@@ -11,7 +11,15 @@ const MainPage = () => {
           }}
           className="newsreader-bold600"
         >
-          Fireworks Play.
+          Fireworks Play
+        </p>
+        <p
+          style={{
+            fontSize: 85,
+          }}
+          className="newsreader-bold600_fadeEffect"
+        >
+          .
         </p>
       </Box>
     </Box>

@@ -18,5 +18,28 @@ code {
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
+  display: inline-block;
   color: #000000;
+}
+
+.newsreader-bold600_fadeEffect {
+  font-family: "Newsreader", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  color: #000000;
+  display: inline-block;
+  animation: fadeEffect 1s infinite alternate; /* Apply animation */
+}
+
+@keyframes fadeEffect {
+  0% {
+    opacity: 0; /* Start with opacity 0 */
+  }
+  50% {
+    opacity: 1; /* Show dot */
+  }
+  100% {
+    opacity: 0; /* End with opacity 0 */
+  }
 }
