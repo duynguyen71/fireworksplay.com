@@ -7,9 +7,12 @@ const SecondaryHeading = ({
   display = "inline-block",
   opacity,
   className = "newsreader-bold600",
+  ...other
 }) => {
   return (
     <Text
+      cursor={"default"}
+      style={other}
       opacity={opacity}
       display={display}
       fontSize={fontSize}

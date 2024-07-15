@@ -41,13 +41,27 @@ code {
     opacity: 0; /* End with opacity 0 */
   }
 }
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+  background: var(--background);
+}
 
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--background);
+}
 .progress-bar {
+  z-index: 100000;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 10px;
-  background: rgb(93, 93, 93);
+  height: 5px;
+  background: rgb(177, 177, 177);
   transform-origin: 0%;
 }

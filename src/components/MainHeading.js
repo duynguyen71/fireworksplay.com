@@ -8,7 +8,12 @@ const MainHeading = ({
   className = "newsreader-bold600",
 }) => {
   return (
-    <Text display={display} fontSize={fontSize} className={className}>
+    <Text
+      cursor={"default"}
+      display={display}
+      fontSize={fontSize}
+      className={className}
+    >
       {text}
     </Text>
   );

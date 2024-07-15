@@ -5,6 +5,7 @@ import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
 import MainHeading from "../components/MainHeading";
 import SecondaryHeading from "../components/SecondaryHeading";
+import ParallaxScroll from "../components/ParallaxScroll";
 
 const MainPage = () => {
   const { scrollYProgress } = useScroll();
@@ -81,8 +82,8 @@ const MainPage = () => {
   return (
     <>
       <motion.div className="progress-bar" style={{ scaleX }} />
-      <Box minH={"200vh"} textAlign={"center"} margin={"auto"}>
-        <Box marginBottom={"50px"} marginTop={["100px", "150px", "200px"]}>
+      <Box textAlign={"center"} margin={"auto"}>
+        <Box marginBottom={"10vh"} marginTop={["100px", "150px", "200px"]}>
           <MainHeading text={"Fireworks Play"} />
           <SecondaryHeading
             display="block"
@@ -108,6 +109,7 @@ const MainPage = () => {
               <Text
                 className="newsreader-bold600"
                 display={"block"}
+                cursor={"default"}
                 fontSize={[25, 35, 55, 60]}
                 style={{
                   color: "#2f3542",
@@ -122,6 +124,7 @@ const MainPage = () => {
               variants={cardVariants2}
             >
               <Text
+                cursor={"default"}
                 className="newsreader-bold600"
                 display={"block"}
                 style={{
@@ -139,6 +142,7 @@ const MainPage = () => {
             >
               <Text
                 className="newsreader-bold600"
+                cursor={"default"}
                 style={{
                   color: "#2f3542",
                 }}
@@ -149,13 +153,19 @@ const MainPage = () => {
               </Text>{" "}
             </motion.div>
           </motion.div>
-
           {/*  END OF SUMMARY */}
+
+          {/* IMAGE */}
+          {/* IMAGE */}
+
+          {/* BADGE STORE */}
           <Box height={"80vh"} />
           <Flex justifyContent={"center"} margin={"auto"} w={"90%"} dir="row">
             <PlayStoreBadge />
+            <Box width={"10px"} />
             <AppStoreBadge />
           </Flex>
+          {/*END OF BADGE STORE */}
         </Box>
       </Box>
     </>
