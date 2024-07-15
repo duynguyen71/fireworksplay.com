@@ -18,8 +18,7 @@ code {
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-  display: inline-block;
-  color: #000000;
+  color: #1a1a1a;
 }
 
 .newsreader-bold600_fadeEffect {
@@ -27,8 +26,7 @@ code {
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
-  color: #000000;
-  display: inline-block;
+  color: #1a1a1a;
   animation: fadeEffect 1s infinite alternate; /* Apply animation */
 }
 
@@ -42,4 +40,14 @@ code {
   100% {
     opacity: 0; /* End with opacity 0 */
   }
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: rgb(93, 93, 93);
+  transform-origin: 0%;
 }

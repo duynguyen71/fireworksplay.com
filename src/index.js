@@ -5,7 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import router from "./router";
-
 const config = {
   initialColorMode: "light",
   useSystemColorMode: false,
