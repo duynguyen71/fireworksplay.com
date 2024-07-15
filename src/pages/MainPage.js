@@ -3,6 +3,8 @@ import React, { useRef, useState, useEffect } from "react";
 import TypeWriter from "../components/TypeWriter";
 import { motion, useInView, useScroll, useSpring } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
+import MainHeading from "../components/MainHeading";
+import SecondaryHeading from "../components/SecondaryHeading";
 
 const MainPage = () => {
   const { scrollYProgress } = useScroll();
@@ -81,26 +83,15 @@ const MainPage = () => {
       <motion.div className="progress-bar" style={{ scaleX }} />
       <Box minH={"200vh"} textAlign={"center"} margin={"auto"}>
         <Box marginBottom={"50px"} marginTop={["100px", "150px", "200px"]}>
-          <Text
-            display={"inline-block"}
-            fontSize={[25, 50, 80]}
-            className="newsreader-bold600"
-          >
-            Fireworks Play
-          </Text>
-          <Text
-            display={"block"}
-            fontSize={[15, 35, 50]}
+          <MainHeading text={"Fireworks Play"} />
+          <SecondaryHeading
+            display="block"
+            fontSize={[25, 35, 55, 60]}
             opacity={0.5}
+            text={"by"}
             className="newsreader-bold600_fadeEffect"
-          >
-            by
-          </Text>
-          <TypeWriter
-            fontSize={[25, 50, 80]}
-            text={"Simplay Studio."}
-            speed={200}
           />
+          <TypeWriter text={"Simplay Studio."} speed={200} />
           {/* SUMMARY */}
           <Box height={"10vh"} />
           <motion.div
@@ -117,7 +108,7 @@ const MainPage = () => {
               <Text
                 className="newsreader-bold600"
                 display={"block"}
-                fontSize={[15, 35, 50]}
+                fontSize={[25, 35, 55, 60]}
                 style={{
                   color: "#2f3542",
                 }}
@@ -136,7 +127,7 @@ const MainPage = () => {
                 style={{
                   color: "#2f3542",
                 }}
-                fontSize={[15, 35, 50]}
+                fontSize={[25, 35, 55, 60]}
               >
                 simulation fireworks game{" "}
               </Text>{" "}
@@ -152,7 +143,7 @@ const MainPage = () => {
                   color: "#2f3542",
                 }}
                 display={"block"}
-                fontSize={[15, 35, 50]}
+                fontSize={[25, 35, 55, 60]}
               >
                 that will blow your mind!
               </Text>{" "}
