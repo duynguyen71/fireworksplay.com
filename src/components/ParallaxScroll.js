@@ -1,15 +1,7 @@
-// Photos from https://citizenofnowhe.re/lines-of-the-city
 import "../parallaxScroll.css";
 import { useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  MotionValue,
-} from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Text } from "@chakra-ui/react";
-import SecondaryHeading from "./SecondaryHeading";
 
 function useParallax(value, distance) {
   return useTransform(value, [0, 1], [-distance, distance]);

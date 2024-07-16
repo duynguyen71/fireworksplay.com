@@ -28,7 +28,7 @@ const ImageSlider = ({ slides, isVisible }) => {
                     position={"relative"}
                     width={"400px"}
                     height={"auto"}
-                    src={`${process.env.PUBLIC_URL}` + "/images/C1.PNG"}
+                    src={`${process.env.PUBLIC_URL}/images/C1.PNG`}
                   />
                 );
               })}

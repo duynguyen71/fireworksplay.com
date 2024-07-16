@@ -1,11 +1,10 @@
-import { Box, Container, Flex, Heading, Image, Text } from "@chakra-ui/react";
-import React, { useRef, useState, useEffect } from "react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 import TypeWriter from "../components/TypeWriter";
-import { color, motion, useInView, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
 import MainHeading from "../components/MainHeading";
 import SecondaryHeading from "../components/SecondaryHeading";
-import ParallaxScroll from "../components/ParallaxScroll";
 import ImageSlider from "../components/ImageSlider";
 import { SlideData } from "../data/SlideData";
 
@@ -18,7 +17,6 @@ const MainPage = () => {
     restDelta: 0.001,
   });
 
-  const scrollRef = useRef(null);
   const cardVariants = {
     offscreen: {
       y: 300,

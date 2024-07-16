@@ -12,6 +12,7 @@ const TypingText = ({
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
   const [isDone, setIsDone] = useState(false);
+  const space = "\xa0";
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,8 +20,12 @@ const TypingText = ({
         setDisplayedText((prev) => prev + text[index]);
         setIndex((prev) => prev + 1);
       } else {
-        setIsDone(true);
-        clearInterval(interval);
+        if (text2 && index < text.length + space.length) {
+          text = text + space;
+        } else {
+          setIsDone(true);
+          clearInterval(interval);
+        }
       }
     }, typingSpeed);
 
