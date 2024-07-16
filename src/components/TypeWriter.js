@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Text } from "@chakra-ui/react";
-import { clear } from "@testing-library/user-event/dist/clear";
 import MainHeading from "./MainHeading";
 
-const TypingText = ({ text, fontSize, isFaded, typingSpeed = 100 }) => {
+const TypingText = ({
+  text,
+  text2,
+  color,
+  fontSize,
+  isFaded,
+  typingSpeed = 100,
+}) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
+  const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -13,14 +19,35 @@ const TypingText = ({ text, fontSize, isFaded, typingSpeed = 100 }) => {
         setDisplayedText((prev) => prev + text[index]);
         setIndex((prev) => prev + 1);
       } else {
+        setIsDone(true);
         clearInterval(interval);
       }
     }, typingSpeed);
 
-    return () => clearInterval(interval);
+    return () => {
+      return clearInterval(interval);
+    };
   }, [text, index, typingSpeed]);
 
-  return <MainHeading opacity={isFaded ? 0.5 : 1} text={displayedText} />;
+  return (
+    <>
+      <MainHeading
+        color={text2 ?? color}
+        opacity={isFaded ? 0.5 : 1}
+        text={displayedText}
+      />
+      {isDone && text2 ? (
+        <TypingText
+          color={color}
+          text={text2}
+          fontSize={fontSize}
+          isFaded={isFaded}
+        />
+      ) : (
+        <></>
+      )}
+    </>
+  );
 };
 
 export default TypingText;

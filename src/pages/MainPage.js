@@ -1,11 +1,13 @@
-import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Image, Text } from "@chakra-ui/react";
 import React, { useRef, useState, useEffect } from "react";
 import TypeWriter from "../components/TypeWriter";
-import { motion, useInView, useScroll, useSpring } from "framer-motion";
+import { color, motion, useInView, useScroll, useSpring } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
 import MainHeading from "../components/MainHeading";
 import SecondaryHeading from "../components/SecondaryHeading";
 import ParallaxScroll from "../components/ParallaxScroll";
+import ImageSlider from "../components/ImageSlider";
+import { SlideData } from "../data/SlideData";
 
 const MainPage = () => {
   const { scrollYProgress } = useScroll();
@@ -83,7 +85,7 @@ const MainPage = () => {
     <>
       <motion.div className="progress-bar" style={{ scaleX }} />
       <Box textAlign={"center"} margin={"auto"}>
-        <Box marginBottom={"10vh"} marginTop={["100px", "150px", "200px"]}>
+        <Box marginBottom={"5vh"} marginTop={["100px", "150px", "200px"]}>
           <MainHeading text={"Fireworks Play"} />
           <SecondaryHeading
             display="block"
@@ -92,9 +94,14 @@ const MainPage = () => {
             text={"by"}
             className="newsreader-bold600_fadeEffect"
           />
-          <TypeWriter text={"Simplay Studio."} speed={200} />
+          <TypeWriter
+            text={"Simplay"}
+            text2={"\t Studio."}
+            color={"#E53E3E"}
+            speed={200}
+          />
           {/* SUMMARY */}
-          <Box height={"10vh"} />
+          <Box height={["10vh", "20vh", "30vh"]} />
           <motion.div
             className="card-container"
             initial={"offscreen"}
@@ -154,18 +161,27 @@ const MainPage = () => {
             </motion.div>
           </motion.div>
           {/*  END OF SUMMARY */}
-
           {/* IMAGE */}
+          <ImageSlider slides={SlideData} isVisible={isVisible} />
           {/* IMAGE */}
-
           {/* BADGE STORE */}
-          <Box height={"80vh"} />
+          <Box height={["15vh", "20vh", "30vh"]} />
           <Flex justifyContent={"center"} margin={"auto"} w={"90%"} dir="row">
             <PlayStoreBadge />
             <Box width={"10px"} />
             <AppStoreBadge />
           </Flex>
           {/*END OF BADGE STORE */}
+          {/* COPYRIGHT 2024 */}
+          <Box textAlign="center" marginTop="4rem">
+            <Text cursor={"default"} fontSize="sm" color="gray.500">
+              © 2024 Simplay Studio |{" "}
+            </Text>
+            <Text cursor={"pointer"} color="teal.500" href="/privacy-policy">
+              Privacy Policy
+            </Text>
+          </Box>
+          {/* COPPY RIGHT */}
         </Box>
       </Box>
     </>
