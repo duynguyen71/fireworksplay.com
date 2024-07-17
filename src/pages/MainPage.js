@@ -93,8 +93,9 @@ const MainPage = () => {
             className="newsreader-bold600_fadeEffect"
           />
           <TypeWriter
-            text={"Simplay"}
-            text2={"\t Studio."}
+            text={"Sim"}
+            text2={"play"}
+            text3={"Studio"}
             color={"#E53E3E"}
             speed={200}
           />
