@@ -196,7 +196,6 @@ const MainPage = () => {
               <Box display={["inline"]}>
                 <Text
                   onClick={() => {
-                    console.log("clicked");
                     window.open("https://simplaystudio.com/privacy");
                   }}
                   display={["inline"]}
@@ -207,16 +206,19 @@ const MainPage = () => {
                 </Text>
                 <Text
                   display={["inline"]}
-                  cursor={"default"}
+                  cursor={"pointer"}
                   fontSize="sm"
                   color="gray.500"
+                  onClick={() => {
+                    window.location.href = "mailto:contact@simplaystudio.com";
+                  }}
                 >
                   contact@simplaystudio.com{" "}
                 </Text>
               </Box>
             </Box>
           </Box>
-          {/* COPPY RIGHT */}
+          {/* COPYRIGHT */}
         </Box>
       </Box>
     </>
