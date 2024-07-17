@@ -93,10 +93,10 @@ const MainPage = () => {
             className="newsreader-bold600_fadeEffect"
           />
           <TypeWriter
+            color={"#E53E3E"}
             text={"Sim"}
             text2={"play"}
             text3={"Studio"}
-            color={"#E53E3E"}
             speed={200}
           />
           {/* SUMMARY */}
@@ -121,7 +121,7 @@ const MainPage = () => {
                   color: "#2f3542",
                 }}
               >
-                Fun and Amazing
+                Fun & Amazing
               </Text>
             </motion.div>
             <motion.div
@@ -173,12 +173,48 @@ const MainPage = () => {
           {/*END OF BADGE STORE */}
           {/* COPYRIGHT 2024 */}
           <Box textAlign="center" marginTop="4rem">
-            <Text cursor={"default"} fontSize="sm" color="gray.500">
-              © 2024 Simplay Studio |{" "}
+            <Text
+              display={["block", "inline"]}
+              cursor={"default"}
+              fontSize="sm"
+              color="gray.500"
+            >
+              © 2024 Simplay Studio
             </Text>
-            <Text cursor={"pointer"} color="teal.500" href="/privacy-policy">
-              Privacy Policy
-            </Text>
+            <Box display={["block", "inline"]}>
+              {
+                <Text
+                  display={["none", "inline"]}
+                  cursor={"default"}
+                  fontSize="sm"
+                  color="gray.500"
+                >
+                  {" "}
+                  |{" "}
+                </Text>
+              }
+              <Box display={["inline"]}>
+                <Text
+                  onClick={() => {
+                    console.log("clicked");
+                    window.open("https://simplaystudio.com/privacy");
+                  }}
+                  display={["inline"]}
+                  fontSize="sm"
+                  color="gray.500"
+                >
+                  Privacy Policy{" | "}
+                </Text>
+                <Text
+                  display={["inline"]}
+                  cursor={"default"}
+                  fontSize="sm"
+                  color="gray.500"
+                >
+                  contact@simplaystudio.com{" "}
+                </Text>
+              </Box>
+            </Box>
           </Box>
           {/* COPPY RIGHT */}
         </Box>

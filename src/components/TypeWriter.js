@@ -56,13 +56,13 @@ const TypingText = ({
   return (
     <>
       <MainHeading
-        color={text2 ?? color}
+        color={color}
         opacity={isFaded ? 0.5 : 1}
         text={displayedText}
       />
       {isDone && text2 ? (
         <TypingText
-          color={color}
+          color={!text ?? color}
           text={text2}
           fontSize={fontSize}
           isFaded={isFaded}
@@ -73,7 +73,7 @@ const TypingText = ({
 
       {isDone2 && text3 ? (
         <TypingText
-          // color={color}
+          color={!text ?? color}
           text={displayedText2}
           fontSize={fontSize}
           isFaded={isFaded}

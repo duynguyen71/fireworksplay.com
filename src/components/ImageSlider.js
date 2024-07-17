@@ -19,16 +19,16 @@ const ImageSlider = ({ slides, isVisible }) => {
           className="card"
           variants={cardVariants}
         >
-          <Box mx={["10vw"]}>
+          <Box mx={["5vw"]}>
             <Carousel autoPlay infiniteLoop>
-              {slides.map((slide) => {
+              {slides.map((slide, index) => {
                 return (
                   <Image
                     key={slide.image}
                     position={"relative"}
                     width={"400px"}
                     height={"auto"}
-                    src={`${process.env.PUBLIC_URL}/images/C1.PNG`}
+                    src={`${process.env.PUBLIC_URL}/images/${index + 1}.png`}
                   />
                 );
               })}
