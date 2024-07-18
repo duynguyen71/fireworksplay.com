@@ -195,6 +195,7 @@ const MainPage = () => {
               }
               <Box display={["inline"]}>
                 <Text
+                  cursor={"pointer"}
                   onClick={() => {
                     window.open("https://simplaystudio.com/privacy");
                   }}
@@ -205,6 +206,7 @@ const MainPage = () => {
                   Privacy Policy{" | "}
                 </Text>
                 <Text
+                  style={{ textDecoration: "none" }}
                   display={["inline"]}
                   cursor={"pointer"}
                   fontSize="sm"
