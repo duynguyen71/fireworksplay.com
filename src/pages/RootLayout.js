@@ -30,32 +30,12 @@ const RootLayout = () => {
     }
   };
 
-  const OverlayOne = () => (
-    <ModalOverlay
-      bg="blackAlpha.900"
-      // backdropFilter="blur(10px) hue-rotate(90deg)"
-    />
-  );
-
-  const OverlayTwo = () => (
-    <ModalOverlay
-    // bg="none"
-    // backdropFilter="auto"
-    // backdropInvert="80%"
-    // backdropBlur="2px"
-    />
-  );
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [overlay, setOverlay] = React.useState(<OverlayOne />);
-
-  useEffect(() => {
-    // setOverlay(<OverlayOne />);
-    // onOpen();
-  }, []);
-
   const navigate = useNavigate();
-  return <Box position={"relative"}></Box>;
+  return (
+    <Box position={"relative"}>
+      <Outlet />
+    </Box>
+  );
 };
 
 export default RootLayout;

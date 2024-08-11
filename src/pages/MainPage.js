@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import TypeWriter from "../components/TypeWriter";
 import { motion, useScroll, useSpring } from "framer-motion";
@@ -7,6 +7,10 @@ import MainHeading from "../components/MainHeading";
 import SecondaryHeading from "../components/SecondaryHeading";
 import ImageSlider from "../components/ImageSlider";
 import { SlideData } from "../data/SlideData";
+import { useNavigate } from "react-router-dom";
+import socialMediaLinks from "../data/SocialMediaLinks";
+import SocialButton from "../components/SocialButton";
+import { FaDiscord, FaTiktok, FaYoutube } from "react-icons/fa";
 
 const MainPage = () => {
   const { scrollYProgress } = useScroll();
@@ -61,6 +65,7 @@ const MainPage = () => {
   };
 
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,6 +87,27 @@ const MainPage = () => {
   return (
     <>
       <motion.div className="progress-bar" style={{ scaleX }} />
+      {/* SOCIAL BUTTONS */}
+      <Box
+        m={5}
+        position={"fixed"}
+        top={["none", "6rem"]}
+        bottom={[10, "none"]}
+        right={["none", 0]}
+      >
+        <VStack spacing={[3, 7]} alignItems={"center"}>
+          <SocialButton label={"Discord"} href={socialMediaLinks.discord}>
+            <FaDiscord />
+          </SocialButton>
+          <SocialButton label={"YouTube"} href={socialMediaLinks.youtube}>
+            <FaYoutube />
+          </SocialButton>
+          <SocialButton label={"Tiktok"} href={socialMediaLinks.tiktok}>
+            <FaTiktok />
+          </SocialButton>
+        </VStack>
+      </Box>
+      {/* END OF SOCIAL BUTTON */}
       <Box textAlign={"center"} margin={"auto"}>
         <Box marginBottom={"5vh"} marginTop={["100px", "150px", "200px"]}>
           <MainHeading text={"Fireworks Play"} />
@@ -177,6 +203,9 @@ const MainPage = () => {
               display={["inline", "inline", "inline"]}
               cursor={"default"}
               fontSize="sm"
+              onClick={() => {
+                navigate("/release-note");
+              }}
               color="gray.500"
             >
               © 2024 Simplay Studio

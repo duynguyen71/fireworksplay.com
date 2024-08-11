@@ -7,6 +7,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     errorElement: <NotFoundPage />,
+    element: <RootLayout />,
     children: [
       {
         index: true,
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   {
     path: "/fireworksplay",
     errorElement: <NotFoundPage />,
+    element: <RootLayout />,
     children: [
       {
         index: true,
