@@ -174,51 +174,36 @@ const MainPage = () => {
           {/* COPYRIGHT 2024 */}
           <Box textAlign="center" marginTop="4rem">
             <Text
-              display={["block", "inline"]}
+              display={["inline", "inline", "inline"]}
               cursor={"default"}
               fontSize="sm"
               color="gray.500"
             >
               © 2024 Simplay Studio
             </Text>
-            <Box display={["block", "inline"]}>
-              {
-                <Text
-                  display={["none", "inline"]}
-                  cursor={"default"}
-                  fontSize="sm"
-                  color="gray.500"
-                >
-                  {" "}
-                  |{" "}
-                </Text>
-              }
-              <Box display={["inline"]}>
-                <Text
-                  cursor={"pointer"}
-                  onClick={() => {
-                    window.open("https://simplaystudio.com/privacy");
-                  }}
-                  display={["inline"]}
-                  fontSize="sm"
-                  color="gray.500"
-                >
-                  Privacy Policy{" | "}
-                </Text>
-                <Text
-                  style={{ textDecoration: "none" }}
-                  display={["inline"]}
-                  cursor={"pointer"}
-                  fontSize="sm"
-                  color="gray.500"
-                  onClick={() => {
-                    window.location.href = "mailto:contact@simplaystudio.com";
-                  }}
-                >
-                  contact@simplaystudio.com{" "}
-                </Text>
-              </Box>
-            </Box>
+            <Text
+              cursor={"pointer"}
+              onClick={() => {
+                window.open("https://simplaystudio.com/privacy");
+              }}
+              display={["inline", "inline"]}
+              fontSize={["sm"]}
+              color="gray.500"
+            >
+              {" | "}
+            </Text>
+            <Text
+              style={{ textDecoration: "none" }}
+              display={["inline"]}
+              cursor={"pointer"}
+              fontSize="sm"
+              color="gray.500"
+              onClick={() => {
+                window.location.href = "mailto:contact@simplaystudio.com";
+              }}
+            >
+              contact@simplaystudio.com{" "}
+            </Text>
           </Box>
           {/* COPYRIGHT */}
         </Box>
