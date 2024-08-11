@@ -13,7 +13,21 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
-        path: "/release-note",
+        path: "release-note",
+        element: <ReleaseNote />,
+      },
+    ],
+  },
+  {
+    path: "/fireworksplay",
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        index: true,
+        element: <MainPage />,
+      },
+      {
+        path: "release-note",
         element: <ReleaseNote />,
       },
     ],
