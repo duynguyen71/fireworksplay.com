@@ -203,9 +203,6 @@ const MainPage = () => {
               display={["inline", "inline", "inline"]}
               cursor={"default"}
               fontSize="sm"
-              onClick={() => {
-                navigate("/release-note");
-              }}
               color="gray.500"
             >
               © 2024 Simplay Studio
@@ -227,6 +224,9 @@ const MainPage = () => {
               cursor={"pointer"}
               fontSize="sm"
               color="gray.500"
+              onClick={() => {
+                window.location.href = "mailto:contact@simplaystudio.com";
+              }}
             >
               contact@simplaystudio.com{" "}
             </Text>
