@@ -227,9 +227,6 @@ const MainPage = () => {
               cursor={"pointer"}
               fontSize="sm"
               color="gray.500"
-              onClick={() => {
-                window.location.href = "mailto:contact@simplaystudio.com";
-              }}
             >
               contact@simplaystudio.com{" "}
             </Text>

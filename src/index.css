@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-/* // <weight>: Use a value from 200 to 800 */
 .newsreader-bold600 {
   font-family: "Newsreader", serif;
   font-optical-sizing: auto;
