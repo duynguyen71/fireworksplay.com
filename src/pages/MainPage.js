@@ -89,13 +89,14 @@ const MainPage = () => {
       <motion.div className="progress-bar" style={{ scaleX }} />
       {/* SOCIAL BUTTONS */}
       <Box
-        m={5}
+        zIndex={9000}
+        m={2}
         position={"fixed"}
         // top={["none", "6rem"]}
         // bottom={[10, "none"]}
         // right={["none", 0]}
-        top={["none", "6rem"]}
-        bottom={["10", "none"]}
+        top={["none", "3rem"]}
+        bottom={["3rem", "none"]}
         right={0}
       >
         <VStack spacing={[3, 7]} alignItems={"center"}>
