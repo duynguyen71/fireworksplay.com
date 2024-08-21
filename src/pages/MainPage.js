@@ -91,9 +91,12 @@ const MainPage = () => {
       <Box
         m={5}
         position={"fixed"}
+        // top={["none", "6rem"]}
+        // bottom={[10, "none"]}
+        // right={["none", 0]}
         top={["none", "6rem"]}
-        bottom={[10, "none"]}
-        right={["none", 0]}
+        bottom={["10", "none"]}
+        right={0}
       >
         <VStack spacing={[3, 7]} alignItems={"center"}>
           <SocialButton label={"Discord"} href={socialMediaLinks.discord}>
