@@ -1,5 +1,33 @@
 export const updates = [
   {
+    version: "Version 2024.8.1",
+    changes: [
+      "New fireworks: Airstrike Salute, Airstrike Rocket, Strobe 09 10, Classic 41 42.",
+      "New props: Ground Strobe.",
+      "Revamp grenade explosion effects, UI.",
+      "Multiplayer: Apply damage to player.",
+    ],
+  },
+  {
+    version: "Version 2024.7.1",
+    changes: [
+      "New Steampunk map.",
+      "Flashlight, Fuse Line.",
+      "Character skin.",
+      "Singleplayer: Won’t fall down if wear Jump Shoes.",
+      "Singleplayer: Bug fixes and enhancements.",
+    ],
+  },
+  {
+    version: "Version 2024.6.1",
+    changes: [
+      "Firework effects more realistic (horsetail, kwitis, palm, rings, strobe).",
+      "Physical rocket launcher (the red one).",
+      "Multiplayer: Firecracker, Props categories.",
+      "Multiplayer bug fixes: https://youtu.be/ZNm0FFairB0",
+    ],
+  },
+  {
     version: "Version 2024.5.2",
     changes: [
       "Firework effects more realistic.",
