@@ -1,5 +1,21 @@
 export const updates = [
   {
+    version: "Version 2024.9.2",
+    changes: [
+      "New seasonal map: Lantern Festival.",
+      "New fireworks: Flash Bang, Salute 06 07, Classic 43.",
+      "New cake:  Artistic Pyro, Lantern Skyfall, Moonlit Radiance.",
+    ],
+  },
+  {
+    version: "Version 2024.9.1",
+    changes: [
+      "New map: Stadium + mini football game.",
+      "New props: Air Smoke Bomb.",
+      "Revamp fireworks sound effects.",
+    ],
+  },
+  {
     version: "Version 2024.8.1",
     changes: [
       "New fireworks: Airstrike Salute, Airstrike Rocket, Strobe 09 10, Classic 41 42.",
