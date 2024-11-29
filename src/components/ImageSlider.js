@@ -26,7 +26,7 @@ const ImageSlider = ({ slides, isVisible }) => {
                   <Image
                     key={slide.image}
                     position={"relative"}
-                    width={"400px"}
+                    // width={"400px"}
                     height={"auto"}
                     src={`${process.env.PUBLIC_URL}/images/${index + 1}.png`}
                   />

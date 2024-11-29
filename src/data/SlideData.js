@@ -23,10 +23,4 @@ export const SlideData = [
   {
     image: "/images/8.png",
   },
-  {
-    image: "/images/9.png",
-  },
-  {
-    image: "/images/10.png",
-  },
 ];

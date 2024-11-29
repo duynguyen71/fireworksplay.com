@@ -92,9 +92,6 @@ const MainPage = () => {
         zIndex={9000}
         m={2}
         position={"fixed"}
-        // top={["none", "6rem"]}
-        // bottom={[10, "none"]}
-        // right={["none", 0]}
         top={["none", "3rem"]}
         bottom={["3rem", "none"]}
         right={0}

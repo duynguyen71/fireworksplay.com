@@ -1,5 +1,26 @@
 export const updates = [
   {
+    version: "Version 2024.12.1",
+    changes: [
+      "Daily Rewards: Thor Thunder, Smoking Pumpkin, Teddy Bear, Military Mortar, Umbrella, UFO Spinner, Minigun Candle, Battery, Monster Firecracker, Gold Shining, Hwacha, Umbrella Fountain, Swimming Stars, Mini Sky Shot, Mini Cake, God of Salute, Crackling Sliver, Kwitis Barrage, Rain of Fire, Super Toy Car, Air Defense, DMX Fire Machine, Military Rocket, Twister Drone, Sparkle Wheel, Girandola, Anti Venom, Multi Flame Machine, Smoky Twister, Airframe Missile.",
+      "New Shells & Fireworks: Sky High, Brocade 10 11, Galactic Ring 2.",
+      "Revamp comets, lighter tool, connection line tool.",
+      "Add show frame rate option.",
+    ],
+  },
+  {
+    version: "Version 2024.10.1",
+    changes: [
+      " Happy Halloween Together.",
+      " New map: Graveyard.",
+      " New fireworks: Jellyfish, Strobe 11, Horsetail 13, 14, Ghost Shell 08.",
+      " New cakes: Phantom Flames, Azure Skyburst.",
+      " Optimized Farm map.",
+      " Applied physic for rockets, and cakes.",
+      " Bug fixes and enhancements.",
+    ],
+  },
+  {
     version: "Version 2024.9.2",
     changes: [
       "New seasonal map: Lantern Festival.",
