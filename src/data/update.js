@@ -1,4 +1,16 @@
+import { link } from "framer-motion/client";
+
 export const updates = [
+  {
+    version: "Version 2025.1.1",
+    changes: [
+      "New mode: Portrait (Close-up shots).",
+      "New fountain: Beehive, Silver Water.",
+      "New fireworks: 50 Random Shots.",
+      "Revamp: Fountain 01, 02.",
+      "Apply physic to Roman Candle.",
+    ],
+  },
   {
     version: "Version 2024.12.1",
     changes: [
