@@ -2,6 +2,16 @@ import { link } from "framer-motion/client";
 
 export const updates = [
   {
+    version: "Version 2025.1.2",
+    changes: [
+      "New multiplayer maps: Big City, Empty Plane.",
+      "New fireworks with skin: Great Eagle, Nebula Core, Dahlia Rocket, Rainbow Nova, Cake 2025.",
+      "Multiplayer: support some items in special category.",
+      "Easier controls: delete, move, connect fuse lines.",
+      "Firecracker: improve explode smoke (8 firecrackers).",
+    ],
+  },
+  {
     version: "Version 2025.1.1",
     changes: [
       "New mode: Portrait (Close-up shots).",

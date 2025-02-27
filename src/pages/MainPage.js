@@ -148,7 +148,7 @@ const MainPage = () => {
                   color: "#2f3542",
                 }}
               >
-                Fun & Amazing
+                A fun & amazing
               </Text>
             </motion.div>
             <motion.div
@@ -165,7 +165,7 @@ const MainPage = () => {
                 }}
                 fontSize={[25, 35, 55, 60]}
               >
-                simulation fireworks game{" "}
+                fireworks simulation game{" "}
               </Text>{" "}
             </motion.div>
             <motion.div
