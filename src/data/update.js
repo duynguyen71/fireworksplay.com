@@ -1,4 +1,98 @@
 export const updates = [
+
+  {
+    version: "Version 2025.5.1",
+    changes: [
+      "Cake: Crackle Combination.",
+      "Shells: Crackle 01-31, Ghost Shell 09-22, Strobe 13-14.",
+      "Pick up ability.",
+      "An option to add more force to Rack.",
+      <a href="https://youtu.be/ca8hT__uT2c" target="_blank">Watch video</a>,
+    ],
+  },
+  {
+    version: "Version 2025.4.1",
+    changes: [
+      "Props: Stage, 3 Flame Blasters, Moving Head Light Projector, Fog Machine, Wooden Pallet, Step Ladder.",
+      "Specials: Laser Gun, Salute Minigun.",
+      "Firecracker: Happy Flower.",
+      "Localization: support 17 languages.",
+      "Auto upside down on placing items.",
+      <a href="https://youtu.be/BdPBapIBFQg" target="_blank">Watch video</a>,
+    ]
+  },
+  {
+    version: "Version 2025.3.1",
+    changes: [
+      "Revamp reloadable rack: realistic & more shapes.",
+      "Map: Big City Lite, Steampunk in Singleplayer mode.",
+      "Fireworks: Inferno Pair, Dragon Fiery Fan, Midnight Party.",
+      "Firecrackers: Crying Cow.",
+      "Shell: Strobe 12.",
+    ],
+  },
+  {
+    version: "Version 2025.2.1",
+    changes: [
+      "New multiplayer maps: Big City, Empty Plane.",
+      "New fireworks with skin: Great Eagle, Nebula Core, Dahlia Rocket, Rainbow Nova, Cake 2025.",
+      "Multiplayer: support some items in special category.",
+      "Easier controls: delete, move, connect fuse lines.",
+      "Firecracker: improve explode smoke (8 firecrackers).",
+      <a href="https://youtu.be/nGCvurGN6uQ" target="_blank">Watch video</a>,
+    ],
+  },
+  {
+    version: "Version 2025.1.1",
+    changes: [
+      "New mode: Portrait (Close-up shots).",
+      "New fountain: Beehive, Silver Water.",
+      "New fireworks: 50 Random Shots.",
+      "Revamp: Fountain 01, 02.",
+      "Apply physic to Roman Candle.",
+      <a href="https://youtube.com/shorts/SSHBCF6--yM" target="_blank">Watch video</a>,
+    ]
+  },
+  {
+    version: "Version 2024.12.1",
+    changes: [
+      "Daily Rewards: Thor Thunder, Smoking Pumpkin, Teddy Bear, Military Mortar, Umbrella, UFO Spinner, Minigun Candle, Battery, Monster Firecracker, Gold Shining, Hwacha, Umbrella Fountain, Swimming Stars, Mini Sky Shot, Mini Cake, God of Salute, Crackling Sliver, Kwitis Barrage, Rain of Fire, Super Toy Car, Air Defense, DMX Fire Machine, Military Rocket, Twister Drone, Sparkle Wheel, Girandola, Anti Venom, Multi Flame Machine, Smoky Twister, Airframe Missile.",
+      "New Shells & Fireworks: Sky High, Brocade 10 11, Galactic Ring 2.",
+      "Revamp comets, lighter tool, connection line tool.",
+      "Add show frame rate option.",
+    ],
+  },
+  {
+    version: "Version upcoming",
+    changes: [
+      "Happy Halloween Together.",
+      "New map: Graveyard.",
+      "New fireworks: Jellyfish, Strobe 11, Horsetail 13, 14, Ghost Shell 08.",
+      "New cakes: Phantom Flames, Azure Skyburst.",
+      "Optimized Farm map.",
+      "Applied physic for rockets, and cakes.",
+      "Bug fixes and enhancements.",
+    ],
+  },
+  {
+    version: "Version 2024.9.2",
+
+    changes: [
+      "New seasonal map: Lantern Festival.",
+      "New fireworks: Flash Bang, Salute 06 07, Classic 43.",
+      "New cake: Artistic Pyro, Lantern Skyfall, Moonlit Radiance.",
+      "https://youtu.be/AsSl4ogQlkU",
+    ],
+  },
+  {
+    version: "Version 2024.9.1",
+    changes: [
+      "New map: Stadium + mini football game.",
+      "New props: Air Smoke Bomb.",
+      "Revamp fireworks sound effects.",
+      "https://youtu.be/e1ShrLwLRpM",
+    ],
+  },
   {
     version: "Version 2024.8.1",
     changes: [
