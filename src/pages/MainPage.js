@@ -92,9 +92,6 @@ const MainPage = () => {
         zIndex={9000}
         m={2}
         position={"fixed"}
-        // top={["none", "6rem"]}
-        // bottom={[10, "none"]}
-        // right={["none", 0]}
         top={["none", "3rem"]}
         bottom={["3rem", "none"]}
         right={0}
@@ -151,7 +148,7 @@ const MainPage = () => {
                   color: "#2f3542",
                 }}
               >
-                Fun & Amazing
+                A fun & amazing
               </Text>
             </motion.div>
             <motion.div
@@ -168,7 +165,7 @@ const MainPage = () => {
                 }}
                 fontSize={[25, 35, 55, 60]}
               >
-                simulation fireworks game{" "}
+                fireworks simulation game{" "}
               </Text>{" "}
             </motion.div>
             <motion.div

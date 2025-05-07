@@ -26,7 +26,8 @@ code {
   font-weight: 600;
   font-style: normal;
   color: #1a1a1a;
-  animation: fadeEffect 1s infinite alternate; /* Apply animation */
+  animation: fadeEffect 1s alternate;
+  animation-iteration-count: 5;
 }
 
 @keyframes fadeEffect {

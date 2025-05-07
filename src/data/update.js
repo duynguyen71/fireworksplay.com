@@ -1,3 +1,5 @@
+import { link } from "framer-motion/client";
+
 export const updates = [
 
   {
@@ -91,6 +93,63 @@ export const updates = [
       "New props: Air Smoke Bomb.",
       "Revamp fireworks sound effects.",
       "https://youtu.be/e1ShrLwLRpM",
+    ],
+  },
+  {
+    version: "Version 2025.1.2",
+    changes: [
+      "New multiplayer maps: Big City, Empty Plane.",
+      "New fireworks with skin: Great Eagle, Nebula Core, Dahlia Rocket, Rainbow Nova, Cake 2025.",
+      "Multiplayer: support some items in special category.",
+      "Easier controls: delete, move, connect fuse lines.",
+      "Firecracker: improve explode smoke (8 firecrackers).",
+    ],
+  },
+  {
+    version: "Version 2025.1.1",
+    changes: [
+      "New mode: Portrait (Close-up shots).",
+      "New fountain: Beehive, Silver Water.",
+      "New fireworks: 50 Random Shots.",
+      "Revamp: Fountain 01, 02.",
+      "Apply physic to Roman Candle.",
+    ],
+  },
+  {
+    version: "Version 2024.12.1",
+    changes: [
+      "Daily Rewards: Thor Thunder, Smoking Pumpkin, Teddy Bear, Military Mortar, Umbrella, UFO Spinner, Minigun Candle, Battery, Monster Firecracker, Gold Shining, Hwacha, Umbrella Fountain, Swimming Stars, Mini Sky Shot, Mini Cake, God of Salute, Crackling Sliver, Kwitis Barrage, Rain of Fire, Super Toy Car, Air Defense, DMX Fire Machine, Military Rocket, Twister Drone, Sparkle Wheel, Girandola, Anti Venom, Multi Flame Machine, Smoky Twister, Airframe Missile.",
+      "New Shells & Fireworks: Sky High, Brocade 10 11, Galactic Ring 2.",
+      "Revamp comets, lighter tool, connection line tool.",
+      "Add show frame rate option.",
+    ],
+  },
+  {
+    version: "Version 2024.10.1",
+    changes: [
+      " Happy Halloween Together.",
+      " New map: Graveyard.",
+      " New fireworks: Jellyfish, Strobe 11, Horsetail 13, 14, Ghost Shell 08.",
+      " New cakes: Phantom Flames, Azure Skyburst.",
+      " Optimized Farm map.",
+      " Applied physic for rockets, and cakes.",
+      " Bug fixes and enhancements.",
+    ],
+  },
+  {
+    version: "Version 2024.9.2",
+    changes: [
+      "New seasonal map: Lantern Festival.",
+      "New fireworks: Flash Bang, Salute 06 07, Classic 43.",
+      "New cake:  Artistic Pyro, Lantern Skyfall, Moonlit Radiance.",
+    ],
+  },
+  {
+    version: "Version 2024.9.1",
+    changes: [
+      "New map: Stadium + mini football game.",
+      "New props: Air Smoke Bomb.",
+      "Revamp fireworks sound effects.",
     ],
   },
   {
