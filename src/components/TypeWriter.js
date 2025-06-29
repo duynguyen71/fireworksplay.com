@@ -36,7 +36,7 @@ const TypingText = ({
 
   useEffect(() => {
     if (text3) {
-      const modifiedText3 = space + text3;  // ✅ Đúng: Tạo biến mới, không gán vào props
+      const modifiedText3 = space + text3;
 
       const interval2 = setInterval(() => {
         if (index2 < modifiedText3.length) {
