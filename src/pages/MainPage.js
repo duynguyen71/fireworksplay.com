@@ -1,5 +1,5 @@
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TypeWriter from "../components/TypeWriter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
@@ -7,7 +7,6 @@ import MainHeading from "../components/MainHeading";
 import SecondaryHeading from "../components/SecondaryHeading";
 import ImageSlider from "../components/ImageSlider";
 import { SlideData } from "../data/SlideData";
-import { useNavigate } from "react-router-dom";
 import socialMediaLinks from "../data/SocialMediaLinks";
 import SocialButton from "../components/SocialButton";
 import { FaDiscord, FaTiktok, FaYoutube } from "react-icons/fa";
@@ -65,7 +64,6 @@ const MainPage = () => {
   };
 
   const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {

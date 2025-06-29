@@ -3,7 +3,11 @@ name: Deploy Fireworks Play to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - master
+  # pull_request:
+  #   branches:
+  #     - master
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -11,15 +15,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+
       - name: Install dependencies
         run: npm install
+
+      - name: Generate Updates Index
+        run: node src/data/updates/auto-generate-index.js
+
       - name: Build the project
         run: npm run build
+
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

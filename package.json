@@ -20,22 +20,39 @@
     "web-vitals": "^2.1.4",
     "webpack": "^5.99.8"
   },
-"scripts": {
-  "generate-updates-index": "node src/data/updates/auto-generate-index.js",
-  "prestart": "npm run generate-updates-index",
-  "start": "react-scripts start",
-  "prebuild": "npm run generate-updates-index",
-  "build": "react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject",
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d build"
-},
+  "scripts": {
+    "lint": "eslint ./src --ext .js,.jsx",
+    "lint:fix": "eslint ./src --ext .js,.jsx --fix",
+    "generate-updates-index": "node src/data/updates/auto-generate-index.js",
+    "prestart": "npm run generate-updates-index",
+    "start": "react-scripts start",
+    "prebuild": "npm run lint:fix && node src/data/updates/auto-generate-index.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "plugins": [
+      "unused-imports"
+    ],
+    "rules": {
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "varsIgnorePattern": "^_",
+          "args": "after-used",
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [
@@ -48,5 +65,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-unused-imports": "^4.1.4"
   }
 }
