@@ -36,10 +36,11 @@ const TypingText = ({
 
   useEffect(() => {
     if (text3) {
-      text3 = space + text3;
+      const modifiedText3 = space + text3;  // ✅ Đúng: Tạo biến mới, không gán vào props
+
       const interval2 = setInterval(() => {
-        if (index2 < text3.length) {
-          setDisplayedText2((prev) => prev + text3[index2]);
+        if (index2 < modifiedText3.length) {
+          setDisplayedText2((prev) => prev + modifiedText3[index2]);
           setIndex2((prev) => prev + 1);
         } else {
           setIsDone2(true);
@@ -47,11 +48,10 @@ const TypingText = ({
         }
       }, typingSpeed);
 
-      return () => {
-        return clearInterval(interval2);
-      };
+      return () => clearInterval(interval2);
     }
   }, [text3, index2, typingSpeed]);
+
 
   return (
     <>
