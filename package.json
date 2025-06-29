@@ -20,14 +20,17 @@
     "web-vitals": "^2.1.4",
     "webpack": "^5.99.8"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
+"scripts": {
+  "generate-updates-index": "node src/data/updates/auto-generate-index.js",
+  "prestart": "npm run generate-updates-index",
+  "start": "react-scripts start",
+  "prebuild": "npm run generate-updates-index",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject",
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
+},
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -8,6 +8,7 @@ const ImageSlider = ({ slides, isVisible }) => {
   return (
     <>
       <Box height={["25vh", "35vh", "40vh"]} />
+
       <motion.div
         className="card-container"
         initial={"offscreen"}
@@ -20,18 +21,23 @@ const ImageSlider = ({ slides, isVisible }) => {
           variants={cardVariants}
         >
           <Box mx={["5vw"]}>
-            <Carousel autoPlay infiniteLoop>
-              {slides.map((slide, index) => {
-                return (
-                  <Image
-                    key={slide.image}
-                    position={"relative"}
-                    // width={"400px"}
-                    height={"auto"}
-                    src={`${process.env.PUBLIC_URL}/images/${index + 1}.png`}
-                  />
-                );
-              })}
+            <Carousel autoPlay infiniteLoop showThumbs={false}>
+              {slides.map((slide, index) => (
+                <Box key={slide.image} position="relative">
+                  <picture>
+                    <source
+                      srcSet={`/images/webp/${index + 1}.webp`}
+                      type="image/webp"
+                    />
+                    <img
+                      src={`/images/${index + 1}.png`}
+                      alt={`Slide ${index + 1}`}
+                      loading="lazy"
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  </picture>
+                </Box>
+              ))}
             </Carousel>
           </Box>
         </motion.div>
