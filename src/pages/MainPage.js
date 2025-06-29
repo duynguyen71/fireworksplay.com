@@ -64,6 +64,7 @@ const MainPage = () => {
   };
 
   const [isVisible, setIsVisible] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -200,11 +201,11 @@ const MainPage = () => {
           <Box textAlign="center" marginTop="4rem">
             <Text
               display={["inline", "inline", "inline"]}
-              cursor={"default"}
+              cursor="default"
               fontSize="sm"
               color="gray.500"
             >
-              © 2024 Simplay Studio
+              © {currentYear} Simplay Studio
             </Text>
             <Text
               cursor={"pointer"}

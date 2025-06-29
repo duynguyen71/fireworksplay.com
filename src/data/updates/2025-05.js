@@ -1,5 +1,4 @@
 const updatesMay2025 = [
-
   {
     version: "Version 2025.6.1",
     changes: [
@@ -8,7 +7,7 @@ const updatesMay2025 = [
       "Props: Disco Ball.",
       "Fireworks: Pink Pig.",
       "Map: Isolate Island.",
-      <a href="https://youtu.be/vCZbTBtXM8E" target="_blank" rel="noreferrer">Watch video</a>,
+      "https://youtu.be/vCZbTBtXM8E",
     ],
   },
   {
@@ -18,7 +17,7 @@ const updatesMay2025 = [
       "Shells: Crackle 01-31, Ghost Shell 09-22, Strobe 13-14.",
       "Pick up ability.",
       "An option to add more force to Rack.",
-      <a href="https://youtu.be/ca8hT__uT2c" target="_blank" rel="noreferrer">Watch video</a>,
+      "https://youtu.be/ca8hT__uT2c"
     ],
   },
   {
@@ -29,7 +28,7 @@ const updatesMay2025 = [
       "Firecracker: Happy Flower.",
       "Localization: support 17 languages.",
       "Auto upside down on placing items.",
-      <a href="https://youtu.be/BdPBapIBFQg" target="_blank" rel="noreferrer">Watch video</a>,
+      "https://youtu.be/BdPBapIBFQg",
     ]
   },
   {
@@ -50,7 +49,7 @@ const updatesMay2025 = [
       "Multiplayer: support some items in special category.",
       "Easier controls: delete, move, connect fuse lines.",
       "Firecracker: improve explode smoke (8 firecrackers).",
-      <a href="https://youtu.be/nGCvurGN6uQ" target="_blank" rel="noreferrer">Watch video</a>,
+      "https://youtu.be/nGCvurGN6uQ",
     ],
   },
   {
@@ -61,7 +60,7 @@ const updatesMay2025 = [
       "New fireworks: 50 Random Shots.",
       "Revamp: Fountain 01, 02.",
       "Apply physic to Roman Candle.",
-      <a href="https://youtube.com/shorts/SSHBCF6--yM" target="_blank" rel="noreferrer">Watch video</a>,
+      "https://youtube.com/shorts/SSHBCF6--yM",
     ]
   },
   {

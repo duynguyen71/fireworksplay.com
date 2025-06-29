@@ -2,18 +2,23 @@ const fs = require('fs');
 const path = require('path');
 
 const updatesDir = path.join(__dirname);
-const files = fs.readdirSync(updatesDir);
+const files = fs.readdirSync(updatesDir)
+  .filter(file => file.endsWith('.js') && file !== 'index.js' && file !== 'auto-generate-index.js')
+  .sort((a, b) => {
+    const aDate = a.replace('.js', '').replace(/-/g, '');
+    const bDate = b.replace('.js', '').replace(/-/g, '');
+    return bDate.localeCompare(aDate);
+  });
 
 let imports = '';
 let allUpdatesArray = [];
 
 files.forEach(file => {
-  if (file.endsWith('.js') && file !== 'index.js' && file !== 'auto-generate-index.js') {
-    const name = 'updates' + path.basename(file, '.js').replace(/-/g, '');
-    imports += `import ${name} from './${file}';\n`;
-    allUpdatesArray.push(`...${name}`);
-  }
+  const name = 'updates' + path.basename(file, '.js').replace(/-/g, '');
+  imports += `import ${name} from './${file}';\n`;
+  allUpdatesArray.push(`...${name}`);
 });
+
 
 const indexContent = `
 ${imports}
