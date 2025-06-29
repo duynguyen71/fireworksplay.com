@@ -7,7 +7,7 @@ const updatesJune2025 = [
       "Props: Disco Ball.",
       "Fireworks: Pink Pig.",
       "Map: Isolate Island.",
-      <a href="https://youtu.be/vCZbTBtXM8E" target="_blank">Watch video</a>,
+      <a href="https://youtu.be/vCZbTBtXM8E" target="_blank" rel="noreferrer">Watch video</a>,
     ],
   },
 ];
