@@ -1,6 +1,6 @@
 import "../parallaxScroll.css";
 import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Text } from "@chakra-ui/react";
 
 function useParallax(value, distance) {
@@ -28,13 +28,6 @@ function Image({ id }) {
 }
 
 export default function ParallaxScroll() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   return (
     <>
       {[1, 2, 3, 4].map((image) => (

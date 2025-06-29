@@ -1,8 +1,7 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
-import React from "react";
 import allUpdates from '../data/updates';
 
-const ReleaseVersionContainer = ({ index, title, listItem = [] }) => {
+const ReleaseVersionContainer = ({ title, listItem = [] }) => {
   return (
     <Box boxShadow={"md"} m={4} my={8} px={8} py={4} borderRadius={"md"}>
       <Heading
