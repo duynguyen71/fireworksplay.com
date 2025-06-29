@@ -28,7 +28,7 @@
     "generate-updates-index": "node src/data/updates/auto-generate-index.js",
     "prestart": "npm run generate-updates-index",
     "start": "react-scripts start",
-    "prebuild": "node scripts/fetch-latest-updates-from-notion.js && node scripts/validate-notion-updates.js && node src/data/updates/auto-generate-index.js",
+    "prebuild": "node src/data/updates/auto-generate-index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
