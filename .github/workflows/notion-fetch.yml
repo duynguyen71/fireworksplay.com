@@ -1,12 +1,12 @@
-name: Fetch Notion Updates Every 6 Hours
+name: Fetch Notion and Deploy to GitHub Pages
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:         # Cho phép trigger manual từ GitHub UI
+    - cron: '0 */6 * * *'    # Mỗi 6 giờ
+  workflow_dispatch:          # Cho phép trigger thủ công từ UI
 
 jobs:
-  fetch-and-commit:
+  fetch-build-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Install dependencies
         run: npm install
@@ -27,7 +27,18 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: node scripts/fetch-latest-updates-from-notion.js
 
-      - name: Commit and push if updated
+      - name: Generate Updates Index
+        run: node src/data/updates/auto-generate-index.js
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+      - name: Commit and push Notion updates
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
