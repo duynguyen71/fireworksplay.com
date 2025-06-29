@@ -1,9 +1,8 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
-import { updates } from "../data/update";
-// https://www.textfixer.com/html/convert-text-html.php
+import allUpdates from '../data/updates';
 
-const ReleaseVersionContainer = ({ index, title, listItem }) => {
+const ReleaseVersionContainer = ({ index, title, listItem = [] }) => {
   return (
     <Box boxShadow={"md"} m={4} my={8} px={8} py={4} borderRadius={"md"}>
       <Heading
@@ -17,12 +16,10 @@ const ReleaseVersionContainer = ({ index, title, listItem }) => {
         {title}
       </Heading>
       {listItem.map((item, index) => (
-        <>
-          <Text fontWeight={"normal"} p={1}>
-            {"- "}
-            {item}
-          </Text>
-        </>
+        <Text key={index} fontWeight={"normal"} p={1}>
+          {"- "}
+          {item}
+        </Text>
       ))}
     </Box>
   );
@@ -31,7 +28,7 @@ const ReleaseVersionContainer = ({ index, title, listItem }) => {
 const ReleaseNote = () => {
   return (
     <>
-      {updates.map((update, index) => (
+      {allUpdates.map((update, index) => (
         <ReleaseVersionContainer
           key={index}
           index={index}
