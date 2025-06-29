@@ -1,0 +1,36 @@
+name: Fetch Notion Updates Every 6 Hours
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:         # Cho phép trigger manual từ GitHub UI
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Fetch latest updates from Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node scripts/fetch-latest-updates-from-notion.js
+
+      - name: Commit and push if updated
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/notion-latest-updates.json
+          git diff --cached --quiet || git commit -m "🔄 Auto-fetch Notion updates (6h cron)"
+          git push
