@@ -1,3 +1,16 @@
+
+name: Empty Workflow (No Notion Fetch)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: No operation
+        run: echo "This is an empty workflow. No Notion fetch, no deploy."
+
 # name: Fetch Notion and Deploy to GitHub Pages
 
 # on:
