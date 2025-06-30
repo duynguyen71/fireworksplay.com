@@ -15,24 +15,29 @@ jobs:
   install:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.node.outputs.version }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Node.js
+        id: node
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm install
-
-      - name: Upload node_modules
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
 
   build:
     needs: install
@@ -47,11 +52,16 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
         with:
-          name: node-modules
-          path: node_modules/
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Generate Updates Index
         run: node src/data/updates/auto-generate-index.js
@@ -78,11 +88,16 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
         with:
-          name: node-modules
-          path: node_modules/
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Download build folder
         uses: actions/download-artifact@v4
