@@ -1,47 +1,47 @@
-name: Fetch Notion and Deploy to GitHub Pages
+# name: Fetch Notion and Deploy to GitHub Pages
 
-on:
-  schedule:
-    - cron: '0 */6 * * *'    # Mỗi 6 giờ
-  workflow_dispatch:          # Cho phép trigger thủ công từ UI
+# on:
+#   schedule:
+#     - cron: '0 */6 * * *'    # Mỗi 6 giờ
+#   workflow_dispatch:          # Cho phép trigger thủ công từ UI
 
-jobs:
-  fetch-build-deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   fetch-build-deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '16'
 
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
 
-      - name: Fetch latest updates from Notion
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-        run: node scripts/fetch-latest-updates-from-notion.js
+#       - name: Fetch latest updates from Notion
+#         env:
+#           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+#           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+#         run: node scripts/fetch-latest-updates-from-notion.js
 
-      - name: Generate Updates Index
-        run: node src/data/updates/auto-generate-index.js
+#       - name: Generate Updates Index
+#         run: node src/data/updates/auto-generate-index.js
 
-      - name: Build the project
-        run: npm run build
+#       - name: Build the project
+#         run: npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-      - name: Commit and push Notion updates
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/notion-latest-updates.json
-          git diff --cached --quiet || git commit -m "🔄 Auto-fetch Notion updates (6h cron)"
-          git push
+#       - name: Deploy to GitHub Pages
+#         uses: peaceiris/actions-gh-pages@v3
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./build
+#       - name: Commit and push Notion updates
+#         run: |
+#           git config --global user.name "github-actions[bot]"
+#           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#           git add src/data/notion-latest-updates.json
+#           git diff --cached --quiet || git commit -m "🔄 Auto-fetch Notion updates (6h cron)"
+#           git push
