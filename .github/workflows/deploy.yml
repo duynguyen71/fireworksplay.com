@@ -116,20 +116,20 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Notify Telegram
-        uses: up9cloud/action-notify@v0.4
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_PARSE_MODE: markdown
-          TELEGRAM_MESSAGE: |
-            ${{ needs.deploy.result == 'success' && '✅ Fireworks Play CI/CD Success 🚀' || '❌ Fireworks Play CI/CD Failed 💥' }}
-        
-            📂 *Repository*: `${{ github.repository }}`
-            🌱 *Branch*: `${{ github.ref_name }}`
-            🔢 *Commit*: `${{ github.sha }}`
-            🛠️ *Workflow*: `${{ github.workflow }}`
-            🏁 *Status*: `${{ needs.deploy.result }}`
-        
-            🔗 [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+    - name: Notify Telegram
+      uses: up9cloud/action-notify@v0.4
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_PARSE_MODE: markdown
+        TELEGRAM_MESSAGE: |
+          ${{ needs.deploy.result == 'success' && '✅ Fireworks Play CI/CD Success 🚀' || '❌ Fireworks Play CI/CD Failed 💥' }}
+
+          *Repo*: `${{ github.repository }}`
+          *Branch*: `${{ github.ref_name }}`
+          *Commit*: `${{ github.sha }}`
+          *Status*: `${{ needs.deploy.result }}`
+
+          👉 [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
 
