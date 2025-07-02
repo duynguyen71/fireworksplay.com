@@ -123,7 +123,7 @@ jobs:
             echo "message=✅ *Fireworks Play CI/CD Success* 🚀" >> $GITHUB_ENV
           else
             echo "message=❌ *Fireworks Play CI/CD Failed* 💥" >> $GITHUB_ENV
-          fi
+          fi  
 
       - name: Notify Telegram
         uses: up9cloud/action-notify@v0.4
@@ -132,11 +132,11 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_PARSE_MODE: markdownv2
           TELEGRAM_MESSAGE: |
-            ${{ env.message }}
+            ${{ env.message }}  
 
             *Repo*: \`${{ github.repository }}\`
             *Branch*: \`${{ github.ref_name }}\`
             *Commit*: \`${{ github.sha }}\`
-            *Status*: \`${{ needs.deploy.result }}\`
+            *Status*: \`${{ needs.deploy.result }}\`  
 
-            👉 [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            👉 \[View Run\]\(https:\/\/github\.com\/${{ github.repository }}\/actions\/runs\/${{ github.run_id }}\) 
