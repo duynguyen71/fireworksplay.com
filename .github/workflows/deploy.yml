@@ -112,7 +112,7 @@ jobs:
           publish_dir: ./build
 
   notify:
-    needs: [deploy]
+    needs: deploy
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -120,23 +120,23 @@ jobs:
         id: set_message
         run: |
           if [ "${{ needs.deploy.result }}" == "success" ]; then
-            echo "message=✅ *Fireworks Play CI/CD Success* 🚀" >> $GITHUB_ENV
+            echo "message=✅ *Fireworks Play Deployed Successfully!* 🚀" >> $GITHUB_ENV
           else
-            echo "message=❌ *Fireworks Play CI/CD Failed* 💥" >> $GITHUB_ENV
-          fi  
+            echo "message=❌ *Fireworks Play Deployment Failed!* 💥" >> $GITHUB_ENV
+          fi
 
-      - name: Notify Telegram
+      - name: Send Telegram Notification
         uses: up9cloud/action-notify@v0.4
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_PARSE_MODE: markdownv2
           TELEGRAM_MESSAGE: |
-            ${{ env.message }}  
+            ${{ env.message }}
 
             *Repo*: \`${{ github.repository }}\`
             *Branch*: \`${{ github.ref_name }}\`
             *Commit*: \`${{ github.sha }}\`
-            *Status*: \`${{ needs.deploy.result }}\`  
+            *Status*: \`${{ needs.deploy.result }}\`
 
-            👉 \[View Run\]\(https:\/\/github\.com\/${{ github.repository }}\/actions\/runs\/${{ github.run_id }}\) 
+            👉 [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
