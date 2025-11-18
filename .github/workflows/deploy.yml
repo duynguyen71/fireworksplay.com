@@ -43,9 +43,9 @@ jobs:
             ~/.npm
             node_modules
             build
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-build-${{ hashFiles('src/**/*', 'public/**/*') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-build-${{ hashFiles('src/**/*', 'public/**/*') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-
             ${{ runner.os }}-node-
 
       # Install dependencies with npm ci (faster and more reliable)
