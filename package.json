@@ -28,7 +28,7 @@
     "lint:fix": "eslint ./src --ext .js,.jsx --fix",
     "generate-updates-index": "node src/data/updates/auto-generate-index.js",
     "prestart": "npm run generate-updates-index",
-    "start": "react-scripts start",
+    "start": "ESLINT_NO_DEV_ERRORS=true react-scripts start",
     "prebuild": "node src/data/updates/auto-generate-index.js",
     "build": "ESLINT_NO_DEV_ERRORS=true react-scripts build",
     "build:no-eslint": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
