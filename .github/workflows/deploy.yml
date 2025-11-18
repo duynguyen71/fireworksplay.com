@@ -11,118 +11,94 @@ on:
       - master
   workflow_dispatch:
 
+# Environment variables for the entire workflow
+env:
+  NODE_ENV: production
+  CI: true
+
 jobs:
-  install:
+  build-and-deploy:
+    # Only run on push to master or merged PRs
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
-    outputs:
-      node-version: ${{ steps.node.outputs.version }}
+    timeout-minutes: 15  # Prevent hanging builds
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1  # Shallow clone for faster checkout
 
       - name: Setup Node.js
-        id: node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"  # Use latest LTS
+          cache: 'npm'  # Built-in npm caching is faster
 
-      - name: Cache NPM dependencies
+      # Enhanced caching strategy
+      - name: Cache node modules and build artifacts
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          path: |
+            ~/.npm
+            node_modules
+            build
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-build-${{ hashFiles('src/**/*', 'public/**/*') }}
           restore-keys: |
+            ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-
             ${{ runner.os }}-node-
 
+      # Install dependencies with npm ci (faster and more reliable)
       - name: Install dependencies
-        run: npm install
+        run: npm ci --prefer-offline --no-audit
 
-  build:
-    needs: install
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Cache NPM dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm install
-
+      # Pre-build optimization
       - name: Generate Updates Index
         run: node src/data/updates/auto-generate-index.js
 
+      # Build with optimization
       - name: Build the project
         run: npm run build
+        env:
+          REACT_APP_WORKER_API_URL: ${{ secrets.REACT_APP_WORKER_API_URL }}
 
-      - name: Upload build folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-folder
-          path: build/
+      # Optional: Analyze bundle size (only on PRs for debugging)
+      - name: Analyze bundle size
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ -d "build/static" ]; then
+            echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
+            find build/static -name "*.js" -o -name "*.css" | xargs du -h | sort -hr >> $GITHUB_STEP_SUMMARY
+          fi
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Cache NPM dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Download build folder
-        uses: actions/download-artifact@v4
-        with:
-          name: build-folder
-          path: build/
-
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        if: success()  # Only deploy if build succeeds
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+          enable_jekyll: false
+          # Deploy with custom 404 and nojekyll
+          keep_files: false
 
+  # Separate job for notifications to not block deployment
   notify:
-    needs: deploy
+    needs: build-and-deploy
     runs-on: ubuntu-latest
-    if: always()
+    if: always() && (secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '')
+    timeout-minutes: 2  # Quick timeout for notifications
+
     steps:
-      - name: Set Telegram Message
-        id: set_message
+      - name: Set deployment status
+        id: status
         run: |
-          if [ "${{ needs.deploy.result }}" == "success" ]; then
-            echo "message=✅ *Fireworks Play Deployed Successfully!* 🚀" >> $GITHUB_ENV
+          if [ "${{ needs.build-and-deploy.result }}" == "success" ]; then
+            echo "message=✅ Fireworks Play Deployed Successfully! 🚀" >> $GITHUB_OUTPUT
+            echo "color=good" >> $GITHUB_OUTPUT
           else
-            echo "message=❌ *Fireworks Play Deployment Failed!* 💥" >> $GITHUB_ENV
+            echo "message=❌ Fireworks Play Deployment Failed! 💥" >> $GITHUB_OUTPUT
+            echo "color=danger" >> $GITHUB_OUTPUT
           fi
 
       - name: Send Telegram Notification
@@ -132,11 +108,12 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_PARSE_MODE: markdownv2
           TELEGRAM_MESSAGE: |
-            ${{ env.message }}
+            ${{ steps.status.outputs.message }}
 
             *Repo*: \`${{ github.repository }}\`
             *Branch*: \`${{ github.ref_name }}\`
             *Commit*: \`${{ github.sha }}\`
-            *Status*: \`${{ needs.deploy.result }}\`
+            *Status*: \`${{ needs.build-and-deploy.result }}\`
+            *Duration*: ${{ job.status }}
 
-            👉 [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            👉 [View Site](https://fireworksplay.com) | [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
