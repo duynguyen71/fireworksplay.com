@@ -35,7 +35,7 @@ jobs:
       - name: Build the project (no ESLint)
         run: npm run build
         env:
-          REACT_APP_WORKER_API_URL: ${{ secrets.REACT_APP_WORKER_API_URL }}
+          REACT_APP_WORKER_API_URL: ${{ secrets.REACT_APP_WORKER_API_URL || 'https://fireworksplay-database-api.khanhduy-dev-bt.workers.dev' }}
 
       - name: Deploy to GitHub Pages
         if: success()
