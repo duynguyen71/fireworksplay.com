@@ -1,5 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 .env
+
 # dependencies
 /node_modules
 /.pnp
@@ -21,3 +22,20 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Claude AI files
+.claude/
+
+# Cloudflare Worker files (separate deployment)
+cloudflare-worker/
+
+# Migration scripts (sensitive data)
+simple-migrate.js
+create-user.js
+migrate-releases.js
+
+# Test files
+test-release.json
+
+# Log files
+*.log
