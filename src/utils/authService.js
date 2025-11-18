@@ -3,10 +3,10 @@
 
 import React from 'react';
 
-const WORKER_API_URL = process.env.REACT_APP_WORKER_API_URL;
+const WORKER_API_URL = process.env.REACT_APP_WORKER_API_URL || 'https://fireworksplay-database-api.ca6ddd6304307642c.workers.dev';
 
-if (!WORKER_API_URL) {
-  console.error('REACT_APP_WORKER_API_URL environment variable is not set');
+if (!process.env.REACT_APP_WORKER_API_URL) {
+  console.warn('REACT_APP_WORKER_API_URL environment variable is not set, using default:', WORKER_API_URL);
 }
 
 // Token storage keys
@@ -49,9 +49,7 @@ class AuthService {
 
   // Register new user
   async register(userData) {
-    if (!WORKER_API_URL) {
-      throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-    }
+    // WORKER_API_URL now has a fallback, so no need to check
 
     try {
       const response = await fetch(`${WORKER_API_URL}/api/auth/register`, {
@@ -81,9 +79,7 @@ class AuthService {
 
   // Login user
   async login(credentials) {
-    if (!WORKER_API_URL) {
-      throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-    }
+    // WORKER_API_URL now has a fallback, so no need to check
 
     try {
       const response = await fetch(`${WORKER_API_URL}/api/auth/login`, {
@@ -147,9 +143,7 @@ class AuthService {
       throw new Error('No authentication token found');
     }
 
-    if (!WORKER_API_URL) {
-      throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-    }
+    // WORKER_API_URL now has a fallback, so no need to check
 
     try {
       const response = await fetch(`${WORKER_API_URL}/api/auth/me`, {

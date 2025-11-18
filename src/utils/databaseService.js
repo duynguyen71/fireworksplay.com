@@ -5,10 +5,10 @@
 import authService from './authService';
 
 // Cloudflare Worker API URL - MUST be configured in environment variables
-const WORKER_API_URL = process.env.REACT_APP_WORKER_API_URL;
+const WORKER_API_URL = process.env.REACT_APP_WORKER_API_URL || 'https://fireworksplay-database-api.ca6ddd6304307642c.workers.dev';
 
-if (!WORKER_API_URL) {
-  console.error('REACT_APP_WORKER_API_URL environment variable is not set');
+if (!process.env.REACT_APP_WORKER_API_URL) {
+  console.warn('REACT_APP_WORKER_API_URL environment variable is not set, using default:', WORKER_API_URL);
 }
 
 // Cache configuration
@@ -52,9 +52,7 @@ const clearCache = () => {
 
 // Fetch all releases from Cloudflare D1 database
 export const fetchReleases = async (page = 1, limit = 50, useCache = true) => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   // Check cache first for page 1 requests (most common case)
   if (useCache && page === 1) {
@@ -92,9 +90,7 @@ export const fetchReleases = async (page = 1, limit = 50, useCache = true) => {
 
 // Create new release
 export const createRelease = async (releaseData) => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const response = await fetch(`${WORKER_API_URL}/api/releases`, {
@@ -124,9 +120,7 @@ export const createRelease = async (releaseData) => {
 
 // Update existing release
 export const updateRelease = async (id, releaseData) => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const response = await fetch(`${WORKER_API_URL}/api/releases/${id}`, {
@@ -156,9 +150,7 @@ export const updateRelease = async (id, releaseData) => {
 
 // Delete release
 export const deleteRelease = async (id) => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const response = await fetch(`${WORKER_API_URL}/api/releases/${id}`, {
@@ -187,9 +179,7 @@ export const deleteRelease = async (id) => {
 
 // Search releases
 export const searchReleases = async (query, limit = 50) => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const params = new URLSearchParams({ q: query, limit: limit.toString() });
@@ -210,9 +200,7 @@ export const searchReleases = async (query, limit = 50) => {
 
 // Get statistics
 export const getStats = async () => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const response = await fetch(`${WORKER_API_URL}/api/stats`);
@@ -232,9 +220,7 @@ export const getStats = async () => {
 
 // Export releases
 export const exportReleases = async () => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const response = await fetch(`${WORKER_API_URL}/api/releases/export`);
@@ -254,9 +240,7 @@ export const exportReleases = async () => {
 
 // Get database schema info
 export const getDatabaseInfo = async () => {
-  if (!WORKER_API_URL) {
-    throw new Error('Worker API URL not configured. Please set REACT_APP_WORKER_API_URL');
-  }
+  // WORKER_API_URL now has a fallback, so no need to check
 
   try {
     const response = await fetch(`${WORKER_API_URL}/api/schema`);
