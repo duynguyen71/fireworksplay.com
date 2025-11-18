@@ -319,13 +319,10 @@ const ReleaseNoteDashboard = () => {
     );
   };
 
-  // Calculate stats
-  const totalReleases = releases.length + databaseReleases.length;
-  const totalChanges = releases.reduce((sum, release) => sum + release.changes.length, 0) +
-    databaseReleases.reduce((sum, release) => sum + release.changes.length, 0);
-  const videoCount = releases.reduce((sum, release) =>
-    sum + release.changes.filter(change => isVideoLink(change)).length, 0
-  ) + databaseReleases.reduce((sum, release) =>
+  // Calculate stats (only from database since all data has been migrated)
+  const totalReleases = databaseReleases.length;
+  const totalChanges = databaseReleases.reduce((sum, release) => sum + release.changes.length, 0);
+  const videoCount = databaseReleases.reduce((sum, release) =>
     sum + release.changes.filter(change => isVideoLink(change)).length, 0
   );
 
@@ -591,17 +588,17 @@ const ReleaseNoteDashboard = () => {
             </CardBody>
           </Card>
 
-          {/* Local Files Info (Read-only) */}
+          {/* Database Info */}
           <Alert status="info" borderRadius="lg" variant="subtle">
             <AlertIcon />
             <Box>
-              <AlertTitle fontSize="md">📁 Local Files Information</AlertTitle>
+              <AlertTitle fontSize="md">💾 Database Information</AlertTitle>
               <Text fontSize="sm">
-                There are {releases.length} local release files that are now integrated into the
+                All release notes are now managed in the Cloudflare Database. View them on the
                 <Button as={RouterLink} to="/release-notes" variant="link" colorScheme="blue" ml={1} fontSize="sm">
                   Release Notes View
                 </Button>
-                page. Local files are now read-only and displayed alongside database releases.
+                page.
               </Text>
             </Box>
           </Alert>
