@@ -24,6 +24,7 @@ import {
   FormLabel,
   Textarea,
   Input,
+  Divider,
   useToast,
   Alert,
   AlertIcon,
@@ -41,6 +42,7 @@ import {
   CardBody,
   SimpleGrid,
   Flex,
+  Icon,
   Tag,
   TagLabel,
   TagLeftIcon,
@@ -327,10 +329,13 @@ const ReleaseNoteDashboard = () => {
     sum + release.changes.filter(change => isVideoLink(change)).length, 0
   );
 
-  // Color mode values for dynamic theming
+  // Color mode values for dynamic theming (must be called before any conditional returns)
   const cardBg = useColorModeValue("white", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const headerBg = useColorModeValue("linear-gradient(135deg, #667eea 0%, #764ba2 100%)", "linear-gradient(135deg, #553c9a 0%, #44337a 100%)");
+  const pageBg = useColorModeValue("gray.50", "gray.900");
+  const tableHeaderBg = useColorModeValue("gray.50", "gray.700");
+  const tableRowHoverBg = useColorModeValue("gray.50", "gray.700");
 
   if (loading) {
     return (
@@ -344,7 +349,7 @@ const ReleaseNoteDashboard = () => {
   }
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
+    <Box minH="100vh" bg={pageBg}>
       {/* Header Section */}
       <Box bgGradient={headerBg} color="white" py={8} px={4}>
         <Box maxW="1200px" mx="auto">
@@ -494,7 +499,7 @@ const ReleaseNoteDashboard = () => {
 
           {/* Database Releases Management */}
           <Card bg={cardBg} border="1px solid" borderColor={borderColor} shadow="lg">
-            <CardHeader bg={useColorModeValue("gray.50", "gray.700")} borderTopRadius="lg">
+            <CardHeader bg={tableHeaderBg} borderTopRadius="lg">
               <HStack justify="space-between">
                 <Heading size="lg" color="red.500">
                   🗄️ Cloudflare Database Releases ({databaseReleases.length})
@@ -510,7 +515,7 @@ const ReleaseNoteDashboard = () => {
                 <TableContainer>
                   <Table variant="simple">
                     <Thead>
-                      <Tr bg={useColorModeValue("gray.50", "gray.700")}>
+                      <Tr bg={tableHeaderBg}>
                         <Th fontWeight="bold">Version</Th>
                         <Th fontWeight="bold">Changes</Th>
                         <Th fontWeight="bold">Media</Th>
@@ -519,7 +524,7 @@ const ReleaseNoteDashboard = () => {
                     </Thead>
                     <Tbody>
                       {databaseReleases.map((release) => (
-                        <Tr key={release.id} _hover={{ bg: useColorModeValue("gray.50", "gray.700") }}>
+                        <Tr key={release.id} _hover={{ bg: tableRowHoverBg }}>
                           <Td fontWeight="bold" color="blue.600">
                             {release.version}
                           </Td>
@@ -605,8 +610,9 @@ const ReleaseNoteDashboard = () => {
       </Box>
 
       {/* Modals */}
-      {/* Edit Modal */}
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} size="xl">
+      <>
+        {/* Edit Modal */}
+        <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} size="xl">
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Edit Release</ModalHeader>
@@ -750,7 +756,7 @@ const ReleaseNoteDashboard = () => {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </Box>
+      </>
     </Box>
   );
 };
