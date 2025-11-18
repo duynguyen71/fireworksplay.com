@@ -82,38 +82,4 @@ jobs:
           # Deploy with custom 404 and nojekyll
           keep_files: false
 
-  # Separate job for notifications to not block deployment
-  notify:
-    needs: build-and-deploy
-    runs-on: ubuntu-latest
-    if: always() && (secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '')
-    timeout-minutes: 2  # Quick timeout for notifications
-
-    steps:
-      - name: Set deployment status
-        id: status
-        run: |
-          if [ "${{ needs.build-and-deploy.result }}" == "success" ]; then
-            echo "message=✅ Fireworks Play Deployed Successfully! 🚀" >> $GITHUB_OUTPUT
-            echo "color=good" >> $GITHUB_OUTPUT
-          else
-            echo "message=❌ Fireworks Play Deployment Failed! 💥" >> $GITHUB_OUTPUT
-            echo "color=danger" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Send Telegram Notification
-        uses: up9cloud/action-notify@v0.4
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_PARSE_MODE: markdownv2
-          TELEGRAM_MESSAGE: |
-            ${{ steps.status.outputs.message }}
-
-            *Repo*: \`${{ github.repository }}\`
-            *Branch*: \`${{ github.ref_name }}\`
-            *Commit*: \`${{ github.sha }}\`
-            *Status*: \`${{ needs.build-and-deploy.result }}\`
-            *Duration*: ${{ job.status }}
-
-            👉 [View Site](https://fireworksplay.com) | [View Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+  
