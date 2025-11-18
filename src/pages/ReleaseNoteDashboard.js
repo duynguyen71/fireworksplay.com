@@ -694,8 +694,15 @@ const ReleaseNoteDashboard = () => {
                     <Textarea
                       value={quickInputText}
                       onChange={(e) => setQuickInputText(e.target.value)}
-                      placeholder="Paste formatted release note here..."
-                      rows={6}
+                      placeholder="Example format:
+
+Version 2025.11.1 | Bundle Version 101 | Version Code 80
+Android Target SDK 35 (android 15) | Min 23 (android 5.1)
+Custom Map is available now!
+- Build your own map.
+- Import/Export for sharing.
+https://youtu.be/f0wHacQFoZ4"
+                      rows={8}
                     />
                     <Button
                       onClick={handleQuickParse}
