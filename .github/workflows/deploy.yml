@@ -4,82 +4,43 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    types:
-      - closed
-    branches:
-      - master
   workflow_dispatch:
 
 # Environment variables for the entire workflow
 env:
   NODE_ENV: production
   CI: true
+  DISABLE_ESLINT_PLUGIN: true
 
 jobs:
   build-and-deploy:
-    # Only run on push to master or merged PRs
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # Prevent hanging builds
+    timeout-minutes: 10  # Shorter timeout for streamlined build
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1  # Shallow clone for faster checkout
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"  # Use latest LTS
-          cache: 'npm'  # Built-in npm caching is faster
+          node-version: "20"
+          cache: 'npm'
 
-      # Enhanced caching strategy
-      - name: Cache node modules and build artifacts
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            node_modules
-            build
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-build-${{ hashFiles('src/**/*', 'public/**/*') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}-
-            ${{ runner.os }}-node-
-
-      # Install dependencies with npm ci (faster and more reliable)
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit
 
-      # Pre-build optimization
-      - name: Generate Updates Index
-        run: node src/data/updates/auto-generate-index.js
-
-      # Build with optimization
-      - name: Build the project
+      - name: Build the project (no ESLint)
         run: npm run build
         env:
           REACT_APP_WORKER_API_URL: ${{ secrets.REACT_APP_WORKER_API_URL }}
 
-      # Optional: Analyze bundle size (only on PRs for debugging)
-      - name: Analyze bundle size
-        if: github.event_name == 'pull_request'
-        run: |
-          if [ -d "build/static" ]; then
-            echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
-            find build/static -name "*.js" -o -name "*.css" | xargs du -h | sort -hr >> $GITHUB_STEP_SUMMARY
-          fi
-
-      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        if: success()  # Only deploy if build succeeds
+        if: success()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
           enable_jekyll: false
-          # Deploy with custom 404 and nojekyll
-          keep_files: false
-
-  
