@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-const WORKER_API_URL = process.env.REACT_APP_WORKER_API_URL || 'https://fireworksplay-database-api.ca6ddd6304307642c.workers.dev';
+const WORKER_API_URL = process.env.REACT_APP_WORKER_API_URL || 'https://fireworksplay-database-api.khanhduy-dev-bt.workers.dev';
 
 if (!process.env.REACT_APP_WORKER_API_URL) {
   console.warn('REACT_APP_WORKER_API_URL environment variable is not set, using default:', WORKER_API_URL);

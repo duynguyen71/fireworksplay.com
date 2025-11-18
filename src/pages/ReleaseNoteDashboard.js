@@ -24,7 +24,6 @@ import {
   FormLabel,
   Textarea,
   Input,
-  Divider,
   useToast,
   Alert,
   AlertIcon,
@@ -42,7 +41,6 @@ import {
   CardBody,
   SimpleGrid,
   Flex,
-  Icon,
   Tag,
   TagLabel,
   TagLeftIcon,
@@ -58,8 +56,6 @@ import {
   ChevronDownIcon,
   TimeIcon,
   ViewIcon,
-  CheckCircleIcon,
-  ExternalLinkIcon,
 } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import allUpdates from "../data/updates";
