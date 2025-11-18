@@ -93,7 +93,7 @@ const ReleaseNote = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [user, setUser] = useState(authService.getUser());
+  const [user, _setUser] = useState(authService.getUser());
   const itemsPerPage = 5;
   const totalPages = Math.ceil(releases.length / itemsPerPage);
 

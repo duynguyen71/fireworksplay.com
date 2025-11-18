@@ -3,7 +3,6 @@ import {
   Box,
   Heading,
   Text,
-  Stack,
   Button,
   HStack,
   VStack,
@@ -25,10 +24,10 @@ import {
   FormLabel,
   Textarea,
   Input,
-  Divider,
   useToast,
   Alert,
   AlertIcon,
+  AlertTitle,
   Badge,
   Spinner,
   IconButton,
@@ -37,12 +36,28 @@ import {
   MenuList,
   MenuItem,
   Avatar,
+  Card,
+  CardHeader,
+  CardBody,
+  SimpleGrid,
+  Flex,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  Wrap,
+  WrapItem,
+  Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import {
   EditIcon,
   DeleteIcon,
   AddIcon,
-  ChevronDownIcon
+  ChevronDownIcon,
+  TimeIcon,
+  ViewIcon,
+  CheckCircleIcon,
+  ExternalLinkIcon,
 } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import allUpdates from "../data/updates";
@@ -302,6 +317,7 @@ const ReleaseNoteDashboard = () => {
     );
   };
 
+  // Calculate stats
   const totalReleases = releases.length + databaseReleases.length;
   const totalChanges = releases.reduce((sum, release) => sum + release.changes.length, 0) +
     databaseReleases.reduce((sum, release) => sum + release.changes.length, 0);
@@ -311,188 +327,286 @@ const ReleaseNoteDashboard = () => {
     sum + release.changes.filter(change => isVideoLink(change)).length, 0
   );
 
+  // Color mode values for dynamic theming
+  const cardBg = useColorModeValue("white", "gray.800");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const headerBg = useColorModeValue("linear-gradient(135deg, #667eea 0%, #764ba2 100%)", "linear-gradient(135deg, #553c9a 0%, #44337a 100%)");
+
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minH="400px">
-        <Spinner size="xl" />
+      <Box display="flex" justifyContent="center" alignItems="center" minH="60vh" bgGradient={headerBg}>
+        <VStack spacing={4} color="white">
+          <Spinner size="xl" thickness="4px" speed="0.65s" emptyColor="gray.200" color="white" />
+          <Text fontSize="lg" fontWeight="medium">Loading Dashboard...</Text>
+        </VStack>
       </Box>
     );
   }
 
   return (
-    <Box maxW="1200px" mx="auto" px={4} py={8}>
-      <VStack spacing={6} align="stretch">
-        <HStack justify="space-between">
-          <Heading size="2xl" color="red.500">
-            FireworksPlay Release Notes Dashboard
-          </Heading>
-          <HStack spacing={4}>
-            <Button
-              onClick={fetchFromDatabase}
-              isLoading={fetchingFromNotion}
-              colorScheme="blue"
-              variant="outline"
-            >
-              Refresh Database
-            </Button>
-            <Button
-              leftIcon={<AddIcon />}
-              onClick={handleNew}
-              colorScheme="green"
-            >
-              Add Release
-            </Button>
+    <Box minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
+      {/* Header Section */}
+      <Box bgGradient={headerBg} color="white" py={8} px={4}>
+        <Box maxW="1200px" mx="auto">
+          <VStack spacing={6} align="stretch">
+            <Flex justify="space-between" align="center">
+              <VStack align="start" spacing={2}>
+                <Heading size="2xl" fontWeight="bold">
+                  🎆 FireworksPlay Dashboard
+                </Heading>
+                <Text fontSize="lg" opacity={0.9}>
+                  Manage your release notes with ease
+                </Text>
+              </VStack>
 
-            {/* User Menu */}
-            <Menu>
-              <MenuButton
-                as={Button}
-                variant="outline"
-                rightIcon={<ChevronDownIcon />}
-                leftIcon={
-                  <Avatar
-                    size="sm"
-                    name={user?.name || 'User'}
-                    bg="red.500"
-                    color="white"
-                  />
-                }
-              >
-                <Text fontSize="sm" fontWeight="medium">
-                  {user?.name || 'User'}
-                </Text>
-                <Text fontSize="xs" color="gray.500">
-                  {user?.role || 'user'}
-                </Text>
-              </MenuButton>
-              <MenuList>
-                <MenuItem>
-                  <VStack align="start" spacing={0}>
-                    <Text fontWeight="bold">{user?.name}</Text>
-                    <Text fontSize="sm" color="gray.600">{user?.email}</Text>
-                    <Badge colorScheme={user?.role === 'admin' ? 'red' : 'blue'} size="sm">
-                      {user?.role?.toUpperCase() || 'USER'}
-                    </Badge>
-                  </VStack>
-                </MenuItem>
-                <MenuItem
-                  icon={<DeleteIcon />}
-                  onClick={handleLogout}
-                  color="red.600"
+              <HStack spacing={4}>
+                <Tooltip label="Refresh database" placement="top">
+                  <Button
+                    onClick={fetchFromDatabase}
+                    isLoading={fetchingFromNotion}
+                    colorScheme="whiteAlpha"
+                    variant="solid"
+                    leftIcon={<TimeIcon />}
+                  >
+                    Refresh
+                  </Button>
+                </Tooltip>
+
+                <Button
+                  leftIcon={<AddIcon />}
+                  onClick={handleNew}
+                  colorScheme="green"
+                  variant="solid"
+                  size="lg"
                 >
-                  Logout
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
-        </HStack>
+                  Add Release
+                </Button>
 
-        {/* Stats Cards */}
-        <Stack direction="row" spacing={4}>
-          <Box bg="white" p={4} borderRadius="lg" boxShadow="md" flex={1}>
-            <Text fontSize="sm" color="gray.600">Total Releases</Text>
-            <Heading size="lg" color="blue.500">{totalReleases}</Heading>
-          </Box>
-          <Box bg="white" p={4} borderRadius="lg" boxShadow="md" flex={1}>
-            <Text fontSize="sm" color="gray.600">Total Changes</Text>
-            <Heading size="lg" color="green.500">{totalChanges}</Heading>
-          </Box>
-          <Box bg="white" p={4} borderRadius="lg" boxShadow="md" flex={1}>
-            <Text fontSize="sm" color="gray.600">Videos</Text>
-            <Heading size="lg" color="purple.500">{videoCount}</Heading>
-          </Box>
-        </Stack>
-
-        {/* Welcome Message */}
-        <Alert status="success" borderRadius="lg">
-          <AlertIcon />
-          <Box>
-            <Text fontWeight="bold">Welcome, {user?.name}!</Text>
-            <Text fontSize="sm">
-              You are logged in as an {user?.role}. You can manage release notes from this dashboard.
-            </Text>
-          </Box>
-        </Alert>
-
-        {/* Database Releases Management */}
-        <Box>
-          <Heading size="lg" color="red.500" mb={4}>
-            Cloudflare Database Releases ({databaseReleases.length})
-          </Heading>
-
-          {databaseReleases.length > 0 ? (
-            <TableContainer bg="white" borderRadius="lg" boxShadow="md">
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Version</Th>
-                    <Th>Changes Count</Th>
-                    <Th>Has Video</Th>
-                    <Th>Actions</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {databaseReleases.map((release) => (
-                    <Tr key={release.id}>
-                      <Td fontWeight="bold">{release.version}</Td>
-                      <Td>{release.changes.length}</Td>
-                      <Td>
-                        {release.changes.some(change => isVideoLink(change)) ? (
-                          <Badge colorScheme="green">Yes</Badge>
-                        ) : (
-                          <Badge colorScheme="gray">No</Badge>
-                        )}
-                      </Td>
-                      <Td>
-                        <HStack spacing={2}>
-                          <IconButton
-                            icon={<EditIcon />}
-                            size="sm"
-                            onClick={() => handleEdit(release)}
-                            aria-label="Edit release"
-                          />
-                          <IconButton
-                            icon={<DeleteIcon />}
-                            size="sm"
-                            onClick={() => handleDelete(release)}
-                            colorScheme="red"
-                            aria-label="Delete release"
-                          />
+                {/* Enhanced User Menu */}
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    colorScheme="whiteAlpha"
+                    variant="solid"
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    <HStack spacing={2}>
+                      <Avatar
+                        size="sm"
+                        name={user?.name || 'User'}
+                        bg="white"
+                        color="purple.600"
+                        border="2px solid white"
+                      />
+                      <VStack spacing={0} align="start" display={{ base: 'none', md: 'flex' }}>
+                        <Text fontSize="sm" fontWeight="bold">{user?.name || 'User'}</Text>
+                        <Text fontSize="xs" opacity={0.8}>{user?.role || 'user'}</Text>
+                      </VStack>
+                    </HStack>
+                  </MenuButton>
+                  <MenuList bg={cardBg} borderColor={borderColor}>
+                    <MenuItem bg="transparent">
+                      <VStack align="start" spacing={2} w="full">
+                        <HStack w="full" justify="space-between">
+                          <Text fontWeight="bold">{user?.name}</Text>
+                          <Badge colorScheme={user?.role === 'admin' ? 'red' : 'blue'} variant="solid">
+                            {user?.role?.toUpperCase() || 'USER'}
+                          </Badge>
                         </HStack>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          ) : (
-            <Alert status="info" borderRadius="lg">
-              <AlertIcon />
-              <Box>
-                <Text fontWeight="bold">No releases in database</Text>
-                <Text mt={1}>Click 'Add Release' to create your first release in Cloudflare Storage.</Text>
-              </Box>
-            </Alert>
-          )}
+                        <Text fontSize="sm" color="gray.600">{user?.email}</Text>
+                      </VStack>
+                    </MenuItem>
+                    <MenuItem
+                      icon={<ViewIcon />}
+                      as={RouterLink}
+                      to="/release-notes"
+                    >
+                      View Release Notes
+                    </MenuItem>
+                    <MenuItem
+                      icon={<DeleteIcon />}
+                      onClick={handleLogout}
+                      color="red.600"
+                    >
+                      Logout
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
+            </Flex>
+
+            {/* Enhanced Stats Cards */}
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+              <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
+                <CardBody>
+                  <HStack justify="space-between">
+                    <VStack align="start" spacing={1}>
+                      <Text fontSize="sm" color="whiteAlpha.800" fontWeight="medium">Total Releases</Text>
+                      <Heading size="lg" color="white">{totalReleases}</Heading>
+                    </VStack>
+                    <Icon as={CheckCircleIcon} boxSize={10} color="green.300" />
+                  </HStack>
+                </CardBody>
+              </Card>
+
+              <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
+                <CardBody>
+                  <HStack justify="space-between">
+                    <VStack align="start" spacing={1}>
+                      <Text fontSize="sm" color="whiteAlpha.800" fontWeight="medium">Total Changes</Text>
+                      <Heading size="lg" color="white">{totalChanges}</Heading>
+                    </VStack>
+                    <Icon as={TimeIcon} boxSize={10} color="blue.300" />
+                  </HStack>
+                </CardBody>
+              </Card>
+
+              <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
+                <CardBody>
+                  <HStack justify="space-between">
+                    <VStack align="start" spacing={1}>
+                      <Text fontSize="sm" color="whiteAlpha.800" fontWeight="medium">Video Content</Text>
+                      <Heading size="lg" color="white">{videoCount}</Heading>
+                    </VStack>
+                    <Icon as={ExternalLinkIcon} boxSize={10} color="purple.300" />
+                  </HStack>
+                </CardBody>
+              </Card>
+            </SimpleGrid>
+          </VStack>
         </Box>
+      </Box>
 
-        {/* Local Files Info (Read-only) */}
-        <Alert status="info" borderRadius="lg" mt={6}>
-          <AlertIcon />
-          <Box>
-            <Text fontWeight="bold">Local Files Information</Text>
-            <Text mt={1}>
-              There are {releases.length} local release files that are now integrated into the
-              <Button as={RouterLink} to="/release-notes" variant="link" colorScheme="blue" ml={1}>
-                Release Notes View
-              </Button>
-              page. Local files are now read-only and displayed alongside database releases.
-            </Text>
-          </Box>
-        </Alert>
+      {/* Main Content */}
+      <Box maxW="1200px" mx="auto" px={4} py={8}>
+        <VStack spacing={6} align="stretch">
 
-        {/* Edit Modal */}
-        <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} size="xl">
+          {/* Welcome Message */}
+          <Alert status="success" borderRadius="lg" variant="solid">
+            <AlertIcon boxSize="20px" />
+            <Box>
+              <AlertTitle>Welcome back, {user?.name}! 👋</AlertTitle>
+              <Text fontSize="sm">
+                You are logged in as an {user?.role}. You can manage release notes from this dashboard.
+              </Text>
+            </Box>
+          </Alert>
+
+          {/* Database Releases Management */}
+          <Card bg={cardBg} border="1px solid" borderColor={borderColor} shadow="lg">
+            <CardHeader bg={useColorModeValue("gray.50", "gray.700")} borderTopRadius="lg">
+              <HStack justify="space-between">
+                <Heading size="lg" color="red.500">
+                  🗄️ Cloudflare Database Releases ({databaseReleases.length})
+                </Heading>
+                <Tag colorScheme="blue" variant="solid">
+                  <TagLeftIcon as={CheckCircleIcon} />
+                  <TagLabel>Database</TagLabel>
+                </Tag>
+              </HStack>
+            </CardHeader>
+            <CardBody>
+              {databaseReleases.length > 0 ? (
+                <TableContainer>
+                  <Table variant="simple">
+                    <Thead>
+                      <Tr bg={useColorModeValue("gray.50", "gray.700")}>
+                        <Th fontWeight="bold">Version</Th>
+                        <Th fontWeight="bold">Changes</Th>
+                        <Th fontWeight="bold">Media</Th>
+                        <Th fontWeight="bold" textAlign="center">Actions</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {databaseReleases.map((release) => (
+                        <Tr key={release.id} _hover={{ bg: useColorModeValue("gray.50", "gray.700") }}>
+                          <Td fontWeight="bold" color="blue.600">
+                            {release.version}
+                          </Td>
+                          <Td>
+                            <Badge colorScheme="green" variant="subtle">
+                              {release.changes.length} {release.changes.length === 1 ? 'change' : 'changes'}
+                            </Badge>
+                          </Td>
+                          <Td>
+                            <Wrap>
+                              {release.changes.some(change => isVideoLink(change)) && (
+                                <WrapItem>
+                                  <Tag colorScheme="purple" variant="solid" size="sm">
+                                    <TagLeftIcon as={ExternalLinkIcon} />
+                                    <TagLabel>Video</TagLabel>
+                                  </Tag>
+                                </WrapItem>
+                              )}
+                              <WrapItem>
+                                <Tag colorScheme="blue" variant="outline" size="sm">
+                                  <TagLabel>{release.changes.length} items</TagLabel>
+                                </Tag>
+                              </WrapItem>
+                            </Wrap>
+                          </Td>
+                          <Td>
+                            <HStack spacing={2} justify="center">
+                              <Tooltip label="Edit Release">
+                                <IconButton
+                                  icon={<EditIcon />}
+                                  size="sm"
+                                  colorScheme="blue"
+                                  variant="ghost"
+                                  onClick={() => handleEdit(release)}
+                                  aria-label="Edit release"
+                                />
+                              </Tooltip>
+                              <Tooltip label="Delete Release">
+                                <IconButton
+                                  icon={<DeleteIcon />}
+                                  size="sm"
+                                  colorScheme="red"
+                                  variant="ghost"
+                                  onClick={() => handleDelete(release)}
+                                  aria-label="Delete release"
+                                />
+                              </Tooltip>
+                            </HStack>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              ) : (
+                <Alert status="info" borderRadius="lg" variant="subtle">
+                  <AlertIcon />
+                  <Box>
+                    <AlertTitle fontSize="md">No releases in database</AlertTitle>
+                    <Text fontSize="sm">Click 'Add Release' to create your first release in Cloudflare Database.</Text>
+                  </Box>
+                </Alert>
+              )}
+            </CardBody>
+          </Card>
+
+          {/* Local Files Info (Read-only) */}
+          <Alert status="info" borderRadius="lg" variant="subtle">
+            <AlertIcon />
+            <Box>
+              <AlertTitle fontSize="md">📁 Local Files Information</AlertTitle>
+              <Text fontSize="sm">
+                There are {releases.length} local release files that are now integrated into the
+                <Button as={RouterLink} to="/release-notes" variant="link" colorScheme="blue" ml={1} fontSize="sm">
+                  Release Notes View
+                </Button>
+                page. Local files are now read-only and displayed alongside database releases.
+              </Text>
+            </Box>
+          </Alert>
+
+        </VStack>
+      </Box>
+
+      {/* Modals */}
+      {/* Edit Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} size="xl">
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Edit Release</ModalHeader>
@@ -636,7 +750,7 @@ const ReleaseNoteDashboard = () => {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </VStack>
+      </Box>
     </Box>
   );
 };
