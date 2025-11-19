@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Box,
   Heading,
@@ -44,72 +44,31 @@ import {
   Flex,
   Icon,
   Tag,
-  TagLabel,
-  TagLeftIcon,
-  Wrap,
-  WrapItem,
   Tooltip,
   useColorModeValue,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  useDisclosure,
-  Collapse,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Grid,
-  GridItem,
   Container,
   useBreakpointValue,
   Hide,
-  Show,
-  Stack,
-  Progress,
   Stat,
   StatLabel,
   StatNumber,
-  StatHelpText,
-  StatArrow,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   List,
   ListItem,
-  ListIcon,
-  ButtonGroup,
-  Spacer,
+  Progress,
+  ScaleFade,
+  SlideFade,
+  Circle,
 } from "@chakra-ui/react";
 import {
   EditIcon,
   DeleteIcon,
   AddIcon,
   ChevronDownIcon,
+  ChevronUpIcon,
   TimeIcon,
   ViewIcon,
   CheckCircleIcon,
   ExternalLinkIcon,
-  HamburgerIcon,
-  CloseIcon,
-  SettingsIcon,
-  SearchIcon,
-  FilterIcon,
-  CopyIcon,
-  DownloadIcon,
-  BellIcon,
-  InfoIcon,
-  WarningIcon,
-  StarIcon,
-  CalendarIcon,
-  LinkIcon,
-  ChatIcon,
 } from "@chakra-ui/icons";
 import { Link as RouterLink } from "react-router-dom";
 import allUpdates from "../data/updates";
@@ -122,6 +81,19 @@ import {
 import authService from "../utils/authService";
 import { parseQuickRelease } from "../utils/quickReleaseParser";
 
+// Clear any existing cache on page load
+const clearExistingCache = () => {
+  try {
+    localStorage.removeItem('fireworksplay_releases_cache');
+    console.log('🗑️ Cleared existing release notes cache');
+  } catch (error) {
+    console.warn('Error clearing cache:', error);
+  }
+};
+
+// Clear cache immediately when module loads
+clearExistingCache();
+
 const ReleaseNoteDashboard = () => {
   const [releases, setReleases] = useState([]);
   const [databaseReleases, setDatabaseReleases] = useState([]);
@@ -133,15 +105,17 @@ const ReleaseNoteDashboard = () => {
   const [formData, setFormData] = useState({ version: '', changes: [''] });
   const [quickInputText, setQuickInputText] = useState('');
   const [user, setUser] = useState(authService.getUser());
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25;
+  const totalPages = Math.ceil(databaseReleases.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   // Responsive breakpoints
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const isTablet = useBreakpointValue({ base: false, md: true, lg: false });
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
 
   // Responsive sizing
   const containerMaxWidth = useBreakpointValue({ base: "100%", md: "container.md", lg: "container.lg", xl: "container.xl" });
@@ -150,8 +124,17 @@ const ReleaseNoteDashboard = () => {
   const headerPadding = useBreakpointValue({ base: 4, sm: 6, md: 8 });
   const contentPadding = useBreakpointValue({ base: 4, sm: 6, md: 8 });
 
-  const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
-  const toast = useToast();
+  const toast = useToast({
+    position: "top-right",
+    duration: 4000,
+    isClosable: true,
+    variant: "solid",
+  });
+
+  // Ref to track if data has been loaded to prevent multiple API calls
+  const hasLoadedData = useRef(false);
+  const isLoadingData = useRef(false);
+  const lastLoadTime = useRef(0);
 
   const handleLogout = async () => {
     try {
@@ -162,8 +145,6 @@ const ReleaseNoteDashboard = () => {
         title: "Logged Out",
         description: "You have been logged out successfully",
         status: "info",
-        duration: 3000,
-        isClosable: true,
       });
 
       // Redirect to login page
@@ -175,26 +156,134 @@ const ReleaseNoteDashboard = () => {
         description: "Failed to logout",
         status: "error",
         duration: 5000,
-        isClosable: true,
       });
     }
   };
 
   const fetchFromDatabase = useCallback(async () => {
+    const now = Date.now();
+
+    // Prevent multiple API calls with multiple checks
+    if (hasLoadedData.current) {
+      console.log('🔄 fetchFromDatabase: Already loaded, skipping API call');
+      return;
+    }
+
+    if (isLoadingData.current) {
+      console.log('🔄 fetchFromDatabase: Currently loading, skipping API call');
+      return;
+    }
+
+    // Prevent calls within 2 seconds of last call
+    if (now - lastLoadTime.current < 2000) {
+      console.log('🔄 fetchFromDatabase: Called too quickly, skipping API call');
+      return;
+    }
+
+    console.log('🔄 fetchFromDatabase: Starting API call');
+
+    hasLoadedData.current = true; // Set immediately to prevent race conditions
+    isLoadingData.current = true;
+    lastLoadTime.current = now;
+
     setFetchingFromNotion(true);
     try {
-      const data = await fetchReleases();
-      setDatabaseReleases(data.releases || data);
+      const data = await fetchReleases(1, 50, false); // Disable cache
+      console.log('Fetched data from API:', data);
+      let releases = data.releases || data;
+      console.log('Releases before sorting:', releases);
+
+      // Map API response to ensure proper ID structure
+      if (releases && Array.isArray(releases)) {
+        releases = releases.map((release, index) => {
+          // Debug: Log the full structure of the first few releases
+          if (index < 3) {
+            console.log(`DEBUG Release ${index} full structure:`, JSON.stringify(release, null, 2));
+          }
+
+          // Ensure each release has a proper ID
+          if (!release.id) {
+            // Try different possible ID field names from the API
+            const possibleIdFields = [
+              'id', '_id', 'database_id', 'record_id', 'rowid', 'row_id',
+              'cf_id', 'cloudflare_id', 'd1_id', 'uuid', 'key', 'pk'
+            ];
+            let mappedId = null;
+
+            // Try to find any ID field
+            for (const field of possibleIdFields) {
+              if (release[field] && release[field] !== '') {
+                mappedId = release[field];
+                console.log(`Found ID in field '${field}':`, mappedId);
+                break;
+              }
+            }
+
+            // If still no ID found, check if any field looks like an ID (numeric or UUID pattern)
+            if (!mappedId) {
+              for (const [key, value] of Object.entries(release)) {
+                if (typeof value === 'string' || typeof value === 'number') {
+                  // Check for common ID patterns
+                  if (typeof value === 'number' && value > 0) {
+                    mappedId = value;
+                    console.log(`Found numeric ID in field '${key}':`, mappedId);
+                    break;
+                  } else if (typeof value === 'string' &&
+                            ((value.length === 36 && value.includes('-')) || // UUID format
+                             (value.length === 32 && /^[a-f0-9]{32}$/i.test(value)) || // Hex format
+                             (/^\d+$/.test(value)))) { // Pure numeric string
+                    mappedId = value;
+                    console.log(`Found string ID in field '${key}':`, mappedId);
+                    break;
+                  }
+                }
+              }
+            }
+
+            // If no ID found, create one based on version and index
+            if (!mappedId) {
+              mappedId = `api-version-${release.version || `unknown-${index}`}`;
+              console.log(`No ID found, generated fallback:`, mappedId);
+            }
+
+            return {
+              ...release,
+              id: mappedId
+            };
+          }
+          return release;
+        });
+
+        console.log('Releases after ID mapping:', releases);
+      }
+
+      // Sort releases by created_at in descending order (newest first)
+      if (releases && releases.length > 0) {
+        releases.sort((a, b) => {
+          // Handle cases where created_at might be missing or in different formats
+          const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+          const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+
+          // Sort descending (newest first)
+          return dateB - dateA;
+        });
+        console.log('Releases after sorting by created_at:', releases);
+      }
+
+      setDatabaseReleases(releases);
 
       toast({
         title: "Success",
-        description: `Loaded ${data.releases?.length || data.length} releases from Cloudflare Database`,
+        description: `Loaded ${releases.length} releases from Cloudflare Database`,
         status: "success",
         duration: 3000,
         isClosable: true,
       });
     } catch (error) {
       console.error('Error loading releases from Cloudflare Database:', error);
+
+      // Reset flags on error to allow retry
+      hasLoadedData.current = false;
 
       toast({
         title: "Error",
@@ -204,37 +293,241 @@ const ReleaseNoteDashboard = () => {
         isClosable: true,
       });
     } finally {
+      isLoadingData.current = false;
       setFetchingFromNotion(false);
     }
   }, [toast]);
 
+  // Manual refresh function that bypasses the one-time protection
+  const handleManualRefresh = async () => {
+    console.log('🔄 handleManualRefresh: Starting manual refresh');
+
+    // Prevent multiple simultaneous refresh calls
+    if (isLoadingData.current) {
+      console.log('🔄 handleManualRefresh: Currently loading, skipping');
+      return;
+    }
+
+    // Prevent rapid successive calls (shorter timeout than auto-load)
+    const now = Date.now();
+    if (now - lastLoadTime.current < 500) {
+      console.log('🔄 handleManualRefresh: Called too quickly, skipping');
+      return;
+    }
+
+    isLoadingData.current = true;
+    lastLoadTime.current = now;
+    setFetchingFromNotion(true);
+
+    try {
+      const data = await fetchReleases(1, 50, false); // Disable cache
+      console.log('Manually fetched data from API:', data);
+      let releases = data.releases || data;
+      console.log('Releases before sorting:', releases);
+
+      // Map API response to ensure proper ID structure
+      if (releases && Array.isArray(releases)) {
+        releases = releases.map((release, index) => {
+          // Debug: Log the full structure of the first few releases
+          if (index < 3) {
+            console.log(`DEBUG Release ${index} full structure:`, JSON.stringify(release, null, 2));
+          }
+
+          // Ensure each release has a proper ID
+          if (!release.id) {
+            // Try different possible ID field names from the API
+            const possibleIdFields = [
+              'id', '_id', 'database_id', 'record_id', 'rowid', 'row_id',
+              'cf_id', 'cloudflare_id', 'd1_id', 'uuid', 'key', 'pk'
+            ];
+            let mappedId = null;
+
+            // Try to find any ID field
+            for (const field of possibleIdFields) {
+              if (release[field] && release[field] !== '') {
+                mappedId = release[field];
+                console.log(`Found ID in field '${field}':`, mappedId);
+                break;
+              }
+            }
+
+            // If still no ID found, check if any field looks like an ID (numeric or UUID pattern)
+            if (!mappedId) {
+              for (const [key, value] of Object.entries(release)) {
+                if (typeof value === 'string' || typeof value === 'number') {
+                  // Check for common ID patterns
+                  if (typeof value === 'number' && value > 0) {
+                    mappedId = value;
+                    console.log(`Found numeric ID in field '${key}':`, mappedId);
+                    break;
+                  } else if (typeof value === 'string' &&
+                            ((value.length === 36 && value.includes('-')) || // UUID format
+                             (value.length === 32 && /^[a-f0-9]{32}$/i.test(value)) || // Hex format
+                             (/^\d+$/.test(value)))) { // Pure numeric string
+                    mappedId = value;
+                    console.log(`Found string ID in field '${key}':`, mappedId);
+                    break;
+                  }
+                }
+              }
+            }
+
+            // If no ID found, create one based on version and index
+            if (!mappedId) {
+              mappedId = `api-version-${release.version || `unknown-${index}`}`;
+              console.log(`No ID found, generated fallback:`, mappedId);
+            }
+
+            return {
+              ...release,
+              id: mappedId
+            };
+          }
+          return release;
+        });
+
+        console.log('Releases after ID mapping:', releases);
+      }
+
+      // Sort releases by created_at in descending order (newest first)
+      if (releases && releases.length > 0) {
+        releases.sort((a, b) => {
+          // Handle cases where created_at might be missing or in different formats
+          const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+          const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+
+          // Sort descending (newest first)
+          return dateB - dateA;
+        });
+        console.log('Releases after sorting by created_at:', releases);
+      }
+
+      setDatabaseReleases(releases);
+
+      toast({
+        title: "Data Refreshed",
+        description: `Successfully refreshed ${releases.length} releases from database`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error('Error manually refreshing releases from Cloudflare Database:', error);
+
+      toast({
+        title: "Refresh Failed",
+        description: `Failed to refresh from database: ${error.message}`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      isLoadingData.current = false;
+      setFetchingFromNotion(false);
+    }
+  };
+
   useEffect(() => {
+    // Set page title
+    document.title = "Dashboard - FireworksPlay";
+
     setReleases(allUpdates);
+    setCurrentPage(1); // Reset to first page when data changes
     setLoading(false);
 
-    // Auto-load from database
-    fetchFromDatabase();
-  }, [fetchFromDatabase]);
+    // Auto-load from database to show release notes on login (only once)
+    if (!hasLoadedData.current) {
+      fetchFromDatabase();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Filter releases based on search and filter
-  const filteredReleases = databaseReleases.filter(release => {
-    const matchesSearch = release.version.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         release.changes.some(change => change.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Filter releases - use database releases instead of static releases
+  const filteredReleases = databaseReleases.slice(indexOfFirstItem, indexOfLastItem);
 
-    if (selectedFilter === 'all') return matchesSearch;
-    if (selectedFilter === 'videos') return matchesSearch && release.changes.some(change => isVideoLink(change));
-    if (selectedFilter === 'recent') return matchesSearch; // Add date logic if needed
+  // Debug function to check releases structure
+  const debugReleases = () => {
+    console.log('=== DEBUG: Releases Data Structure ===');
+    console.log('Total databaseReleases:', databaseReleases.length);
+    console.log('Sample releases with IDs and dates:');
+    databaseReleases.slice(0, 3).forEach((release, index) => {
+      console.log(`Release ${index}:`, {
+        id: release.id,
+        version: release.version,
+        created_at: release.created_at,
+        hasChanges: release.changes && release.changes.length > 0
+      });
+    });
+    console.log('First 10 releases sorted order:');
+    databaseReleases.slice(0, 10).forEach((release, index) => {
+      console.log(`${index + 1}. ${release.version} (created: ${release.created_at})`);
+    });
+    console.log('=====================================');
+  };
 
-    return matchesSearch;
-  });
+  // Generate unique ID for releases without database ID
+  const generateId = (release) => {
+    // Use version as ID if database ID is missing
+    return release.id || `version-${release.version || 'unknown'}`;
+  };
+
+  // Auto-debug when releases change
+  React.useEffect(() => {
+    if (databaseReleases.length > 0) {
+      debugReleases();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [databaseReleases]);
+
+  // Scroll to top functionality
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.pageYOffset > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   const handleEdit = (release) => {
-    setSelectedRelease(release);
+    console.log('handleEdit called with release:', release);
+    const releaseId = generateId(release);
+    console.log('Generated ID:', releaseId);
+    console.log('Release version:', release.version);
+
+    if (!release) {
+      console.error('Edit error: Release is missing');
+      toast({
+        title: "Error",
+        description: "Cannot edit: Release data is incomplete",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    // Ensure the release has an ID (generated if missing)
+    const releaseWithId = { ...release, id: releaseId };
+    setSelectedRelease(releaseWithId);
     setFormData({
       version: release.version,
-      changes: release.changes.length > 0 ? release.changes : ['']
+      changes: release.changes && release.changes.length > 0 ? release.changes : ['']
     });
     setIsEditModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setIsEditModalOpen(false);
+    setSelectedRelease(null);
+    setFormData({ version: '', changes: [''] });
   };
 
   const handleNew = () => {
@@ -247,21 +540,46 @@ const ReleaseNoteDashboard = () => {
     try {
       let savedRelease;
 
+      console.log('handleSave - selectedRelease:', selectedRelease);
+      console.log('handleSave - formData:', formData);
+
+      // Validate form data
+      if (!formData.version || formData.version.trim() === '') {
+        throw new Error('Version is required');
+      }
+
       if (selectedRelease && selectedRelease.id) {
         // Update existing release in Cloudflare
+        console.log('Updating release with ID:', selectedRelease.id);
+        console.log('Form data for update:', JSON.stringify(formData, null, 2));
         savedRelease = await updateRelease(selectedRelease.id, formData);
       } else {
         // Create new release in Cloudflare
+        console.log('Creating new release');
         savedRelease = await createRelease(formData);
       }
 
-      // Update local state
+      // Update local state with proper sorting
       if (selectedRelease && selectedRelease.id) {
-        setDatabaseReleases(prev =>
-          prev.map(r => r.id === selectedRelease.id ? savedRelease : r)
-        );
+        setDatabaseReleases(prev => {
+          const updated = prev.map(r => r.id === selectedRelease.id ? savedRelease : r);
+          // Re-sort after update
+          return updated.sort((a, b) => {
+            const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+            const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+            return dateB - dateA;
+          });
+        });
       } else {
-        setDatabaseReleases(prev => [savedRelease, ...prev]);
+        setDatabaseReleases(prev => {
+          const withNew = [savedRelease, ...prev];
+          // Re-sort after adding new
+          return withNew.sort((a, b) => {
+            const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+            const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+            return dateB - dateA;
+          });
+        });
       }
 
       setIsEditModalOpen(false);
@@ -294,7 +612,15 @@ const ReleaseNoteDashboard = () => {
       // Delete from Cloudflare if it has an ID
       try {
         await deleteRelease(releaseToDelete.id);
-        setDatabaseReleases(prev => prev.filter(r => r.id !== releaseToDelete.id));
+        setDatabaseReleases(prev => {
+          const filtered = prev.filter(r => r.id !== releaseToDelete.id);
+          // Maintain sorting order after deletion
+          return filtered.sort((a, b) => {
+            const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+            const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+            return dateB - dateA;
+          });
+        });
 
         toast({
           title: "Success",
@@ -317,6 +643,11 @@ const ReleaseNoteDashboard = () => {
       // Local only release
       const updatedReleases = releases.filter(r => r !== releaseToDelete);
       setReleases(updatedReleases);
+      // Reset to first page if current page becomes empty after deletion
+      const newTotalPages = Math.ceil(updatedReleases.length / itemsPerPage);
+      if (currentPage > newTotalPages && newTotalPages > 0) {
+        setCurrentPage(newTotalPages);
+      }
 
       toast({
         title: "Success",
@@ -406,314 +737,773 @@ const ReleaseNoteDashboard = () => {
     sum + release.changes.filter(change => isVideoLink(change)).length, 0
   );
 
-  // Color mode values for dynamic theming
-  const cardBg = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
-  const headerBg = useColorModeValue("linear-gradient(135deg, #667eea 0%, #764ba2 100%)", "linear-gradient(135deg, #553c9a 0%, #44337a 100%)");
-  const pageBg = useColorModeValue("gray.50", "gray.900");
-  const tableHeaderBg = useColorModeValue("gray.50", "gray.700");
-  const tableRowHoverBg = useColorModeValue("gray.50", "gray.700");
+  // Simple consistent theme
+  // Colors
+  const bgPrimary = useColorModeValue("white", "gray.900");
+  const bgSecondary = useColorModeValue("gray.50", "gray.800");
+  const bgCard = useColorModeValue("white", "gray.800");
+  const bgModal = useColorModeValue("white", "gray.800");
 
-  // Mobile Release Card Component
+  const textPrimary = useColorModeValue("gray.900", "gray.100");
+  const textSecondary = useColorModeValue("gray.600", "gray.300");
+  const textMuted = useColorModeValue("gray.500", "gray.400");
+
+  const border = useColorModeValue("gray.200", "gray.600");
+
+  // Modern Mobile Release Card Component with Glass Effects
   const MobileReleaseCard = ({ release }) => (
-    <Card bg={cardBg} border="1px solid" borderColor={borderColor} shadow="md" mb={4}>
-      <CardBody>
-        <VStack spacing={3} align="stretch">
-          <Flex justify="space-between" align="center">
-            <Heading size="sm" color="blue.600" noOfLines={1}>
-              {release.version}
-            </Heading>
-            <HStack spacing={2}>
-              <Badge colorScheme="green" variant="subtle" fontSize="xs">
-                {release.changes.length} changes
-              </Badge>
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  icon={<ChevronDownIcon />}
-                  variant="ghost"
-                  size="sm"
-                />
-                <MenuList>
-                  <MenuItem icon={<EditIcon />} onClick={() => handleEdit(release)}>
-                    Edit
-                  </MenuItem>
-                  <MenuItem icon={<DeleteIcon />} onClick={() => handleDelete(release)} color="red.600">
-                    Delete
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </HStack>
-          </Flex>
+    <ScaleFade initialScale={0.9} in>
+      <Card
+        bg={bgCard}
+        border="1px solid"
+        borderColor={border}
+        borderRadius="lg"
+        mb={4}
+        shadow="sm"
+        transition="all 0.2s"
+        _hover={{
+          shadow: "md",
+          transform: 'translateY(-2px)'
+        }}
+      >
+        <CardBody p={4}>
+          <VStack spacing={4} align="stretch">
+            <Flex justify="space-between" align="center">
+              <VStack align="start" spacing={1}>
+                <Heading
+                  size="md"
+                  color={textPrimary}
+                  fontWeight="bold"
+                  noOfLines={1}
+                >
+                  {release.version}
+                </Heading>
+                <Text fontSize="xs" color={textSecondary}>
+                  ID: {generateId(release) || 'N/A'}
+                </Text>
+              </VStack>
+              <HStack spacing={2}>
+                <Circle size="24px" bg="green.500" color="white">
+                  <Text fontSize="10px" fontWeight="bold">{release.changes.length}</Text>
+                </Circle>
+                <Menu>
+                  <MenuButton
+                    as={IconButton}
+                    icon={<ChevronDownIcon />}
+                    variant="ghost"
+                    size="md"
+                    borderRadius="full"
+                  />
+                  <MenuList bg={bgModal} borderColor={border}>
+                    <MenuItem
+                      icon={<EditIcon />}
+                      onClick={() => handleEdit(release)}
+                      color={textPrimary}
+                    >
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      icon={<DeleteIcon />}
+                      onClick={() => handleDelete(release)}
+                      color="red.600"
+                    >
+                      Delete
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
+            </Flex>
 
-          <VStack align="start" spacing={2}>
-            <Wrap>
-              {release.changes.some(change => isVideoLink(change)) && (
-                <WrapItem>
-                  <Tag colorScheme="purple" variant="solid" size="sm">
-                    <TagLeftIcon as={ExternalLinkIcon} />
-                    <TagLabel>Video</TagLabel>
-                  </Tag>
-                </WrapItem>
-              )}
-              <WrapItem>
-                <Tag colorScheme="blue" variant="outline" size="sm">
-                  {release.changes.length} items
-                </Tag>
-              </WrapItem>
-            </Wrap>
+            <HStack spacing={2}>
+              {release.changes.filter(change => isVideoLink(change)).map((video, videoIndex) => (
+                <Button
+                  key={videoIndex}
+                  as="a"
+                  href={video}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="xs"
+                  bgGradient="linear(135deg, #9f7aea 0%, #805ad5 100%)"
+                  color={textPrimary}
+                  leftIcon={<ExternalLinkIcon boxSize={3} />}
+                  borderRadius="full"
+                  fontWeight="medium"
+                  _hover={{
+                    bgGradient: "linear(135deg, #805ad5 0%, #6b46c1 100%)",
+                    transform: 'scale(1.05)'
+                  }}
+                  transition="all 0.2s"
+                >
+                  Video {videoIndex + 1}
+                </Button>
+              ))}
+              <Badge
+                bgGradient="linear(135deg, #4299e1 0%, #3182ce 100%)"
+                color={textPrimary}
+                px={3}
+                py={1}
+                borderRadius="full"
+                fontSize="xs"
+                fontWeight="medium"
+              >
+                {release.changes.length} items
+              </Badge>
+            </HStack>
 
             <Box>
-              <Text fontSize="xs" color="gray.600" mb={1}>Recent changes:</Text>
-              <List spacing={1} fontSize="xs">
-                {release.changes.slice(0, 2).map((change, index) => (
-                  <ListItem key={index} noOfLines={2}>
-                    <ListIcon as={CheckCircleIcon} color="green.500" boxSize={3} />
-                    {change}
+              <Text fontSize="sm" color={textSecondary} fontWeight="medium" mb={2}>Changes:</Text>
+              <List spacing={2}>
+                {release.changes.map((change, index) => (
+                  <ListItem key={index}>
+                    <HStack align="start">
+                      <CheckCircleIcon color="green.500" boxSize={4} mt={0.5} />
+                      <Text fontSize="sm" noOfLines={3} flex={1}>{change}</Text>
+                    </HStack>
                   </ListItem>
                 ))}
-                {release.changes.length > 2 && (
-                  <Text fontSize="xs" color="gray.500">
-                    +{release.changes.length - 2} more...
-                  </Text>
-                )}
               </List>
             </Box>
           </VStack>
-        </VStack>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+    </ScaleFade>
   );
 
-  // Mobile Header Component
+  // Modern Mobile Header Component with Glass Effects
   const MobileHeader = () => (
-    <Box bgGradient={headerBg} color="white" py={6} px={headerPadding}>
-      <Container maxW={containerMaxWidth}>
+    <Box
+      bg={useColorModeValue("green.500", "green.600")}
+      color="white"
+      py={6}
+      px={headerPadding}
+      position="relative"
+      overflow="hidden"
+    >
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="rgba(255, 255, 255, 0.1)"
+              />
+      <Container maxW={containerMaxWidth} position="relative">
         <VStack spacing={4} align="stretch">
-          <Flex justify="space-between" align="center">
-            <VStack align="start" spacing={1}>
-              <Heading size="lg" fontWeight="bold">
-                🎆 Dashboard
-              </Heading>
-              <Text fontSize="sm" opacity={0.9}>
-                Manage releases
-              </Text>
-            </VStack>
+          <SlideFade in>
+            <Flex justify="space-between" align="center">
+              <VStack align="start" spacing={2}>
+                <Heading
+                  size="lg"
+                  fontWeight="extrabold"
+                  letterSpacing="tight"
+                  color="white"
+                  bgGradient="linear(135deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%)"
+                  bgClip="text"
+                  textShadow="0 2px 10px rgba(255, 255, 255, 0.5)"
+                  position="relative"
+                  display="inline-block"
+                  _after={{
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: 0,
+                    right: 0,
+                    height: '3px',
+                    bgGradient: 'linear(90deg, transparent, #ffffff, transparent)',
+                    borderRadius: 'full',
+                    animation: 'shimmer 2s ease-in-out infinite alternate'
+                  }}
+                >
+                  ✨ Dashboard
+                </Heading>
+                <Text fontSize="sm" opacity={0.9} fontWeight="medium" color="white">
+                  Manage your releases with style
+                </Text>
+              </VStack>
 
-            <HStack spacing={2}>
-              <Tooltip label="Refresh">
-                <IconButton
-                  onClick={fetchFromDatabase}
-                  isLoading={fetchingFromNotion}
-                  colorScheme="whiteAlpha"
-                  variant="solid"
-                  icon={<TimeIcon />}
-                  size="sm"
-                  aria-label="Refresh"
-                />
-              </Tooltip>
+              <HStack spacing={2}>
+                <Tooltip label="Refresh data">
+                  <IconButton
+                    onClick={handleManualRefresh}
+                    isLoading={fetchingFromNotion}
+                    bg="rgba(255, 255, 255, 0.2)"
+                                        border="1px solid rgba(255, 255, 255, 0.3)"
+                    icon={<TimeIcon />}
+                    size="md"
+                    aria-label="Refresh"
+                    borderRadius="full"
+                    _hover={{
+                      bg: 'rgba(255, 255, 255, 0.3)',
+                      transform: 'scale(1.05)'
+                    }}
+                    transition="all 0.2s"
+                  />
+                </Tooltip>
 
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  icon={<Avatar size="sm" name={user?.name || 'User'} bg="white" color="purple.600" />}
-                  colorScheme="whiteAlpha"
-                  variant="solid"
-                  size="sm"
-                />
-                <MenuList bg={cardBg} borderColor={borderColor}>
-                  <MenuItem bg="transparent">
-                    <VStack align="start" spacing={1} w="full">
-                      <Text fontWeight="bold" fontSize="sm">{user?.name}</Text>
-                      <Badge colorScheme={user?.role === 'admin' ? 'red' : 'blue'} variant="solid" fontSize="xs">
-                        {user?.role?.toUpperCase() || 'USER'}
-                      </Badge>
-                    </VStack>
-                  </MenuItem>
-                  <MenuItem icon={<ViewIcon />} as={RouterLink} to="/release-notes" fontSize="sm">
-                    View Notes
-                  </MenuItem>
-                  <MenuItem icon={<DeleteIcon />} onClick={handleLogout} color="red.600" fontSize="sm">
-                    Logout
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </HStack>
-          </Flex>
+                <Menu>
+                  <MenuButton
+                    as={IconButton}
+                    icon={
+                      <Avatar
+                        size="sm"
+                        name={user?.name || 'User'}
+                        bg="white"
+                        color="purple.600"
+                        border="2px solid rgba(255, 255, 255, 0.5)"
+                      />
+                    }
+                    bg="rgba(255, 255, 255, 0.2)"
+                                        border="1px solid rgba(255, 255, 255, 0.3)"
+                    size="md"
+                    borderRadius="full"
+                    _hover={{
+                      bg: 'rgba(255, 255, 255, 0.3)',
+                      transform: 'scale(1.05)'
+                    }}
+                    transition="all 0.2s"
+                  />
+                  <MenuList
+                    bg={bgModal}
+                    borderColor={border}
+                                        shadow="md"
+                  >
+                    <MenuItem bg="transparent">
+                      <VStack align="start" spacing={2} w="full">
+                        <Text fontWeight="bold" fontSize="sm" color={textPrimary}>{user?.name}</Text>
+                        <Badge
+                          bgGradient={
+                            user?.role === 'admin'
+                              ? 'linear(135deg, #f56565 0%, #e53e3e 100%)'
+                              : 'linear(135deg, #4299e1 0%, #3182ce 100%)'
+                          }
+                          color={textPrimary}
+                          variant="solid"
+                          fontSize="xs"
+                          px={3}
+                          py={1}
+                          borderRadius="full"
+                        >
+                          {user?.role?.toUpperCase() || 'USER'}
+                        </Badge>
+                      </VStack>
+                    </MenuItem>
+                    <MenuItem
+                      icon={<ViewIcon />}
+                      as={RouterLink}
+                      to="/release-note"
+                      fontSize="sm"
+                      bg="transparent"
+                      color={textPrimary}
+                      _hover={{
+                        bg: "red.50",
+                        color: "red.500"
+                      }}
+                      borderRadius="md"
+                      mx={1}
+                      my={1}
+                    >
+                      View Notes
+                    </MenuItem>
+                    <MenuItem
+                      icon={<DeleteIcon />}
+                      onClick={handleLogout}
+                      color="red.600"
+                      fontSize="sm"
+                      bg="transparent"
+                      _hover={{ bg: 'rgba(245, 101, 101, 0.1)' }}
+                    >
+                      Logout
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
+            </Flex>
+          </SlideFade>
 
-          {/* Mobile Stats */}
+          {/* Modern Mobile Stats */}
           <SimpleGrid columns={statsColumns} spacing={3}>
-            <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
-              <CardBody p={3}>
-                <Stat>
-                  <StatLabel fontSize="xs" color="whiteAlpha.800">Releases</StatLabel>
-                  <StatNumber fontSize="lg" color="white">{totalReleases}</StatNumber>
-                </Stat>
-              </CardBody>
-            </Card>
+            <ScaleFade initialScale={0.8} in>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="xl"
+                overflow="hidden"
+                position="relative"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  bg: 'rgba(255, 255, 255, 0.25)'
+                }}
+              >
+                <CardBody p={4}>
+                  <HStack justify="space-between" align="center">
+                    <Stat>
+                      <VStack align="start" spacing={1}>
+                        <StatLabel fontSize="xs" color={textSecondary} fontWeight="medium">
+                          Total Releases
+                        </StatLabel>
+                        <StatNumber fontSize="xl" color={textPrimary} fontWeight="bold">
+                          {totalReleases}
+                        </StatNumber>
+                      </VStack>
+                    </Stat>
+                    <Circle size="40px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                      <Icon as={CheckCircleIcon} boxSize={6} color="green.300" />
+                    </Circle>
+                  </HStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
 
-            <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
-              <CardBody p={3}>
-                <Stat>
-                  <StatLabel fontSize="xs" color="whiteAlpha.800">Changes</StatLabel>
-                  <StatNumber fontSize="lg" color="white">{totalChanges}</StatNumber>
-                </Stat>
-              </CardBody>
-            </Card>
+            <ScaleFade initialScale={0.8} in delay={0.1}>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="xl"
+                overflow="hidden"
+                position="relative"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  bg: 'rgba(255, 255, 255, 0.25)'
+                }}
+              >
+                <CardBody p={4}>
+                  <HStack justify="space-between" align="center">
+                    <Stat>
+                      <VStack align="start" spacing={1}>
+                        <StatLabel fontSize="xs" color={textSecondary} fontWeight="medium">
+                          Changes Made
+                        </StatLabel>
+                        <StatNumber fontSize="xl" color={textPrimary} fontWeight="bold">
+                          {totalChanges}
+                        </StatNumber>
+                      </VStack>
+                    </Stat>
+                    <Circle size="40px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                      <Icon as={TimeIcon} boxSize={6} color="blue.300" />
+                    </Circle>
+                  </HStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
 
-            <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
-              <CardBody p={3}>
-                <Stat>
-                  <StatLabel fontSize="xs" color="whiteAlpha.800">Videos</StatLabel>
-                  <StatNumber fontSize="lg" color="white">{videoCount}</StatNumber>
-                </Stat>
-              </CardBody>
-            </Card>
+            <ScaleFade initialScale={0.8} in delay={0.2}>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="xl"
+                overflow="hidden"
+                position="relative"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  bg: 'rgba(255, 255, 255, 0.25)'
+                }}
+              >
+                <CardBody p={4}>
+                  <HStack justify="space-between" align="center">
+                    <Stat>
+                      <VStack align="start" spacing={1}>
+                        <StatLabel fontSize="xs" color={textSecondary} fontWeight="medium">
+                          Video Content
+                        </StatLabel>
+                        <StatNumber fontSize="xl" color={textPrimary} fontWeight="bold">
+                          {videoCount}
+                        </StatNumber>
+                      </VStack>
+                    </Stat>
+                    <Circle size="40px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                      <Icon as={ExternalLinkIcon} boxSize={6} color="purple.300" />
+                    </Circle>
+                  </HStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
           </SimpleGrid>
 
-          {/* Mobile Add Button */}
-          <Button
-            leftIcon={<AddIcon />}
-            onClick={handleNew}
-            colorScheme="green"
-            variant="solid"
-            size="md"
-            w="full"
-          >
-            Add New Release
-          </Button>
+          {/* Modern Mobile Add Button */}
+          <ScaleFade initialScale={0.9} in delay={0.3}>
+            <Button
+              leftIcon={<AddIcon />}
+              onClick={handleNew}
+              bgGradient="linear(135deg, #38a169 0%, #2f855a 100%)"
+              color="white"
+              variant="solid"
+              size="lg"
+              w="full"
+              borderRadius="full"
+              fontWeight="extrabold"
+              letterSpacing="wider"
+              textTransform="uppercase"
+              fontSize="md"
+              py={6}
+              boxShadow="0 10px 40px rgba(56, 161, 105, 0.6), 0 0 0 3px rgba(72, 187, 120, 0.2)"
+              border="2px solid rgba(255, 255, 255, 0.3)"
+              position="relative"
+              overflow="hidden"
+              _hover={{
+                bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
+                transform: 'translateY(-3px) scale(1.02)',
+                boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
+                border: "2px solid rgba(255, 255, 255, 0.5)"
+              }}
+              _active={{
+                transform: 'translateY(-1px) scale(1.01)',
+                boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
+              }}
+              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: '-100%',
+                width: '100%',
+                height: '100%',
+                bg: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+                transition: 'left 0.5s',
+              }}
+              _hover={{
+                _before: {
+                  left: '100%'
+                }
+              }}
+            >
+              <VStack spacing={1}>
+                <Text fontSize="lg" fontWeight="extrabold">✨ Add New Release</Text>
+                <Text fontSize="xs" opacity={0.9} fontWeight="medium">Create New Version</Text>
+              </VStack>
+            </Button>
+          </ScaleFade>
         </VStack>
       </Container>
     </Box>
   );
 
-  // Desktop Header Component
+  // Modern Desktop Header Component with Glass Effects
   const DesktopHeader = () => (
-    <Box bgGradient={headerBg} color="white" py={8} px={headerPadding}>
-      <Container maxW={containerMaxWidth}>
-        <VStack spacing={6} align="stretch">
-          <Flex justify="space-between" align="center">
-            <VStack align="start" spacing={2}>
-              <Heading size="2xl" fontWeight="bold">
-                🎆 FireworksPlay Dashboard
-              </Heading>
-              <Text fontSize="lg" opacity={0.9}>
-                Manage your release notes with ease
-              </Text>
-            </VStack>
+    <Box
+      bg={useColorModeValue("green.500", "green.600")}
+      color="white"
+      py={10}
+      px={headerPadding}
+      position="relative"
+      overflow="hidden"
+    >
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="rgba(255, 255, 255, 0.1)"
+              />
+      <Container maxW={containerMaxWidth} position="relative">
+        <VStack spacing={8} align="stretch">
+          <SlideFade in>
+            <Flex justify="space-between" align="center">
+              <VStack align="start" spacing={3}>
+                <Heading
+                  size="3xl"
+                  fontWeight="extrabold"
+                  letterSpacing="tight"
+                  color="white"
+                  bgGradient="linear(135deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%)"
+                  bgClip="text"
+                  textShadow="0 2px 10px rgba(255, 255, 255, 0.5)"
+                  position="relative"
+                  display="inline-block"
+                  _after={{
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '-2px',
+                    left: 0,
+                    right: 0,
+                    height: '3px',
+                    bgGradient: 'linear(90deg, transparent, #ffffff, transparent)',
+                    borderRadius: 'full',
+                    animation: 'shimmer 2s ease-in-out infinite alternate'
+                  }}
+                >
+                  ✨ FireworksPlay Dashboard
+                </Heading>
+                </VStack>
 
-            <HStack spacing={4}>
-              <Tooltip label="Refresh database" placement="top">
+              <HStack spacing={4}>
+                <Tooltip label="Refresh database" placement="top">
+                  <Button
+                    onClick={handleManualRefresh}
+                    isLoading={fetchingFromNotion}
+                    bg="rgba(255, 255, 255, 0.2)"
+                                        border="1px solid rgba(255, 255, 255, 0.3)"
+                    color={textPrimary}
+                    leftIcon={<TimeIcon />}
+                    size="md"
+                    borderRadius="full"
+                    fontWeight="medium"
+                    _hover={{
+                      bg: 'rgba(255, 255, 255, 0.3)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)'
+                    }}
+                    transition="all 0.3s"
+                  >
+                    Refresh Data
+                  </Button>
+                </Tooltip>
+
                 <Button
-                  onClick={fetchFromDatabase}
-                  isLoading={fetchingFromNotion}
-                  colorScheme="whiteAlpha"
+                  leftIcon={<AddIcon />}
+                  onClick={handleNew}
+                  bgGradient="linear(135deg, #38a169 0%, #2f855a 100%)"
+                  color="white"
                   variant="solid"
-                  leftIcon={<TimeIcon />}
+                  size="lg"
+                  borderRadius="full"
+                  fontWeight="extrabold"
+                  letterSpacing="wider"
+                  textTransform="uppercase"
+                  fontSize="md"
+                  px={8}
+                  py={6}
+                  boxShadow="0 10px 40px rgba(56, 161, 105, 0.6), 0 0 0 3px rgba(72, 187, 120, 0.2)"
+                  border="2px solid rgba(255, 255, 255, 0.3)"
+                  position="relative"
+                  overflow="hidden"
+                  _hover={{
+                    bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
+                    transform: 'translateY(-3px) scale(1.02)',
+                    boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
+                    border: "2px solid rgba(255, 255, 255, 0.5)"
+                  }}
+                  _active={{
+                    transform: 'translateY(-1px) scale(1.01)',
+                    boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
+                  }}
+                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                  _before={{
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: '-100%',
+                    width: '100%',
+                    height: '100%',
+                    bg: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+                    transition: 'left 0.5s',
+                  }}
+                  _hover={{
+                    _before: {
+                      left: '100%'
+                    }
+                  }}
                 >
-                  Refresh
+                  <VStack spacing={1}>
+                    <Text fontSize="lg" fontWeight="extrabold">✨ Add Release</Text>
+                    <Text fontSize="xs" opacity={0.9} fontWeight="medium">Create New Version</Text>
+                  </VStack>
                 </Button>
-              </Tooltip>
 
-              <Button
-                leftIcon={<AddIcon />}
-                onClick={handleNew}
-                colorScheme="green"
-                variant="solid"
-                size="lg"
-              >
-                Add Release
-              </Button>
-
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  colorScheme="whiteAlpha"
-                  variant="solid"
-                  rightIcon={<ChevronDownIcon />}
-                >
-                  <HStack spacing={2}>
-                    <Avatar
-                      size="sm"
-                      name={user?.name || 'User'}
-                      bg="white"
-                      color="purple.600"
-                      border="2px solid white"
-                    />
-                    <VStack spacing={0} align="start" display={{ base: 'none', md: 'flex' }}>
-                      <Text fontSize="sm" fontWeight="bold">{user?.name || 'User'}</Text>
-                      <Text fontSize="xs" opacity={0.8}>{user?.role || 'user'}</Text>
-                    </VStack>
-                  </HStack>
-                </MenuButton>
-                <MenuList bg={cardBg} borderColor={borderColor}>
-                  <MenuItem bg="transparent">
-                    <VStack align="start" spacing={2} w="full">
-                      <HStack w="full" justify="space-between">
-                        <Text fontWeight="bold">{user?.name}</Text>
-                        <Badge colorScheme={user?.role === 'admin' ? 'red' : 'blue'} variant="solid">
-                          {user?.role?.toUpperCase() || 'USER'}
-                        </Badge>
-                      </HStack>
-                      <Text fontSize="sm" color="gray.600">{user?.email}</Text>
-                    </VStack>
-                  </MenuItem>
-                  <MenuItem
-                    icon={<ViewIcon />}
-                    as={RouterLink}
-                    to="/release-notes"
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    bg="rgba(255, 255, 255, 0.2)"
+                                        border="1px solid rgba(255, 255, 255, 0.3)"
+                    color={textPrimary}
+                    rightIcon={<ChevronDownIcon />}
+                    borderRadius="full"
+                    size="md"
+                    fontWeight="medium"
+                    _hover={{
+                      bg: 'rgba(255, 255, 255, 0.3)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)'
+                    }}
+                    transition="all 0.3s"
                   >
-                    View Release Notes
-                  </MenuItem>
-                  <MenuItem
-                    icon={<DeleteIcon />}
-                    onClick={handleLogout}
-                    color="red.600"
+                    <HStack spacing={3}>
+                      <Avatar
+                        size="sm"
+                        name={user?.name || 'User'}
+                        bg="white"
+                        color="purple.600"
+                        border="2px solid rgba(255, 255, 255, 0.8)"
+                      />
+                      <VStack spacing={0} align="start" display={{ base: 'none', md: 'flex' }}>
+                        <Text fontSize="sm" fontWeight="bold">{user?.name || 'User'}</Text>
+                        <Text fontSize="xs" opacity={0.9}>{user?.role || 'user'}</Text>
+                      </VStack>
+                    </HStack>
+                  </MenuButton>
+                  <MenuList
+                    bg={bgModal}
+                    borderColor={border}
+                                        shadow="md"
+                    borderRadius="xl"
+                    py={2}
                   >
-                    Logout
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </HStack>
-          </Flex>
+                    <MenuItem bg="transparent" _hover={{ bg: 'rgba(102, 126, 234, 0.1)' }}>
+                      <VStack align="start" spacing={2} w="full">
+                        <HStack w="full" justify="space-between">
+                          <Text fontWeight="bold" color={textPrimary}>{user?.name}</Text>
+                          <Badge
+                            bgGradient={
+                              user?.role === 'admin'
+                                ? 'linear(135deg, #f56565 0%, #e53e3e 100%)'
+                                : 'linear(135deg, #4299e1 0%, #3182ce 100%)'
+                            }
+                            color={textPrimary}
+                            variant="solid"
+                            px={3}
+                            py={1}
+                            borderRadius="full"
+                            fontSize="xs"
+                          >
+                            {user?.role?.toUpperCase() || 'USER'}
+                          </Badge>
+                        </HStack>
+                        <Text fontSize="sm" color={textSecondary}>{user?.email}</Text>
+                      </VStack>
+                    </MenuItem>
+                    <MenuItem
+                      icon={<ViewIcon />}
+                      as={RouterLink}
+                      to="/release-note"
+                      bg="transparent"
+                      color={textPrimary}
+                      _hover={{
+                        bg: "red.50",
+                        color: "red.500"
+                      }}
+                      borderRadius="md"
+                      mx={1}
+                      my={1}
+                    >
+                      View Release Notes
+                    </MenuItem>
+                    <MenuItem
+                      icon={<DeleteIcon />}
+                      onClick={handleLogout}
+                      color="red.600"
+                      bg="transparent"
+                      _hover={{ bg: 'rgba(245, 101, 101, 0.1)' }}
+                    >
+                      Logout
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
+            </Flex>
+          </SlideFade>
 
-          {/* Desktop Stats */}
+          {/* Modern Desktop Stats */}
           <SimpleGrid columns={statsColumns} spacing={6}>
-            <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
-              <CardBody>
-                <HStack justify="space-between">
-                  <VStack align="start" spacing={1}>
-                    <Text fontSize="sm" color="whiteAlpha.800" fontWeight="medium">Total Releases</Text>
-                    <Heading size="lg" color="white">{totalReleases}</Heading>
-                  </VStack>
-                  <Icon as={CheckCircleIcon} boxSize={10} color="green.300" />
-                </HStack>
-              </CardBody>
-            </Card>
+            <ScaleFade initialScale={0.8} in>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="2xl"
+                overflow="hidden"
+                position="relative"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-4px)',
+                  bg: 'rgba(255, 255, 255, 0.25)'
+                }}
+              >
+                <CardBody p={6}>
+                  <HStack justify="space-between" align="center">
+                    <VStack align="start" spacing={2}>
+                      <Text fontSize="md" color={textPrimary} fontWeight="semibold">
+                        Total Releases
+                      </Text>
+                      <Heading size="2xl" color={textPrimary} fontWeight="bold">
+                        {totalReleases}
+                      </Heading>
+                      <Text fontSize="xs" color={textSecondary}>
+                        Active versions in database
+                      </Text>
+                    </VStack>
+                    <Circle size="60px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                      <Icon as={CheckCircleIcon} boxSize={8} color="green.300" />
+                    </Circle>
+                  </HStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
 
-            <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
-              <CardBody>
-                <HStack justify="space-between">
-                  <VStack align="start" spacing={1}>
-                    <Text fontSize="sm" color="whiteAlpha.800" fontWeight="medium">Total Changes</Text>
-                    <Heading size="lg" color="white">{totalChanges}</Heading>
-                  </VStack>
-                  <Icon as={TimeIcon} boxSize={10} color="blue.300" />
-                </HStack>
-              </CardBody>
-            </Card>
+            <ScaleFade initialScale={0.8} in delay={0.1}>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="2xl"
+                overflow="hidden"
+                position="relative"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-4px)',
+                  bg: 'rgba(255, 255, 255, 0.25)'
+                }}
+              >
+                <CardBody p={6}>
+                  <HStack justify="space-between" align="center">
+                    <VStack align="start" spacing={2}>
+                      <Text fontSize="md" color={textPrimary} fontWeight="semibold">
+                        Changes Made
+                      </Text>
+                      <Heading size="2xl" color={textPrimary} fontWeight="bold">
+                        {totalChanges}
+                      </Heading>
+                      <Text fontSize="xs" color={textSecondary}>
+                        Total updates across all releases
+                      </Text>
+                    </VStack>
+                    <Circle size="60px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                      <Icon as={TimeIcon} boxSize={8} color="blue.300" />
+                    </Circle>
+                  </HStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
 
-            <Card bg="whiteAlpha.100" backdropFilter="blur(10px)" border="1px solid" borderColor="whiteAlpha.200">
-              <CardBody>
-                <HStack justify="space-between">
-                  <VStack align="start" spacing={1}>
-                    <Text fontSize="sm" color="whiteAlpha.800" fontWeight="medium">Video Content</Text>
-                    <Heading size="lg" color="white">{videoCount}</Heading>
-                  </VStack>
-                  <Icon as={ExternalLinkIcon} boxSize={10} color="purple.300" />
-                </HStack>
-              </CardBody>
-            </Card>
+            <ScaleFade initialScale={0.8} in delay={0.2}>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="2xl"
+                overflow="hidden"
+                position="relative"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-4px)',
+                  bg: 'rgba(255, 255, 255, 0.25)'
+                }}
+              >
+                <CardBody p={6}>
+                  <HStack justify="space-between" align="center">
+                    <VStack align="start" spacing={2}>
+                      <Text fontSize="md" color={textPrimary} fontWeight="semibold">
+                        Video Content
+                      </Text>
+                      <Heading size="2xl" color={textPrimary} fontWeight="bold">
+                        {videoCount}
+                      </Heading>
+                      <Text fontSize="xs" color={textSecondary}>
+                        Video links and tutorials
+                      </Text>
+                    </VStack>
+                    <Circle size="60px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                      <Icon as={ExternalLinkIcon} boxSize={8} color="purple.300" />
+                    </Circle>
+                  </HStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
           </SimpleGrid>
         </VStack>
       </Container>
@@ -722,262 +1512,564 @@ const ReleaseNoteDashboard = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minH="60vh" bgGradient={headerBg}>
-        <VStack spacing={4} color="white">
-          <Spinner size="xl" thickness="4px" speed="0.65s" emptyColor="gray.200" color="white" />
-          <Text fontSize="lg" fontWeight="medium">Loading Dashboard...</Text>
-        </VStack>
+      <Box
+        minH="100vh"
+        bg={bgPrimary}
+        position="relative"
+        overflow="hidden"
+      >
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="rgba(255, 255, 255, 0.05)"
+                  />
+        <Flex
+          position="relative"
+          justifyContent="center"
+          alignItems="center"
+          minH="100vh"
+        >
+          <VStack spacing={6} color={textPrimary} textAlign="center">
+            <ScaleFade in>
+              <Spinner
+                size="xl"
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="rgba(255, 255, 255, 0.3)"
+                color={textPrimary}
+              />
+            </ScaleFade>
+            <SlideFade in>
+              <VStack spacing={2}>
+                <Heading size="lg" fontWeight="bold" letterSpacing="tight">
+                  Loading Dashboard
+                </Heading>
+                <Text fontSize="md" opacity={0.9} fontWeight="medium">
+                  Preparing your modern release management experience
+                </Text>
+                <Progress
+                  size="xs"
+                  w="200px"
+                  isIndeterminate
+                  bg="rgba(255, 255, 255, 0.2)"
+                  colorScheme="whiteAlpha"
+                />
+              </VStack>
+            </SlideFade>
+          </VStack>
+        </Flex>
       </Box>
     );
   }
 
   return (
-    <Box minH="100vh" bg={pageBg}>
-      {/* Header */}
-      <Hide above="md">
-        <MobileHeader />
-      </Hide>
-      <Hide below="md">
-        <DesktopHeader />
-      </Hide>
+    <Box
+      minH="100vh"
+      bg={bgPrimary}
+      position="relative"
+      overflow="hidden"
+    >
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="rgba(255, 255, 255, 0.03)"
+              />
+      <Box position="relative">
+        {/* Header */}
+        <Hide above="md">
+          <MobileHeader />
+        </Hide>
+        <Hide below="md">
+          <DesktopHeader />
+        </Hide>
 
-      {/* Main Content */}
-      <Container maxW={containerMaxWidth} px={contentPadding} py={6}>
-        <VStack spacing={6} align="stretch">
+        {/* Main Content */}
+        <Container maxW={containerMaxWidth} px={contentPadding} py={8}>
+          <VStack spacing={8} align="stretch">
 
-          {/* Welcome Message */}
-          <Alert status="success" borderRadius="lg" variant="solid">
-            <AlertIcon boxSize="20px" />
-            <Box>
-              <AlertTitle>Welcome back, {user?.name}! 👋</AlertTitle>
-              <Text fontSize="sm">
-                You are logged in as an {user?.role}. You can manage release notes from this dashboard.
-              </Text>
-            </Box>
-          </Alert>
+            {/* Modern Welcome Message */}
+            <ScaleFade in>
+              <Alert
+                status="success"
+                borderRadius="2xl"
+                variant="subtle"
+                bg="rgba(72, 187, 120, 0.1)"
+                                border="1px solid rgba(72, 187, 120, 0.3)"
+                shadow="md"
+              >
+                <AlertIcon boxSize="24px" color="green.500" />
+                <Box>
+                  <AlertTitle fontSize="lg" fontWeight="bold" color="green.300">
+                    Welcome back, {user?.name}! 👋
+                  </AlertTitle>
+                  <Text fontSize="sm" color="green.200" mt={1}>
+                    You are logged in as an {user?.role}. Manage your releases with our modern dashboard experience.
+                  </Text>
+                </Box>
+              </Alert>
+            </ScaleFade>
 
-          {/* Search and Filter Bar */}
-          <Card bg={cardBg} border="1px solid" borderColor={borderColor} shadow="md">
-            <CardBody p={isMobile ? 3 : 4}>
-              <VStack spacing={3}>
-                <FormControl>
-                  <Input
-                    placeholder="Search releases or changes..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    leftElement={<SearchIcon />}
-                    size={isMobile ? "sm" : "md"}
-                  />
-                </FormControl>
+            {/* Modern Database Releases Management */}
+            <ScaleFade in delay={0.1}>
+              <Card
+                bg={bgCard}
+                                border="1px solid"
+                borderColor={border}
+                borderRadius="2xl"
+                shadow="md"
+                overflow="hidden"
+                position="relative"
+              >
+                <Box
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  right={0}
+                  h="3px"
+                  bgGradient="linear(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%)"
+                />
+                <CardHeader
+                  bg={bgSecondary}
+                                    borderBottom="1px solid"
+                  borderBottomColor={border}
+                  py={4}
+                >
+                  <HStack justify="space-between" align="center">
+                    <VStack align="start" spacing={2}>
+                      <HStack spacing={2}>
+                        <Text fontSize={isMobile ? "2xl" : "3xl"}>📝</Text>
+                        <Heading
+                          size={isMobile ? "lg" : "xl"}
+                          bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
+                          bgClip="text"
+                          fontWeight="bold"
+                        >
+                          Release Notes ({filteredReleases.length})
+                        </Heading>
+                      </HStack>
+                      </VStack>
+                    <HStack spacing={2}>
+                      <Circle size="40px" bg="rgba(66, 153, 225, 0.2)" backdropFilter="blur(8px)">
+                        <CheckCircleIcon color="blue.500" boxSize={6} />
+                      </Circle>
+                      <Tag
+                        bgGradient="linear(135deg, #4299e1 0%, #3182ce 100%)"
+                        color={textPrimary}
+                        variant="solid"
+                        px={3}
+                        py={1}
+                        borderRadius="full"
+                        fontWeight="medium"
+                      >
+                        Database
+                      </Tag>
+                    </HStack>
+                  </HStack>
+                </CardHeader>
+                <CardBody p={0}>
+                  {filteredReleases.length > 0 ? (
+                    <>
+                      {/* Mobile View - Card Layout */}
+                      <Hide above="md">
+                        <Box p={4}>
+                          <VStack spacing={4} align="stretch">
+                            {filteredReleases.map((release, _index) => (
+                              <MobileReleaseCard key={release.id} release={release} />
+                            ))}
+                          </VStack>
 
-                <HStack spacing={2} w="full" justify="stretch">
-                  <ButtonGroup size={isMobile ? "sm" : "md"} w="full">
-                    <Button
-                      variant={selectedFilter === 'all' ? 'solid' : 'outline'}
-                      onClick={() => setSelectedFilter('all')}
-                      flex={1}
-                      colorScheme={selectedFilter === 'all' ? 'blue' : 'gray'}
-                    >
-                      All
-                    </Button>
-                    <Button
-                      variant={selectedFilter === 'videos' ? 'solid' : 'outline'}
-                      onClick={() => setSelectedFilter('videos')}
-                      flex={1}
-                      colorScheme={selectedFilter === 'videos' ? 'purple' : 'gray'}
-                    >
-                      Videos
-                    </Button>
-                    <Button
-                      variant={selectedFilter === 'recent' ? 'solid' : 'outline'}
-                      onClick={() => setSelectedFilter('recent')}
-                      flex={1}
-                      colorScheme={selectedFilter === 'recent' ? 'green' : 'gray'}
-                    >
-                      Recent
-                    </Button>
-                  </ButtonGroup>
-                </HStack>
-              </VStack>
-            </CardBody>
-          </Card>
+                          {/* Mobile Pagination Controls */}
+                          {totalPages > 1 && (
+                            <HStack justify="center" mt={6} spacing={4}>
+                              <Button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                isDisabled={currentPage === 1}
+                                size="md"
+                                variant="outline"
+                                colorScheme="blue"
+                              >
+                                Previous
+                              </Button>
+                              <Text color="gray.300" fontSize="sm">
+                                Page {currentPage} of {totalPages}
+                              </Text>
+                              <Button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                isDisabled={currentPage === totalPages}
+                                size="md"
+                                variant="outline"
+                                colorScheme="blue"
+                              >
+                                Next
+                              </Button>
+                            </HStack>
+                          )}
+                        </Box>
+                      </Hide>
 
-          {/* Database Releases Management */}
-          <Card bg={cardBg} border="1px solid" borderColor={borderColor} shadow="lg">
-            <CardHeader bg={tableHeaderBg} borderTopRadius="lg">
-              <HStack justify="space-between" align="center">
-                <VStack align="start" spacing={0}>
-                  <Heading size={isMobile ? "md" : "lg"} color="red.500">
-                    🗄️ Database Releases ({filteredReleases.length})
-                  </Heading>
-                  {searchTerm && (
-                    <Text fontSize="xs" color="gray.600">
-                      Showing results for "{searchTerm}"
-                    </Text>
+                      {/* Desktop View - Modern Table Layout */}
+                      <Hide below="md">
+                        <Box p={6}>
+                          <TableContainer
+                            bg="rgba(255, 255, 255, 0.1)"
+                                                        borderRadius="lg"
+                            border="1px solid"
+                            borderColor={border}
+                          >
+                            <Table variant="simple">
+                              <Thead>
+                                <Tr bg={bgSecondary} borderBottom="2px solid" borderColor={border}>
+                                  <Th
+                                    fontWeight="bold"
+                                    color={textPrimary}
+                                    textTransform="uppercase"
+                                    fontSize="xs"
+                                    letterSpacing="wider"
+                                    py={4}
+                                    borderRight="1px solid"
+                                    borderRightColor={border}
+                                  >
+                                    Version
+                                  </Th>
+                                  <Th
+                                    fontWeight="bold"
+                                    color={textPrimary}
+                                    textTransform="uppercase"
+                                    fontSize="xs"
+                                    letterSpacing="wider"
+                                    py={4}
+                                    borderRight="1px solid"
+                                    borderRightColor={border}
+                                  >
+                                    Changes
+                                  </Th>
+                                  <Th
+                                    fontWeight="bold"
+                                    color={textPrimary}
+                                    textTransform="uppercase"
+                                    fontSize="xs"
+                                    letterSpacing="wider"
+                                    py={4}
+                                    borderRight="1px solid"
+                                    borderRightColor={border}
+                                  >
+                                    Media Type
+                                  </Th>
+                                  <Th
+                                    fontWeight="bold"
+                                    color={textPrimary}
+                                    textTransform="uppercase"
+                                    fontSize="xs"
+                                    letterSpacing="wider"
+                                    py={4}
+                                    textAlign="center"
+                                  >
+                                    Actions
+                                  </Th>
+                                </Tr>
+                              </Thead>
+                              <Tbody>
+                                {filteredReleases.map((release, _index) => (
+                                  <Tr
+                                    key={release.id}
+                                    _hover={{
+                                      bg: bgSecondary,
+                                      transform: 'scale(1.01)',
+                                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                                    }}
+                                    transition="all 0.2s"
+                                    borderBottom="1px solid"
+                                    borderBottomColor={border}
+                                  >
+                                    <Td
+                                      fontWeight="bold"
+                                      bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
+                                      bgClip="text"
+                                      borderRight="1px solid"
+                                      borderRightColor={border}
+                                    >
+                                      <VStack align="start" spacing={1}>
+                                        <Text fontSize="md" color={textPrimary}>{release.version}</Text>
+                                        <Text fontSize="xs" color={textSecondary}>
+                                          ID: {generateId(release) || 'N/A'}
+                                        </Text>
+                                      </VStack>
+                                    </Td>
+                                    <Td borderRight="1px solid" borderRightColor={border}>
+                                      <Badge
+                                        bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
+                                        color={textPrimary}
+                                        px={3}
+                                        py={1}
+                                        borderRadius="full"
+                                        fontWeight="medium"
+                                        fontSize="xs"
+                                      >
+                                        {release.changes.length} {release.changes.length === 1 ? 'item' : 'items'}
+                                      </Badge>
+                                    </Td>
+                                    <Td borderRight="1px solid" borderRightColor={border}>
+                                      <HStack spacing={2}>
+                                        {release.changes.filter(change => isVideoLink(change)).map((video, videoIndex) => (
+                                          <Button
+                                            key={videoIndex}
+                                            as="a"
+                                            href={video}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            size="xs"
+                                            bgGradient="linear(135deg, #9f7aea 0%, #805ad5 100%)"
+                                            color={textPrimary}
+                                            leftIcon={<ExternalLinkIcon boxSize={3} />}
+                                            borderRadius="full"
+                                            fontWeight="medium"
+                                            _hover={{
+                                              bgGradient: "linear(135deg, #805ad5 0%, #6b46c1 100%)",
+                                              transform: 'scale(1.05)'
+                                            }}
+                                            transition="all 0.2s"
+                                          >
+                                            Video {videoIndex + 1}
+                                          </Button>
+                                        ))}
+                                        <Badge
+                                          bgGradient="linear(135deg, #4299e1 0%, #3182ce 100%)"
+                                          color={textPrimary}
+                                          px={2}
+                                          py={1}
+                                          borderRadius="full"
+                                          fontSize="xs"
+                                          fontWeight="medium"
+                                        >
+                                          Content
+                                        </Badge>
+                                      </HStack>
+                                    </Td>
+                                    <Td>
+                                      <HStack spacing={2} justify="center">
+                                        <Tooltip label="Edit Release" placement="top">
+                                          <IconButton
+                                            icon={<EditIcon />}
+                                            size="md"
+                                            bg="rgba(66, 153, 225, 0.2)"
+                                                                                        border="1px solid rgba(66, 153, 225, 0.3)"
+                                            color="blue.600"
+                                            onClick={() => handleEdit(release)}
+                                            aria-label="Edit release"
+                                            borderRadius="full"
+                                            _hover={{
+                                              bg: 'rgba(66, 153, 225, 0.3)',
+                                              transform: 'scale(1.1)'
+                                            }}
+                                            transition="all 0.2s"
+                                          />
+                                        </Tooltip>
+                                        <Tooltip label="Delete Release" placement="top">
+                                          <IconButton
+                                            icon={<DeleteIcon />}
+                                            size="md"
+                                            bg="rgba(245, 101, 101, 0.2)"
+                                                                                        border="1px solid rgba(245, 101, 101, 0.3)"
+                                            color="red.600"
+                                            onClick={() => handleDelete(release)}
+                                            aria-label="Delete release"
+                                            borderRadius="full"
+                                            _hover={{
+                                              bg: 'rgba(245, 101, 101, 0.3)',
+                                              transform: 'scale(1.1)'
+                                            }}
+                                            transition="all 0.2s"
+                                          />
+                                        </Tooltip>
+                                      </HStack>
+                                    </Td>
+                                  </Tr>
+                                ))}
+                              </Tbody>
+                            </Table>
+                          </TableContainer>
+
+                          {/* Desktop Pagination Controls */}
+                          {totalPages > 1 && (
+                            <HStack justify="center" mt={6} spacing={4}>
+                              <Button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                isDisabled={currentPage === 1}
+                                size="md"
+                                variant="outline"
+                                colorScheme="blue"
+                              >
+                                Previous
+                              </Button>
+                              <Text color="gray.300" fontSize="sm">
+                                Page {currentPage} of {totalPages}
+                              </Text>
+                              <Button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                isDisabled={currentPage === totalPages}
+                                size="md"
+                                variant="outline"
+                                colorScheme="blue"
+                              >
+                                Next
+                              </Button>
+                            </HStack>
+                          )}
+                        </Box>
+                      </Hide>
+                    </>
+                  ) : (
+                    <Box p={8}>
+                      <Alert
+                        status="info"
+                        borderRadius="2xl"
+                        variant="subtle"
+                        bg="rgba(66, 153, 225, 0.1)"
+                                                border="1px solid rgba(66, 153, 225, 0.3)"
+                        shadow="md"
+                      >
+                        <AlertIcon boxSize="20px" color="blue.500" />
+                        <Box>
+                          <AlertTitle fontSize={isMobile ? "md" : "lg"} fontWeight="bold" color="blue.300">
+                            No releases found
+                          </AlertTitle>
+                          <Text fontSize="sm" color="blue.200" mt={1}>
+                            Start by creating your first release in the Cloudflare Database using the 'Add Release' button.
+                          </Text>
+                        </Box>
+                      </Alert>
+                    </Box>
                   )}
-                </VStack>
-                <Tag colorScheme="blue" variant="solid">
-                  <TagLeftIcon as={CheckCircleIcon} />
-                  <TagLabel>Database</TagLabel>
-                </Tag>
-              </HStack>
-            </CardHeader>
-            <CardBody>
-              {filteredReleases.length > 0 ? (
-                <>
-                  {/* Mobile View - Card Layout */}
-                  <Hide above="md">
-                    <VStack spacing={0} align="stretch">
-                      {filteredReleases.map((release) => (
-                        <MobileReleaseCard key={release.id} release={release} />
-                      ))}
-                    </VStack>
-                  </Hide>
+                </CardBody>
+              </Card>
+            </ScaleFade>
 
-                  {/* Desktop View - Table Layout */}
-                  <Hide below="md">
-                    <TableContainer>
-                      <Table variant="simple">
-                        <Thead>
-                          <Tr bg={tableHeaderBg}>
-                            <Th fontWeight="bold">Version</Th>
-                            <Th fontWeight="bold">Changes</Th>
-                            <Th fontWeight="bold">Media</Th>
-                            <Th fontWeight="bold" textAlign="center">Actions</Th>
-                          </Tr>
-                        </Thead>
-                        <Tbody>
-                          {filteredReleases.map((release) => (
-                            <Tr key={release.id} _hover={{ bg: tableRowHoverBg }}>
-                              <Td fontWeight="bold" color="blue.600">
-                                {release.version}
-                              </Td>
-                              <Td>
-                                <Badge colorScheme="green" variant="subtle">
-                                  {release.changes.length} {release.changes.length === 1 ? 'change' : 'changes'}
-                                </Badge>
-                              </Td>
-                              <Td>
-                                <Wrap>
-                                  {release.changes.some(change => isVideoLink(change)) && (
-                                    <WrapItem>
-                                      <Tag colorScheme="purple" variant="solid" size="sm">
-                                        <TagLeftIcon as={ExternalLinkIcon} />
-                                        <TagLabel>Video</TagLabel>
-                                      </Tag>
-                                    </WrapItem>
-                                  )}
-                                  <WrapItem>
-                                    <Tag colorScheme="blue" variant="outline" size="sm">
-                                      <TagLabel>{release.changes.length} items</TagLabel>
-                                    </Tag>
-                                  </WrapItem>
-                                </Wrap>
-                              </Td>
-                              <Td>
-                                <HStack spacing={2} justify="center">
-                                  <Tooltip label="Edit Release">
-                                    <IconButton
-                                      icon={<EditIcon />}
-                                      size="sm"
-                                      colorScheme="blue"
-                                      variant="ghost"
-                                      onClick={() => handleEdit(release)}
-                                      aria-label="Edit release"
-                                    />
-                                  </Tooltip>
-                                  <Tooltip label="Delete Release">
-                                    <IconButton
-                                      icon={<DeleteIcon />}
-                                      size="sm"
-                                      colorScheme="red"
-                                      variant="ghost"
-                                      onClick={() => handleDelete(release)}
-                                      aria-label="Delete release"
-                                    />
-                                  </Tooltip>
-                                </HStack>
-                              </Td>
-                            </Tr>
-                          ))}
-                        </Tbody>
-                      </Table>
-                    </TableContainer>
-                  </Hide>
-                </>
-              ) : (
-                <Alert status="info" borderRadius="lg" variant="subtle">
-                  <AlertIcon />
-                  <Box>
-                    <AlertTitle fontSize={isMobile ? "sm" : "md"}>
-                      No releases found
-                    </AlertTitle>
-                    <Text fontSize="sm">
-                      {searchTerm
-                        ? `No releases match your search for "${searchTerm}"`
-                        : "Click 'Add Release' to create your first release in Cloudflare Database."
-                      }
-                    </Text>
-                  </Box>
-                </Alert>
-              )}
-            </CardBody>
-          </Card>
+            {/* Modern Database Info */}
+            <ScaleFade in delay={0.2}>
+              <Alert
+                status="info"
+                borderRadius="2xl"
+                variant="subtle"
+                bg="rgba(66, 153, 225, 0.1)"
+                                border="1px solid rgba(66, 153, 225, 0.3)"
+                shadow="md"
+              >
+                <AlertIcon boxSize="24px" color="blue.500" />
+                <Box>
+                  <AlertTitle fontSize="lg" fontWeight="bold" color="blue.300" mb={2}>
+                    💾 Database Information
+                  </AlertTitle>
+                  <Text fontSize="sm" color="blue.200">
+                    All release notes are managed in the Cloudflare Database. View them on the
+                    <Button
+                      as={RouterLink}
+                      to="/release-note"
+                      variant="link"
+                      color="red.500"
+                      fontWeight="bold"
+                      ml={1}
+                      fontSize="sm"
+                      _hover={{
+                        color: "red.500",
+                        textDecoration: "underline"
+                      }}
+                      _active={{
+                        color: "red.500",
+                        transform: "scale(0.98)"
+                      }}
+                    >
+                      Release Notes View
+                    </Button>
+                    page.
+                  </Text>
+                </Box>
+              </Alert>
+            </ScaleFade>
 
-          {/* Database Info */}
-          <Alert status="info" borderRadius="lg" variant="subtle">
-            <AlertIcon />
-            <Box>
-              <AlertTitle fontSize="md">💾 Database Information</AlertTitle>
-              <Text fontSize="sm">
-                All release notes are managed in the Cloudflare Database. View them on the
-                <Button as={RouterLink} to="/release-notes" variant="link" colorScheme="blue" ml={1} fontSize="sm">
-                  Release Notes View
-                </Button>
-                page.
-              </Text>
-            </Box>
-          </Alert>
+          </VStack>
+        </Container>
+      </Box>
 
-        </VStack>
-      </Container>
-
-      {/* Modals */}
+      {/* Modern Modals */}
       <>
         {/* Edit Modal */}
-        <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} size={modalSize}>
+        <Modal isOpen={isEditModalOpen} onClose={handleEditModalClose} size={modalSize} isCentered>
           <ModalOverlay />
-          <ModalContent maxH="90vh" overflowY="auto">
-            <ModalHeader>Edit Release</ModalHeader>
+          <ModalContent
+            bg={bgModal}
+            borderRadius="lg"
+            maxH="90vh"
+            overflowY="auto"
+          >
+            <ModalHeader
+              borderBottom="1px solid"
+              borderColor={border}
+            >
+              <Heading size="lg" fontWeight="bold" color={textPrimary}>Edit Release</Heading>
+            </ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              <VStack spacing={4}>
+            <ModalBody p={6}>
+              <VStack spacing={6}>
                 <FormControl>
-                  <FormLabel>Version</FormLabel>
+                  <FormLabel fontWeight="semibold" color={textPrimary}>Version</FormLabel>
                   <Input
                     value={formData.version}
                     onChange={(e) => setFormData(prev => ({ ...prev, version: e.target.value }))}
                     placeholder="e.g., Version 2025.10.1"
+                    bg={bgSecondary}
+                    border="1px solid"
+                    borderColor={border}
+                    borderRadius="lg"
+                    color={textPrimary}
+                    _placeholder={{ color: textMuted }}
+                    _focus={{
+                      borderColor: '#667eea',
+                      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                    }}
                   />
                 </FormControl>
 
                 <FormControl>
-                  <FormLabel>Changes</FormLabel>
-                  <VStack spacing={2} align="stretch">
+                  <FormLabel fontWeight="semibold" color={textPrimary}>Changes</FormLabel>
+                  <VStack spacing={3} align="stretch">
                     {formData.changes.map((change, index) => (
-                      <HStack key={index}>
+                      <HStack key={index} spacing={3}>
                         <Textarea
                           value={change}
                           onChange={(e) => handleUpdateChange(index, e.target.value)}
                           placeholder={`Change ${index + 1}`}
                           flex={1}
+                          bg={bgSecondary}
+                          border="1px solid"
+                          borderColor={border}
+                          borderRadius="lg"
+                          color={textPrimary}
+                          _placeholder={{ color: textMuted }}
+                          _focus={{
+                            borderColor: '#667eea',
+                            boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                          }}
                         />
                         {formData.changes.length > 1 && (
                           <IconButton
                             icon={<DeleteIcon />}
                             onClick={() => handleRemoveChange(index)}
-                            colorScheme="red"
-                            size="sm"
+                            bg="rgba(245, 101, 101, 0.2)"
+                            border="1px solid rgba(245, 101, 101, 0.3)"
+                            color="red.600"
+                            size="md"
+                            borderRadius="full"
+                            _hover={{
+                              bg: 'rgba(245, 101, 101, 0.3)',
+                              transform: 'scale(1.1)'
+                            }}
+                            transition="all 0.2s"
                           />
                         )}
                       </HStack>
@@ -985,8 +2077,18 @@ const ReleaseNoteDashboard = () => {
                     <Button
                       leftIcon={<AddIcon />}
                       onClick={handleAddChange}
-                      variant="outline"
+                      bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
+                      color={textPrimary}
+                      variant="solid"
                       alignSelf="flex-start"
+                      size="sm"
+                      borderRadius="full"
+                      fontWeight="medium"
+                      _hover={{
+                        bgGradient: "linear(135deg, #5a67d8 0%, #6b46c1 100%)",
+                        transform: 'translateY(-1px)'
+                      }}
+                      transition="all 0.2s"
                     >
                       Add Change
                     </Button>
@@ -994,39 +2096,90 @@ const ReleaseNoteDashboard = () => {
                 </FormControl>
               </VStack>
             </ModalBody>
-            <ModalFooter>
-              <Button variant="outline" mr={3} onClick={() => setIsEditModalOpen(false)}>
+            <ModalFooter p={6} borderTop="1px solid" borderColor={border}>
+              <Button
+                variant="outline"
+                mr={3}
+                onClick={() => setIsEditModalOpen(false)}
+                size="md"
+                borderRadius="full"
+                fontWeight="medium"
+                borderColor={border}
+                _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
+              >
                 Cancel
               </Button>
-              <Button colorScheme="blue" onClick={handleSave}>
+              <Button
+                bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
+                color={textPrimary}
+                onClick={handleSave}
+                size="md"
+                borderRadius="full"
+                fontWeight="bold"
+                _hover={{
+                  bgGradient: "linear(135deg, #5a67d8 0%, #6b46c1 100%)",
+                  transform: 'translateY(-1px)'
+                }}
+                transition="all 0.2s"
+              >
                 Save Changes
               </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
 
-        {/* New Modal */}
-        <Modal isOpen={isNewModalOpen} onClose={() => setIsNewModalOpen(false)} size={modalSize}>
-          <ModalOverlay />
-          <ModalContent maxH="90vh" overflowY="auto">
-            <ModalHeader>Add New Release</ModalHeader>
+        {/* New Modal with Glass Design */}
+        <Modal isOpen={isNewModalOpen} onClose={() => setIsNewModalOpen(false)} size={modalSize} isCentered>
+          <ModalOverlay bg="rgba(0, 0, 0, 0.6)" backdropFilter="blur(8px)" />
+          <ModalContent
+            bg={bgModal}
+                        border="1px solid"
+            borderColor="rgba(148, 163, 184, 0.2)"
+            borderRadius="2xl"
+            boxShadow="0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+            maxH="90vh"
+            overflowY="auto"
+          >
+            <ModalHeader
+              bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
+              color={textPrimary}
+              borderTopRadius="2xl"
+              py={6}
+            >
+              <VStack align="start" spacing={1}>
+                <Heading size="lg" fontWeight="bold">Add New Release</Heading>
+                <Text fontSize="sm" opacity={0.9}>
+                  Create a new release version
+                </Text>
+              </VStack>
+            </ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              <VStack spacing={4}>
+            <ModalBody p={6}>
+              <VStack spacing={6}>
                 <FormControl>
-                  <FormLabel>Version</FormLabel>
+                  <FormLabel fontWeight="semibold" color={textPrimary}>Version</FormLabel>
                   <Input
                     value={formData.version}
                     onChange={(e) => setFormData(prev => ({ ...prev, version: e.target.value }))}
                     placeholder="e.g., Version 2025.10.1"
+                    bg={bgSecondary}
+                    border="1px solid"
+                    borderColor={border}
+                    borderRadius="lg"
+                    color={textPrimary}
+                    _placeholder={{ color: textMuted }}
+                    _focus={{
+                      borderColor: '#48bb78',
+                      boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)'
+                    }}
                   />
                 </FormControl>
 
-                <Divider />
+                <Divider borderColor={border} />
 
                 <FormControl>
-                  <FormLabel>Quick Input (Parse Release Note)</FormLabel>
-                  <VStack spacing={2} align="stretch">
+                  <FormLabel fontWeight="semibold" color={textPrimary}>Quick Input (Parse Release Note)</FormLabel>
+                  <VStack spacing={3} align="stretch">
                     <Textarea
                       value={quickInputText}
                       onChange={(e) => setQuickInputText(e.target.value)}
@@ -1039,37 +2192,72 @@ Custom Map is available now!
 - Import/Export for sharing.
 https://youtu.be/f0wHacQFoZ4"
                       rows={8}
+                      bg={bgSecondary}
+                      border="1px solid"
+                      borderColor={border}
+                      borderRadius="lg"
+                      _focus={{
+                        borderColor: '#9f7aea',
+                        boxShadow: '0 0 0 3px rgba(159, 122, 234, 0.1)'
+                      }}
                     />
                     <Button
                       onClick={handleQuickParse}
-                      colorScheme="purple"
-                      variant="outline"
+                      bgGradient="linear(135deg, #9f7aea 0%, #805ad5 100%)"
+                      color={textPrimary}
+                      variant="solid"
                       alignSelf="flex-start"
+                      size="sm"
+                      borderRadius="full"
+                      fontWeight="medium"
+                      _hover={{
+                        bgGradient: "linear(135deg, #805ad5 0%, #6b46c1 100%)",
+                        transform: 'translateY(-1px)'
+                      }}
+                      transition="all 0.2s"
                     >
                       Parse Quick Input
                     </Button>
                   </VStack>
                 </FormControl>
 
-                <Divider />
+                <Divider borderColor={border} />
 
                 <FormControl>
-                  <FormLabel>Changes</FormLabel>
-                  <VStack spacing={2} align="stretch">
+                  <FormLabel fontWeight="semibold" color={textPrimary}>Changes</FormLabel>
+                  <VStack spacing={3} align="stretch">
                     {formData.changes.map((change, index) => (
-                      <HStack key={index}>
+                      <HStack key={index} spacing={3}>
                         <Textarea
                           value={change}
                           onChange={(e) => handleUpdateChange(index, e.target.value)}
                           placeholder={`Change ${index + 1}`}
                           flex={1}
+                          bg={bgSecondary}
+                          border="1px solid"
+                          borderColor={border}
+                          borderRadius="lg"
+                          color={textPrimary}
+                          _placeholder={{ color: textMuted }}
+                          _focus={{
+                            borderColor: '#48bb78',
+                            boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)'
+                          }}
                         />
                         {formData.changes.length > 1 && (
                           <IconButton
                             icon={<DeleteIcon />}
                             onClick={() => handleRemoveChange(index)}
-                            colorScheme="red"
-                            size="sm"
+                            bg="rgba(245, 101, 101, 0.2)"
+                            border="1px solid rgba(245, 101, 101, 0.3)"
+                            color="red.600"
+                            size="md"
+                            borderRadius="full"
+                            _hover={{
+                              bg: 'rgba(245, 101, 101, 0.3)',
+                              transform: 'scale(1.1)'
+                            }}
+                            transition="all 0.2s"
                           />
                         )}
                       </HStack>
@@ -1077,8 +2265,18 @@ https://youtu.be/f0wHacQFoZ4"
                     <Button
                       leftIcon={<AddIcon />}
                       onClick={handleAddChange}
-                      variant="outline"
+                      bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
+                      color={textPrimary}
+                      variant="solid"
                       alignSelf="flex-start"
+                      size="sm"
+                      borderRadius="full"
+                      fontWeight="medium"
+                      _hover={{
+                        bgGradient: "linear(135deg, #38a169 0%, #2f855a 100%)",
+                        transform: 'translateY(-1px)'
+                      }}
+                      transition="all 0.2s"
                     >
                       Add Change
                     </Button>
@@ -1086,17 +2284,63 @@ https://youtu.be/f0wHacQFoZ4"
                 </FormControl>
               </VStack>
             </ModalBody>
-            <ModalFooter>
-              <Button variant="outline" mr={3} onClick={() => setIsNewModalOpen(false)}>
+            <ModalFooter p={6} borderTop="1px solid" borderColor={border}>
+              <Button
+                variant="outline"
+                mr={3}
+                onClick={() => setIsNewModalOpen(false)}
+                size="md"
+                borderRadius="full"
+                fontWeight="medium"
+                borderColor={border}
+                _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
+              >
                 Cancel
               </Button>
-              <Button colorScheme="green" onClick={handleSave}>
+              <Button
+                bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
+                color={textPrimary}
+                onClick={handleSave}
+                size="md"
+                borderRadius="full"
+                fontWeight="bold"
+                _hover={{
+                  bgGradient: "linear(135deg, #38a169 0%, #2f855a 100%)",
+                  transform: 'translateY(-1px)'
+                }}
+                transition="all 0.2s"
+              >
                 Add Release
               </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
       </>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <IconButton
+          aria-label="Scroll to top"
+          icon={<ChevronUpIcon />}
+          onClick={scrollToTop}
+          position="fixed"
+          bottom={8}
+          right={8}
+          size="lg"
+          borderRadius="full"
+          bg="rgba(239, 68, 68, 0.8)"
+          color="white"
+          boxShadow="0 4px 12px rgba(0, 0, 0, 0.15)"
+          backdropFilter="blur(8px)"
+          zIndex={1000}
+          _hover={{
+            bg: "rgba(220, 38, 38, 0.9)",
+            transform: "scale(1.1)",
+          }}
+          transition="all 0.3s ease"
+          opacity={0.9}
+        />
+      )}
     </Box>
   );
 };

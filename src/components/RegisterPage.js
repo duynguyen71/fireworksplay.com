@@ -34,8 +34,8 @@ const RegisterPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showPassword, _setShowPassword] = useState(false);
-  const [showConfirmPassword, _setShowConfirmPassword] = useState(false);
+  const [_showPassword, _setShowPassword] = useState(false);
+  const [_showConfirmPassword, _setShowConfirmPassword] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -211,7 +211,7 @@ const RegisterPage = () => {
                   <FormLabel>Password</FormLabel>
                   <Input
                     name="password"
-                    type={showPassword ? "text" : "password"}
+                    type="password"
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Create a strong password"
@@ -240,7 +240,7 @@ const RegisterPage = () => {
                   <FormLabel>Confirm Password</FormLabel>
                   <Input
                     name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
+                    type="password"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Re-enter your password"

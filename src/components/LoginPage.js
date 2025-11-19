@@ -14,8 +14,7 @@ import {
   Card,
   CardBody,
   VStack,
-  Checkbox,
-  Divider
+  Checkbox
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import authService from "../utils/authService";
@@ -28,7 +27,7 @@ const LoginPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [showPassword, _setShowPassword] = useState(false);
+  const [_showPassword, _setShowPassword] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -148,7 +147,7 @@ const LoginPage = () => {
                   <FormLabel>Password</FormLabel>
                   <Input
                     name="password"
-                    type={showPassword ? "text" : "password"}
+                    type="password"
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"

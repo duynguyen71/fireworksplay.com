@@ -194,16 +194,40 @@ class AuthService {
     };
   }
 
-  // Validate token by checking current user
+  // Validate token by checking current user (optimized to avoid duplicate calls)
   async validateToken() {
     if (!this.token) {
       return false;
     }
 
     try {
-      await this.getCurrentUser();
+      // Direct call to avoid duplicate getCurrentUser() call
+      const response = await fetch(`${WORKER_API_URL}/api/auth/me`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token is invalid, clear local data
+          this._clearAuthData();
+        }
+        throw new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      if (data.success) {
+        this.user = data.user;
+        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+      }
+
       return true;
     } catch (error) {
+      console.error('Token validation error:', error);
       this._clearAuthData();
       return false;
     }
