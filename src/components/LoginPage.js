@@ -14,12 +14,10 @@ import {
   Card,
   CardBody,
   VStack,
-  HStack,
-  Link,
   Checkbox,
   Divider
 } from "@chakra-ui/react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import authService from "../utils/authService";
 
 const LoginPage = () => {
@@ -106,18 +104,7 @@ const LoginPage = () => {
     }
   };
 
-  const handleGuestLogin = () => {
-    toast({
-      title: "Guest Access",
-      description: "Please register for an account to access the dashboard",
-      status: "info",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    navigate("/register");
-  };
-
+  
   return (
     <Box
       minH="100vh"
@@ -150,7 +137,7 @@ const LoginPage = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="admin@fireworksplay.com"
+                    placeholder="Enter your email"
                     size="lg"
                     borderRadius="md"
                   />
@@ -172,19 +159,14 @@ const LoginPage = () => {
                 </FormControl>
 
                 <FormControl>
-                  <HStack justify="space-between">
-                    <Checkbox
-                      name="rememberMe"
-                      isChecked={formData.rememberMe}
-                      onChange={handleChange}
-                      colorScheme="red"
-                    >
-                      Remember me
-                    </Checkbox>
-                    <Link color="red.500" fontSize="sm" href="#forgot-password">
-                      Forgot password?
-                    </Link>
-                  </HStack>
+                  <Checkbox
+                    name="rememberMe"
+                    isChecked={formData.rememberMe}
+                    onChange={handleChange}
+                    colorScheme="red"
+                  >
+                    Remember me
+                  </Checkbox>
                 </FormControl>
 
                 <Button
@@ -201,28 +183,7 @@ const LoginPage = () => {
               </VStack>
             </form>
 
-            <Divider />
-
-            {/* Guest Access */}
-            <VStack spacing={3}>
-              <Button
-                variant="outline"
-                size="lg"
-                w="full"
-                onClick={handleGuestLogin}
-                borderRadius="md"
-              >
-                Continue as Guest
-              </Button>
-
-              <Text textAlign="center" color="gray.600" fontSize="sm">
-                Don't have an account?{" "}
-                <Link as={RouterLink} to="/register" color="red.500">
-                  Sign up
-                </Link>
-              </Text>
-            </VStack>
-
+            
             {/* Demo Account Info */}
             {/* <Alert status="info" borderRadius="md" fontSize="sm">
               <AlertIcon />
