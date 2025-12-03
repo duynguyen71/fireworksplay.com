@@ -1145,17 +1145,6 @@ const ReleaseNoteDashboard = () => {
               border="2px solid rgba(255, 255, 255, 0.3)"
               position="relative"
               overflow="hidden"
-              _hover={{
-                bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
-                transform: 'translateY(-3px) scale(1.02)',
-                boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
-                border: "2px solid rgba(255, 255, 255, 0.5)"
-              }}
-              _active={{
-                transform: 'translateY(-1px) scale(1.01)',
-                boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
-              }}
-              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
               _before={{
                 content: '""',
                 position: 'absolute',
@@ -1167,10 +1156,19 @@ const ReleaseNoteDashboard = () => {
                 transition: 'left 0.5s',
               }}
               _hover={{
+                bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
+                transform: 'translateY(-3px) scale(1.02)',
+                boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
+                border: "2px solid rgba(255, 255, 255, 0.5)",
                 _before: {
                   left: '100%'
                 }
               }}
+              _active={{
+                transform: 'translateY(-1px) scale(1.01)',
+                boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
+              }}
+              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             >
               <VStack spacing={1}>
                 <Text fontSize="lg" fontWeight="extrabold">✨ Add New Release</Text>
@@ -1273,17 +1271,6 @@ const ReleaseNoteDashboard = () => {
                   border="2px solid rgba(255, 255, 255, 0.3)"
                   position="relative"
                   overflow="hidden"
-                  _hover={{
-                    bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
-                    transform: 'translateY(-3px) scale(1.02)',
-                    boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
-                    border: "2px solid rgba(255, 255, 255, 0.5)"
-                  }}
-                  _active={{
-                    transform: 'translateY(-1px) scale(1.01)',
-                    boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
-                  }}
-                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                   _before={{
                     content: '""',
                     position: 'absolute',
@@ -1295,10 +1282,19 @@ const ReleaseNoteDashboard = () => {
                     transition: 'left 0.5s',
                   }}
                   _hover={{
+                    bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
+                    transform: 'translateY(-3px) scale(1.02)',
+                    boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
+                    border: "2px solid rgba(255, 255, 255, 0.5)",
                     _before: {
                       left: '100%'
                     }
                   }}
+                  _active={{
+                    transform: 'translateY(-1px) scale(1.01)',
+                    boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
+                  }}
+                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                 >
                   <VStack spacing={1}>
                     <Text fontSize="lg" fontWeight="extrabold">✨ Add Release</Text>

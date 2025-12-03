@@ -30,7 +30,7 @@ const TypingText = ({
     }, typingSpeed);
 
     return () => {
-      return clearInterval(interval);
+      clearInterval(interval);
     };
   }, [text, index, typingSpeed]);
 
@@ -59,6 +59,11 @@ const TypingText = ({
         color={color}
         opacity={isFaded ? 0.5 : 1}
         text={displayedText}
+        style={{
+          willChange: 'opacity',
+          backfaceVisibility: 'hidden',
+          transform: 'translateZ(0)'
+        }}
       />
       {isDone && text2 ? (
         <TypingText

@@ -10,59 +10,19 @@ import { SlideData } from "../data/SlideData";
 import socialMediaLinks from "../data/SocialMediaLinks";
 import SocialButton from "../components/SocialButton";
 import { FaDiscord, FaTiktok, FaYoutube } from "react-icons/fa";
+import { cardVariants, cardVariants2, cardVariants3 } from "../data/MotionVariants";
 
 const MainPage = () => {
   const { scrollYProgress } = useScroll();
 
   const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 80,
+    damping: 20,
     restDelta: 0.001,
+    mass: 1.2,
   });
 
-  const cardVariants = {
-    offscreen: {
-      y: 300,
-    },
-    onscreen: {
-      y: 50,
-      rotate: 0,
-      transition: {
-        type: "spring",
-        bounce: 0.4,
-        duration: 1,
-      },
-    },
-  };
-  const cardVariants2 = {
-    offscreen: {
-      y: 300,
-    },
-    onscreen: {
-      y: 50,
-      rotate: 0,
-      transition: {
-        type: "spring",
-        bounce: 0.4,
-        duration: 1.25,
-      },
-    },
-  };
-  const cardVariants3 = {
-    offscreen: {
-      y: 300,
-    },
-    onscreen: {
-      y: 100,
-      rotate: -10,
-      transition: {
-        type: "spring",
-        bounce: 0.8,
-        duration: 1.5,
-      },
-    },
-  };
-
+  
   const [isVisible, setIsVisible] = useState(false);
   const currentYear = new Date().getFullYear();
 

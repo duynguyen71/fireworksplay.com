@@ -34,8 +34,6 @@ const RegisterPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [_showPassword, _setShowPassword] = useState(false);
-  const [_showConfirmPassword, _setShowConfirmPassword] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();

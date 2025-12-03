@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 code {
@@ -26,19 +27,25 @@ code {
   font-weight: 600;
   font-style: normal;
   color: #1a1a1a;
-  animation: fadeEffect 1s alternate;
+  animation: fadeEffect 1.2s ease-in-out alternate;
   animation-iteration-count: 5;
+  will-change: opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 @keyframes fadeEffect {
   0% {
-    opacity: 0; /* Start with opacity 0 */
+    opacity: 0;
+    transform: translateY(1px);
   }
   50% {
-    opacity: 1; /* Show dot */
+    opacity: 1;
+    transform: translateY(0);
   }
   100% {
-    opacity: 0; /* End with opacity 0 */
+    opacity: 0;
+    transform: translateY(1px);
   }
 }
 ::-webkit-scrollbar {
@@ -64,4 +71,32 @@ code {
   height: 5px;
   background: rgb(177, 177, 177);
   transform-origin: 0%;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Performance optimizations for animations */
+* {
+  box-sizing: border-box;
+}
+
+.motion-safe * {
+  will-change: transform, opacity;
+}
+
+.motion-reduce * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -7,6 +7,9 @@ const MainHeading = ({
   display = "inline-block",
   className = "newsreader-bold600",
   color,
+  opacity,
+  style,
+  ...props
 }) => {
   return (
     <Text
@@ -15,6 +18,9 @@ const MainHeading = ({
       display={display}
       fontSize={fontSize}
       className={className}
+      opacity={opacity}
+      style={style}
+      {...props}
     >
       {text}
     </Text>
