@@ -84,6 +84,8 @@ const MainPage = () => {
             text2={"play"}
             text3={"Studio"}
             speed={200}
+            textColor={"black"}
+            textColor2={"black"}
           />
           {/* SUMMARY */}
           <Box height={["10vh", "20vh", "30vh"]} />
@@ -165,7 +167,7 @@ const MainPage = () => {
               fontSize="sm"
               color="gray.500"
             >
-              © {currentYear} Simplay Studio
+              © {currentYear} <span style={{ color: "red" }}>Sim</span><span style={{ color: "black" }}>play Studio</span>
             </Text>
             <Text
               cursor={"pointer"}

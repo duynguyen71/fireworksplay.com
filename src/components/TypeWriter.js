@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import MainHeading from "./MainHeading";
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const TypingText = ({
   text,
   text2,
   text3,
   color,
+  textColor,
+  textColor2,
   fontSize,
   isFaded,
   typingSpeed = 100,
@@ -62,7 +65,8 @@ const TypingText = ({
       />
       {isDone && text2 ? (
         <TypingText
-          color={color}
+          // eslint-disable-next-line no-undef
+          color={textColor || color}
           text={text2}
           fontSize={fontSize}
           isFaded={isFaded}
@@ -73,7 +77,8 @@ const TypingText = ({
 
       {isDone2 && text3 ? (
         <MainHeading
-          color={color}
+          // eslint-disable-next-line no-undef
+          color={textColor2 || color}
           opacity={isFaded ? 0.5 : 1}
           text={displayedText2}
           fontSize={fontSize}
