@@ -59,15 +59,10 @@ const TypingText = ({
         color={color}
         opacity={isFaded ? 0.5 : 1}
         text={displayedText}
-        style={{
-          willChange: 'opacity',
-          backfaceVisibility: 'hidden',
-          transform: 'translateZ(0)'
-        }}
       />
       {isDone && text2 ? (
         <TypingText
-          color={!text ?? color}
+          color={color}
           text={text2}
           fontSize={fontSize}
           isFaded={isFaded}
@@ -77,11 +72,11 @@ const TypingText = ({
       )}
 
       {isDone2 && text3 ? (
-        <TypingText
-          color={!text ?? color}
+        <MainHeading
+          color={color}
+          opacity={isFaded ? 0.5 : 1}
           text={displayedText2}
           fontSize={fontSize}
-          isFaded={isFaded}
         />
       ) : (
         <></>

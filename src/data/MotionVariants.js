@@ -11,7 +11,6 @@ const cardVariants = {
       type: "spring",
       bounce: 0.4,
       duration: 0.8,
-      ease: [0.25, 0.1, 0.25, 1]
     },
   },
 };
@@ -28,7 +27,6 @@ const cardVariants2 = {
       type: "spring",
       bounce: 0.3,
       duration: 0.9,
-      ease: [0.25, 0.1, 0.25, 1]
     },
   },
 };
@@ -45,7 +43,6 @@ const cardVariants3 = {
       type: "spring",
       bounce: 0.5,
       duration: 1.0,
-      ease: [0.25, 0.1, 0.25, 1]
     },
   },
 };
