@@ -20,6 +20,7 @@ const MainHeading = ({
       className={className}
       opacity={opacity}
       style={style}
+      userSelect="none"
       {...props}
     >
       {text}

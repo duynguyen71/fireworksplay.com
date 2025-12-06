@@ -17,6 +17,7 @@ const SecondaryHeading = ({
       display={display}
       fontSize={fontSize}
       className={className}
+      userSelect="none"
     >
       {text}
     </Text>
