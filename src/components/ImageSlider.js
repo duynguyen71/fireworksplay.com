@@ -19,8 +19,8 @@ const ImageSlider = ({ slides }) => {
           flexWrap="wrap"
           justifyContent="center"
           alignContent="center"
-          gap={[2, 2, 3]}
-          px={["2vw", "3vw", "4vw"]}
+          gap={[1, 1.5, 2]}
+          px={["1vw", "2vw", "3vw"]}
         >
           {slides.map((slide, index) => (
             <Box
@@ -32,7 +32,7 @@ const ImageSlider = ({ slides }) => {
               transition="transform 0.3s"
               _hover={{ transform: "scale(1.05)" }}
               flex={["1 1 100%", "1 1 calc(50% - 16px)", "1 1 calc(33.333% - 24px)", "1 1 calc(33.333% - 24px)"]}
-              maxW={{ base: "400px", md: "450px", lg: "500px" }}
+              maxW={{ base: "450px", md: "550px", lg: "600px" }}
               cursor="pointer"
               onClick={() => handleImageClick(index)}
             >

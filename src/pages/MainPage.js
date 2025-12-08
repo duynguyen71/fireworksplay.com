@@ -56,9 +56,12 @@ const MainPage = () => {
     }
   }, [showImages]);
 
+  
   return (
     <>
       <motion.div className="progress-bar" style={{ scaleX }} />
+
+      
       {/* SOCIAL BUTTONS */}
       <Box
         zIndex={9000}
@@ -83,7 +86,25 @@ const MainPage = () => {
       {/* END OF SOCIAL BUTTON */}
       <Box textAlign={"center"} margin={"auto"}>
         <Box marginBottom={"8vh"} marginTop={["100px", "150px", "200px"]}>
-          <MainHeading text={"Fireworks Play"} />
+          <style>
+            {`
+              @keyframes subtleGlow {
+                0%, 100% {
+                  filter: brightness(1) drop-shadow(0 0 20px rgba(220, 20, 60, 0.3));
+                }
+                50% {
+                  filter: brightness(1.1) drop-shadow(0 0 30px rgba(0, 128, 0, 0.4));
+                }
+              }
+              .christmas-title {
+                animation: subtleGlow 4s ease-in-out infinite;
+              }
+            `}
+          </style>
+          <Box className="christmas-title">
+            <MainHeading text={"Fireworks Play"} />
+          </Box>
+
           <Box mb={2}>
             <SecondaryHeading
               display="block"
@@ -105,7 +126,7 @@ const MainPage = () => {
             />
           </Box>
           {/* SUMMARY */}
-          <Box minHeight={["40vh", "45vh", "50vh"]} mt={12}>
+          <Box minHeight={["25vh", "30vh", "35vh"]} mt={8}>
             {showSummary && (
             <motion.div
               className="card-container"
@@ -121,7 +142,7 @@ const MainPage = () => {
                   className="newsreader-bold600"
                   display={"block"}
                   cursor={"default"}
-                  fontSize={[25, 35, 55, 60]}
+                  fontSize={[18, 24, 30, 36]}
                   userSelect="none"
                   style={{
                     color: "#2f3542",
@@ -142,7 +163,7 @@ const MainPage = () => {
                   style={{
                     color: "#2f3542",
                   }}
-                  fontSize={[25, 35, 55, 60]}
+                  fontSize={[18, 24, 30, 36]}
                 >
                   fireworks simulation game{" "}
                 </Text>{" "}
@@ -159,7 +180,7 @@ const MainPage = () => {
                     color: "#2f3542",
                   }}
                   display={"block"}
-                  fontSize={[25, 35, 55, 60]}
+                  fontSize={[18, 24, 30, 36]}
                 >
                   that will blow your mind!
                 </Text>{" "}
@@ -169,7 +190,7 @@ const MainPage = () => {
           </Box>
           {/*  END OF SUMMARY */}
           {/* IMAGE */}
-          {showImages && <ImageSlider slides={SlideData} />}
+          {showImages && <Box mt={[9, 4, 2]}><ImageSlider slides={SlideData} /></Box>}
           {/* IMAGE */}
           {/* BADGE STORE */}
           {showStoreBadges && (
