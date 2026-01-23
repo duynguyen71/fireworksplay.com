@@ -3,16 +3,18 @@
   "name": "Fireworks Play",
   "icons": [
     {
-      "src": "app-icon64.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "src": "app-icon512-spring.png",
+      "sizes": "512x512 256x256 192x192 128x128 64x64 32x32 24x24 16x16",
       "type": "image/png"
     },
     {
-      "src": "app-icon64.png",
+      "src": "app-icon512-spring.png",
+      "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "app-icon64.png",
+      "src": "app-icon512-spring.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ],
