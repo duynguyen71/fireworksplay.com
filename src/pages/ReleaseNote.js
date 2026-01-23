@@ -221,15 +221,26 @@ const ReleaseNote = () => {
   return (
     <Box maxW="900px" mx="auto" px={4} py={8}>
       <HStack justify="space-between" mb={4}>
-        <Button
-          onClick={handleRefresh}
-          isLoading={refreshing}
-          colorScheme="green"
-          variant="outline"
-          leftIcon={<ExternalLinkIcon />}
-        >
-          Refresh
-        </Button>
+        <Box>
+          <RouterLink to="/">
+            <HStack spacing={3} alignItems="center" cursor="pointer" _hover={{ opacity: 0.8 }}>
+              <img
+                src="/GameLabel_bk.png"
+                alt="Game Logo"
+                style={{ height: '50px', width: 'auto', borderRadius: '50%' }}
+              />
+              <Heading
+                as="h1"
+                size="xl"
+                bgGradient="linear(to-r, orange.400, yellow.400)"
+                bgClip="text"
+                textShadow="2px 2px 4px rgba(0,0,0,0.1)"
+              >
+                Fireworks Play
+              </Heading>
+            </HStack>
+          </RouterLink>
+        </Box>
         {user && (
           <Button
             as={RouterLink}
