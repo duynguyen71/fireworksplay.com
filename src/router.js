@@ -1,11 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainPage from "./pages/MainPage";
+import CatalogPage from "./pages/CatalogPage";
 import ReleaseNote from "./pages/ReleaseNote";
 import ReleaseNoteDashboard from "./pages/ReleaseNoteDashboard";
 import NotFoundPage from "./pages/NotFoundPage";
 import RootLayout from "./pages/RootLayout";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 const router = createBrowserRouter([
   {
@@ -17,6 +16,8 @@ const router = createBrowserRouter([
         index: true,
         element: <MainPage />,
       },
+      { path: "fireworks", element: <CatalogPage /> },
+      { path: "racks", element: <CatalogPage racks /> },
       {
         path: "release-note",
         element: <ReleaseNote />,
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requireAdmin>
             <ReleaseNoteDashboard />
           </ProtectedRoute>
         ),
@@ -40,6 +41,8 @@ const router = createBrowserRouter([
         index: true,
         element: <MainPage />,
       },
+      { path: "fireworks", element: <CatalogPage /> },
+      { path: "racks", element: <CatalogPage racks /> },
       {
         path: "release-note",
         element: <ReleaseNote />,
@@ -47,7 +50,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requireAdmin>
             <ReleaseNoteDashboard />
           </ProtectedRoute>
         ),
@@ -55,17 +58,9 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/register",
-    element: <RegisterPage />,
-  },
-  {
     path: "/release-note-dashboard",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requireAdmin>
         <ReleaseNoteDashboard />
       </ProtectedRoute>
     ),

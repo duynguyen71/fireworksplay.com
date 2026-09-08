@@ -1,122 +1,30 @@
-import { Box, Flex, Image, Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
+import { Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 
-const ImageSlider = ({ slides }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export default function ImageSlider({ slides }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  const handleImageClick = (index) => {
-    setSelectedImage(index);
-    onOpen();
-  };
-
+  const close = () => setSelectedImage(null);
   return (
     <>
-      <Box
-        className="card-container"
-        opacity={1}
-      >
-        <Flex
-          flexWrap="wrap"
-          justifyContent="center"
-          alignContent="center"
-          gap={[1, 1.5, 2]}
-          px={["1vw", "2vw", "3vw"]}
-        >
-          {slides.map((slide, index) => (
-            <Box
-              key={slide.image}
-              borderRadius="lg"
-              overflow="hidden"
-              boxShadow="md"
-              bg="white"
-              transition="transform 0.3s"
-              _hover={{ transform: "scale(1.05)" }}
-              flex={["1 1 100%", "1 1 calc(50% - 16px)", "1 1 calc(33.333% - 24px)", "1 1 calc(33.333% - 24px)"]}
-              maxW={{ base: "450px", md: "550px", lg: "600px" }}
-              cursor="pointer"
-              onClick={() => handleImageClick(index)}
-            >
-              <picture>
-                <source
-                  srcSet={`/images/webp/${index + 1}.webp`}
-                  type="image/webp"
-                />
-                <Image
-                  src={`/images/${index + 1}.png`}
-                  alt={`Screenshot ${index + 1}`}
-                  loading="lazy"
-                  w="100%"
-                  h="auto"
-                  objectFit="cover"
-                  position="relative"
-                />
-              </picture>
-            </Box>
-          ))}
-        </Flex>
-      </Box>
-
-      {/* Modal for full-size image view */}
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size="full"
-        isCentered
-        closeOnOverlayClick={true}
-      >
+      <div className="screenshot-grid">
+        {slides.map((slide, index) => (
+          <button key={slide.image} className="screenshot-button" onClick={() => setSelectedImage(index)} aria-label={`Open Fireworks Play screenshot ${index + 1}`}>
+            <picture>
+              <source srcSet={`/images/webp/${index + 1}.webp`} type="image/webp" />
+              <img src={slide.image} alt={`Fireworks Play gameplay screenshot ${index + 1}`} loading="lazy" width="2048" height="946" />
+            </picture>
+          </button>
+        ))}
+      </div>
+      <Modal isOpen={selectedImage !== null} onClose={close} size="6xl" isCentered>
         <ModalOverlay />
-        <ModalContent bg="black" border="none">
-          <ModalCloseButton color="white" size="lg" />
-          <ModalBody
-            p={0}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            h="100vh"
-            onClick={onClose}
-            cursor="pointer"
-          >
-            {selectedImage !== null && (
-              <Box
-                onClick={(e) => e.stopPropagation()}
-                cursor="zoom-in"
-                maxW="95vw"
-                maxH="95vh"
-                overflow="hidden"
-              >
-                <img
-                  src={`/images/${selectedImage + 1}.png`}
-                  alt={`Screenshot ${selectedImage + 1}`}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    userSelect: 'none',
-                    WebkitUserSelect: 'none',
-                    WebkitTouchCallout: 'none',
-                    KhtmlUserSelect: 'none',
-                    MozUserSelect: 'none',
-                    msUserSelect: 'none',
-                    transformOrigin: 'center center',
-                    transition: 'transform 0.3s ease',
-                  }}
-                  draggable={false}
-                  onWheel={(e) => {
-                    e.preventDefault();
-                    const img = e.target;
-                    const scale = e.deltaY < 0 ? 1.2 : 0.8;
-                    const currentScale = img.style.transform.replace(/[^\d.]/g, '') || 1;
-                    const newScale = Math.min(Math.max(currentScale * scale, 1), 3);
-                    img.style.transform = `scale(${newScale})`;
-                  }}
-                />
-              </Box>
-            )}
+        <ModalContent mx={4} bg="surface" aria-label="Fireworks Play screenshot">
+          <ModalCloseButton bg="surface" color="foreground" zIndex={1} aria-label="Close screenshot" />
+          <ModalBody p={0}>
+            {selectedImage !== null && <img src={slides[selectedImage].image} alt={`Fireworks Play gameplay screenshot ${selectedImage + 1}`} style={{ display: "block", width: "100%", height: "auto" }} />}
           </ModalBody>
         </ModalContent>
       </Modal>
     </>
   );
-};
-
-export default ImageSlider;
+}

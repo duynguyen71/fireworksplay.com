@@ -43,7 +43,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
           const currentUser = authService.getUser();
 
           // Check admin requirements
-          if (requireAdmin && currentUser.role !== 'admin') {
+          if (requireAdmin && currentUser?.role !== 'admin') {
             setError("Admin access required for this page");
             setIsAuthenticated(false);
             return;
@@ -93,11 +93,11 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bg="gray.900"
       >
         <VStack spacing={4}>
           <Spinner size="xl" color="red.500" thickness="4px" />
-          <Text fontSize="lg" color="gray.600">
+          <Text fontSize="lg" color="muted">
             Verifying authentication...
           </Text>
         </VStack>
@@ -113,7 +113,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bg="gray.900"
         px={4}
       >
         <VStack spacing={6} maxW="400px" w="full" textAlign="center">
@@ -126,22 +126,21 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
             Authentication Error
           </Heading>
 
-          <Text color="gray.600">
+          <Text color="muted">
             {requireAdmin
               ? "This page requires administrator privileges. Please contact an administrator if you believe this is an error."
-              : "We couldn't verify your authentication. Please sign in again."
+              : "We couldn't verify your authentication. An authenticated session is required."
             }
           </Text>
 
           <VStack spacing={3} w="full">
             <Button
               as={RouterLink}
-              to="/login"
-              state={{ from: location }}
+              to="/"
               colorScheme="red"
               w="full"
             >
-              Sign In
+              Back to Home
             </Button>
 
             <Button
@@ -157,17 +156,11 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     );
   }
 
-  // Not authenticated - redirect to login
+  // No public login form; unauthenticated visitors return to the homepage.
   if (!isAuthenticated) {
     return (
       <Navigate
-        to="/login"
-        state={{
-          from: location,
-          message: requireAdmin
-            ? "Admin access required for this page"
-            : "Please sign in to access this page"
-        }}
+        to="/"
         replace
       />
     );
@@ -181,7 +174,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bg="gray.900"
         px={4}
       >
         <VStack spacing={6} maxW="400px" w="full" textAlign="center">
@@ -194,7 +187,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
             Admin Access Required
           </Heading>
 
-          <Text color="gray.600">
+          <Text color="muted">
             This page requires administrator privileges. Your current role is: {user?.role || 'user'}
           </Text>
 
@@ -209,11 +202,11 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
 
             <Button
               as={RouterLink}
-              to="/dashboard"
+              to="/"
               variant="outline"
               w="full"
             >
-              Go to Dashboard
+              Back to Home
             </Button>
           </VStack>
         </VStack>
