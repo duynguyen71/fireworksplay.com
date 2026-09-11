@@ -164,6 +164,9 @@ const ReleaseNote = () => {
     return (
       <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8} display="flex" justifyContent="center" alignItems="center" minH="400px">
         <VStack spacing={4}>
+          <Heading as="h1" size="xl" color="foreground">
+            Release Notes
+          </Heading>
           <Spinner size="xl" color="foreground" />
           <Text>Loading release notes...</Text>
         </VStack>
@@ -174,6 +177,9 @@ const ReleaseNote = () => {
   if (error) {
     return (
       <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8}>
+        <Heading as="h1" size="xl" color="foreground" mb={4}>
+          Release Notes
+        </Heading>
         <Alert status="error" borderRadius="lg" mb={4}>
           <AlertIcon />
           <VStack align="start" spacing={2}>
@@ -198,6 +204,9 @@ const ReleaseNote = () => {
   if (releases.length === 0) {
     return (
       <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8}>
+        <Heading as="h1" size="xl" color="foreground" mb={4}>
+          Release Notes
+        </Heading>
         <Alert status="info" borderRadius="lg">
           <AlertIcon />
           <VStack align="start" spacing={2}>

@@ -971,7 +971,7 @@ const ReleaseNoteDashboard = () => {
                     <MenuItem
                       icon={<ViewIcon />}
                       as={RouterLink}
-                      to="/release-note"
+                      to="/release-note/"
                       fontSize="sm"
                       bg="transparent"
                       color={textPrimary}
@@ -1329,7 +1329,7 @@ const ReleaseNoteDashboard = () => {
                     <MenuItem
                       icon={<ViewIcon />}
                       as={RouterLink}
-                      to="/release-note"
+                      to="/release-note/"
                       bg="transparent"
                       color={textPrimary}
                       _hover={{
@@ -1924,7 +1924,7 @@ const ReleaseNoteDashboard = () => {
                     All release notes are managed in the Cloudflare Database. View them on the
                     <Button
                       as={RouterLink}
-                      to="/release-note"
+                      to="/release-note/"
                       variant="link"
                       color="red.500"
                       fontWeight="bold"

@@ -33,6 +33,7 @@
     "start": "ESLINT_NO_DEV_ERRORS=true react-scripts start",
     "prebuild": "node src/data/updates/auto-generate-index.js",
     "build": "ESLINT_NO_DEV_ERRORS=true react-scripts build",
+    "postbuild": "node scripts/generate-static-routes.js",
     "build:no-eslint": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

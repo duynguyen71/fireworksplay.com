@@ -4,7 +4,6 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
 html.home-scroll-snap { scroll-behavior: auto; scroll-snap-type: y mandatory; }
 html.home-scroll-snap.is-section-scrolling { scroll-snap-type: none; }
 html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scroll-snap-align: start; scroll-snap-stop: always; }
-.scroll-progress { position: fixed; top: 0; right: 0; left: 0; z-index: 9998; height: 4px; background: #33b1ff; transform-origin: 0 50%; pointer-events: none; }
 .subpage-nav { width: 100%; max-width: 1280px; margin: 0 auto; padding: 48px 32px 0; }
 .back-home-link { display: inline-block; color: #33b1ff; text-decoration: none; }
 .back-home-link:hover { text-decoration: underline; }
@@ -21,18 +20,10 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
   text-align: center;
   background: #07131a url("../public/images/webp/2.webp") center / cover no-repeat;
 }
-.hero-video-wrap, .hero-shade { position: absolute; inset: 0; }
-.hero-video-wrap { overflow: hidden; pointer-events: none; }
-.hero-video { position: absolute; top: 50%; left: 50%; width: 100vw; height: 56.25vw; min-width: 177.78vh; min-height: 100vh; border: 0; transform: translate(-50%, -50%); }
-.hero-shade {
-  background:
-    linear-gradient(180deg, #02090e 0, rgba(2, 9, 14, 0.98) 72px, rgba(2, 9, 14, 0.62) 112px, transparent 160px),
-    radial-gradient(ellipse 240px 140px at 50% 50%, rgba(2, 9, 14, 0.98) 0%, rgba(2, 9, 14, 0.86) 42%, transparent 76%),
-    linear-gradient(180deg, rgba(2, 12, 18, 0.5) 0%, rgba(2, 9, 14, 0.62) 72%, #161616 100%);
-}
+.hero-video-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hero-video { position: absolute; top: 50%; left: 50%; width: 112vw; height: 63vw; min-width: 199vh; min-height: 112vh; border: 0; transform: translate(-50%, -50%); }
+.hero-edge-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2, 9, 14, 0.52) 0%, transparent 22%, transparent 72%, rgba(2, 9, 14, 0.64) 100%); pointer-events: none; }
 .home-hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: min(760px, 100%); }
-.hero-video-toggle { position: absolute; right: 24px; bottom: 24px; z-index: 2; padding: 10px 14px; border: 1px solid rgba(255, 255, 255, 0.65); background: rgba(0, 0, 0, 0.45); color: #fff; font: inherit; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
-.hero-video-toggle:hover { background: rgba(0, 0, 0, 0.75); }
 .eyebrow { margin-bottom: 24px; color: var(--site-secondary); font-size: 14px; }
 .home-hero .studio-word { margin-bottom: 8px; color: #f4f4f4; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
 .studio-sim { color: #ff3b30; }
@@ -42,6 +33,9 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
 .hero-description { margin: 0; color: #f4f4f4; font-size: clamp(20px, 2vw, 28px); line-height: 1.4; max-width: 650px; text-shadow: 0 2px 18px #000; text-wrap: balance; }
 .store-links { display: flex; gap: 16px; margin: 28px 0 24px; align-items: center; justify-content: center; flex-wrap: wrap; }
 .store-links a { display: flex; }
+.hero-scroll-hint { position: absolute; z-index: 2; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; border: 2px solid #fff; border-radius: 50%; background: transparent; color: #fff; transform: translateX(-50%); cursor: pointer; }
+.hero-scroll-hint > span { display: flex; align-items: center; justify-content: center; }
+.hero-scroll-hint svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: square; stroke-linejoin: miter; }
 .text-link { color: var(--site-link); font-size: 16px; display: inline-flex; gap: 32px; align-items: center; }
 .text-link:hover, .site-footer a:hover { text-decoration: underline; }
 .gallery-section { max-width: 1216px; width: calc(100% - 64px); margin: auto; padding: 40px 0 64px; border-top: 1px solid var(--site-border); }
@@ -68,8 +62,8 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
 .newsreader-bold600, .newsreader-bold600_fadeEffect { font-family: "IBM Plex Sans", sans-serif; font-weight: 400; color: var(--site-text); }
 @media (max-width: 600px) {
   .subpage-nav { padding: 32px 20px 0; }
-  .home-hero { min-height: 100svh; padding: 40px 20px; }
-  .hero-video-toggle { right: 16px; bottom: 16px; }
+  .home-hero { min-height: 100svh; padding: 32px 20px 84px; }
+  .hero-scroll-hint { display: none; }
   .home h1 { letter-spacing: -1px; }
   .gallery-section { width: calc(100% - 40px); padding: 32px 0 48px; }
   .section-heading h2 { font-size: 24px; }
@@ -79,18 +73,27 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
 }
 @media (prefers-reduced-motion: reduce) {
   html.home-scroll-snap { scroll-snap-type: none; }
-  .scroll-progress { display: none; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  .hero-video-wrap, .hero-video-toggle { display: none; }
+  .hero-video-wrap { display: none; }
 }
 
 .hero-catalog-links { display: flex; justify-content: center; gap: 20px 36px; flex-wrap: wrap; }
-.game-spotlight { padding: 56px max(32px, calc((100% - 1216px) / 2)) 72px; background: linear-gradient(120deg, #ffb000 0%, #ff7a00 100%); color: #111; }
+.game-spotlight {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding: clamp(40px, 6vh, 64px) max(32px, calc((100% - 1216px) / 2));
+  background: linear-gradient(120deg, #ffb000 0%, #ff7a00 100%);
+  color: #111;
+}
+.game-spotlight > div { width: 100%; }
 .game-spotlight-heading { max-width: 900px; margin-bottom: 32px; }
 .game-spotlight-heading .eyebrow { display: inline-block; margin: 0 0 14px; padding: 7px 10px; background: #111; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
 .game-spotlight-intro { margin: 0; font-size: clamp(24px, 3vw, 38px); font-weight: 500; line-height: 1.2; text-wrap: balance; }
-.new-game-card { display: flex; min-height: 500px; overflow: hidden; background: linear-gradient(90deg, #0b0b0b 0%, #0b0b0b 48%, rgba(11, 11, 11, 0.92) 57%, rgba(11, 11, 11, 0.08) 82%), url("../public/images/fireworks-show-simulator.webp") 70% center / cover no-repeat; color: #f4f4f4; border: 3px solid #111; box-shadow: 12px 12px 0 rgba(20, 20, 20, 0.28); }
-.new-game-content { display: flex; flex-direction: column; justify-content: center; width: 54%; padding: 44px 48px; }
+.new-game-card { position: relative; display: flex; min-height: 500px; overflow: hidden; background: #0b0b0b; color: #f4f4f4; border: 3px solid #111; box-shadow: 12px 12px 0 rgba(20, 20, 20, 0.28); }
+.new-game-card::after { position: absolute; inset: 0; background: linear-gradient(90deg, #0b0b0b 0%, rgba(11, 11, 11, 0.98) 42%, rgba(11, 11, 11, 0.82) 57%, rgba(11, 11, 11, 0.04) 84%); content: ""; pointer-events: none; }
+.new-game-hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.new-game-content { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; width: 54%; padding: 44px 48px; }
 .new-game-badge { display: inline-flex; align-self: flex-start; margin: 0 0 18px; padding: 7px 10px; background: #ffb000; color: #111; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .new-game-logo-heading { margin: -20px 0 -10px; }
 .new-game-logo { display: block; width: min(100%, 430px); height: auto; }
@@ -100,12 +103,27 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
 .steam-link { background: #a4d007; color: #161616; padding: 12px 20px; font-weight: 600; }
 .steam-link:hover { background: #b8e329; }
 @media (max-width: 800px) {
-  .new-game-card { min-height: 700px; align-items: flex-end; background: linear-gradient(180deg, rgba(11, 11, 11, 0.04) 0%, rgba(11, 11, 11, 0.84) 38%, #0b0b0b 56%), url("../public/images/fireworks-show-simulator.webp") 72% center / cover no-repeat; }
-  .new-game-content { width: 100%; padding-top: 280px; }
+  .game-spotlight { align-items: flex-start; padding: 32px 24px 40px; }
+  .game-spotlight-heading { margin-bottom: 24px; }
+  .new-game-card { flex-direction: column; min-height: 0; box-shadow: 6px 6px 0 rgba(20, 20, 20, 0.28); }
+  .new-game-card::after { display: none; }
+  .new-game-hero-image { position: static; aspect-ratio: 16 / 7; height: auto; object-fit: cover; }
+  .new-game-content { width: 100%; padding: 24px 28px 28px; }
 }
 @media (max-width: 600px) {
-  .game-spotlight { padding: 40px 20px 48px; }
-  .new-game-content { padding: 260px 24px 24px; }
+  .game-spotlight { padding: 28px 20px 32px; }
+  .game-spotlight-heading { margin-bottom: 18px; }
+  .game-spotlight-intro { font-size: clamp(22px, 7vw, 28px); }
+  .new-game-card { border-width: 2px; box-shadow: 4px 4px 0 rgba(20, 20, 20, 0.28); }
+  .new-game-content { padding: 18px 16px 20px; }
+  .new-game-badge { margin-bottom: 10px; padding: 6px 8px; font-size: 11px; }
+  .new-game-logo-heading { margin: -8px 0 -4px; }
+  .new-game-logo { width: min(78%, 250px); }
+  .new-game-content h3 { margin-bottom: 10px; font-size: clamp(22px, 6.5vw, 26px); }
+  .new-game-content > p:not(.new-game-badge) { font-size: 14px; line-height: 1.45; }
+  .new-game-links { gap: 12px 16px; margin-top: 14px; }
+  .new-game-links .text-link { gap: 16px; font-size: 14px; }
+  .steam-link { padding: 10px 14px; font-size: 14px; }
 }
 .catalog-page { max-width: 1280px; margin: auto; padding: 48px 32px 64px; min-height: 70vh; }
 .catalog-page h1 { font-size: 42px; line-height: 1.2; font-weight: 400; margin-bottom: 16px; }

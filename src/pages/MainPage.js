@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { animate, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { useEffect } from "react";
+import { animate, motion, useReducedMotion } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
 import ImageSlider from "../components/ImageSlider";
 import { SlideData } from "../data/SlideData";
@@ -17,14 +17,25 @@ function getPageTop(element) {
 }
 
 export default function MainPage() {
-  const [isHeroVideoPlaying, setIsHeroVideoPlaying] = useState(true);
   const shouldReduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-  const smoothScrollProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+
+  const scrollToAnnouncement = () => {
+    const target = document.querySelector(".game-spotlight");
+    if (!target) return;
+
+    const destination = getPageTop(target);
+    if (shouldReduceMotion) {
+      window.scrollTo(0, destination);
+      return;
+    }
+
+    animate(window.scrollY, destination, {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (value) => window.scrollTo(0, value),
+      onComplete: () => window.scrollTo(0, destination),
+    });
+  };
 
   useEffect(() => {
     const root = document.documentElement;
@@ -124,21 +135,18 @@ export default function MainPage() {
 
   return (
     <main id="main-content" className="home">
-      <motion.div className="scroll-progress" style={{ scaleX: smoothScrollProgress }} aria-hidden="true" />
       <section className="home-hero" aria-labelledby="home-title">
         <div className="hero-video-wrap" aria-hidden="true">
-          {isHeroVideoPlaying && (
-            <iframe
-              className="hero-video"
-              src="https://www.youtube-nocookie.com/embed/viQ2JorDcSs?autoplay=1&mute=1&controls=0&loop=1&playlist=viQ2JorDcSs&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3"
-              title="Fireworks Play trailer background"
-              tabIndex="-1"
-              allow="autoplay; encrypted-media"
-              loading="eager"
-            />
-          )}
+          <iframe
+            className="hero-video"
+            src="https://www.youtube-nocookie.com/embed/viQ2JorDcSs?autoplay=1&mute=1&controls=0&loop=1&playlist=viQ2JorDcSs&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3"
+            title="Fireworks Play trailer background"
+            tabIndex="-1"
+            allow="autoplay; encrypted-media"
+            loading="eager"
+          />
         </div>
-        <div className="hero-shade" aria-hidden="true" />
+        <div className="hero-edge-shade" aria-hidden="true" />
         <div className="home-hero-content">
           <p className="eyebrow studio-word"><span className="studio-sim">Sim</span>play Studio</p>
           <h1 id="home-title">
@@ -150,15 +158,30 @@ export default function MainPage() {
             <AppStoreBadge />
           </div>
           <div className="hero-catalog-links">
-            <Link className="text-link" to="/fireworks">Browse fireworks <span aria-hidden="true">→</span></Link>
-            <Link className="text-link" to="/racks">Browse racks <span aria-hidden="true">→</span></Link>
-            <Link className="text-link" to="/release-note">Release notes <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" to="/fireworks/">Browse fireworks <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" to="/racks/">Browse racks <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" to="/release-note/">Release notes <span aria-hidden="true">→</span></Link>
             <a className="text-link" href="/privacy.html">Privacy <span aria-hidden="true">→</span></a>
           </div>
         </div>
-        <button className="hero-video-toggle" type="button" onClick={() => setIsHeroVideoPlaying((isPlaying) => !isPlaying)}>
-          {isHeroVideoPlaying ? "Pause Video" : "Play Video"}
-        </button>
+        <motion.button
+          type="button"
+          className="hero-scroll-hint"
+          aria-label="Scroll down"
+          onClick={scrollToAnnouncement}
+          whileHover={shouldReduceMotion ? undefined : { y: 2 }}
+          whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+        >
+          <motion.span
+            aria-hidden="true"
+            animate={shouldReduceMotion ? undefined : { y: [0, 5, 0] }}
+            transition={shouldReduceMotion ? undefined : { duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M5 8.5 12 15.5 19 8.5" />
+            </svg>
+          </motion.span>
+        </motion.button>
       </section>
       <section className="game-spotlight" aria-labelledby="game-spotlight-title">
         <motion.div
@@ -173,6 +196,14 @@ export default function MainPage() {
             <p className="game-spotlight-intro">The next fireworks game from Simplay Studio is coming to PC.</p>
           </div>
           <div className="new-game-card">
+            <img
+              className="new-game-hero-image"
+              src="/images/fireworks_show_simulator_library_hero.png"
+              alt=""
+              width="3840"
+              height="1240"
+              loading="lazy"
+            />
             <div className="new-game-content">
               <p className="new-game-badge">Coming to Steam</p>
               <h2 id="game-spotlight-title" className="new-game-logo-heading">

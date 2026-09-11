@@ -11,6 +11,8 @@
   <meta name="title" content="Fireworks Play - Amazing Fireworks Simulator" />
   <meta name="description"
     content="Fun and amazing fireworks simulator that will blow your mind. Try it now for free!" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://fireworksplay.com/" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
@@ -21,12 +23,23 @@
   <meta property="og:image" content="https://fireworksplay.com/og-image.png" />
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://fireworksplay.com/" />
-  <meta property="twitter:title" content="Fireworks Play - Amazing Fireworks Simulator" />
-  <meta property="twitter:description"
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://fireworksplay.com/" />
+  <meta name="twitter:title" content="Fireworks Play - Amazing Fireworks Simulator" />
+  <meta name="twitter:description"
     content="Fun and amazing fireworks simulator that will blow your mind. Try it now for free!" />
-  <meta property="twitter:image" content="https://fireworksplay.com/og-image.png" />
+  <meta name="twitter:image" content="https://fireworksplay.com/og-image.png" />
+
+  <script type="application/ld+json" id="route-structured-data">
+    {"@context":"https://schema.org","@type":"WebSite","name":"Fireworks Play","description":"Fun and amazing fireworks simulator that will blow your mind. Try it now for free!","url":"https://fireworksplay.com/"}
+  </script>
+
+  <style>
+    .static-route-content { min-height: 100vh; padding: 72px 24px; background: #161616; color: #f4f4f4; font-family: Arial, sans-serif; text-align: center; }
+    .static-route-content h1 { margin: 0 0 16px; font-size: 42px; }
+    .static-route-content p { margin: 0 auto 24px; max-width: 680px; color: #c6c6c6; font-size: 18px; }
+    .static-route-content a { margin: 0 12px; color: #33b1ff; }
+  </style>
 
   <!-- Favicon -->
   <link rel="icon" href="%PUBLIC_URL%/app-icon512-spring.png" sizes="512x512" />
@@ -56,7 +69,17 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
+  <div id="root">
+    <main class="static-route-content" data-static-route-content>
+      <h1>Fireworks Play</h1>
+      <p>Create fireworks shows, explore maps, and play with friends.</p>
+      <nav aria-label="Public pages">
+        <a href="/fireworks/">Fireworks</a>
+        <a href="/racks/">Racks</a>
+        <a href="/release-note/">Release Notes</a>
+      </nav>
+    </main>
+  </div>
 </body>
 
 </html>
