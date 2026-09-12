@@ -1,248 +1,149 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import TypeWriter from "../components/TypeWriter";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
-import MainHeading from "../components/MainHeading";
-import SecondaryHeading from "../components/SecondaryHeading";
 import ImageSlider from "../components/ImageSlider";
 import { SlideData } from "../data/SlideData";
-import socialMediaLinks from "../data/SocialMediaLinks";
-import SocialButton from "../components/SocialButton";
-import { FaDiscord, FaTiktok, FaYoutube } from "react-icons/fa";
-import { cardVariants, cardVariants2, cardVariants3 } from "../data/MotionVariants";
 
-const MainPage = () => {
-  const { scrollYProgress } = useScroll();
-
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 20,
-    restDelta: 0.001,
-    mass: 1.2,
-  });
-
-
-  const [showSummary, setShowSummary] = useState(false);
-  const [showImages, setShowImages] = useState(false);
-  const [showStoreBadges, setShowStoreBadges] = useState(false);
-  const currentYear = new Date().getFullYear();
-
-  // Show summary after typewriter animation completes
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSummary(true);
-    }, 2500); // Adjust this delay based on typewriter speed (200ms per character * ~10 characters)
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Show images after summary animation completes
-  useEffect(() => {
-    if (showSummary) {
-      const timer = setTimeout(() => {
-        setShowImages(true);
-      }, 1500); // Wait for summary animation to complete
-      return () => clearTimeout(timer);
-    }
-  }, [showSummary]);
-
-  // Show store badges after images load
-  useEffect(() => {
-    if (showImages) {
-      const timer = setTimeout(() => {
-        setShowStoreBadges(true);
-      }, 1000); // Wait for images to start showing
-      return () => clearTimeout(timer);
-    }
-  }, [showImages]);
-
-  
-  return (
-    <>
-      <motion.div className="progress-bar" style={{ scaleX }} />
-
-      
-      {/* SOCIAL BUTTONS */}
-      <Box
-        zIndex={9000}
-        m={2}
-        position={"fixed"}
-        top={["none", "3rem"]}
-        bottom={["3rem", "none"]}
-        right={0}
-      >
-        <VStack spacing={[3, 7]} alignItems={"center"}>
-          <SocialButton label={"Discord"} href={socialMediaLinks.discord}>
-            <FaDiscord />
-          </SocialButton>
-          <SocialButton label={"YouTube"} href={socialMediaLinks.youtube}>
-            <FaYoutube />
-          </SocialButton>
-          <SocialButton label={"Tiktok"} href={socialMediaLinks.tiktok}>
-            <FaTiktok />
-          </SocialButton>
-        </VStack>
-      </Box>
-      {/* END OF SOCIAL BUTTON */}
-      <Box textAlign={"center"} margin={"auto"}>
-        <Box marginBottom={"8vh"} marginTop={["100px", "150px", "200px"]}>
-          <style>
-            {`
-              @keyframes subtleGlow {
-                0%, 100% {
-                  filter: brightness(1) drop-shadow(0 0 20px rgba(220, 20, 60, 0.3));
-                }
-                50% {
-                  filter: brightness(1.1) drop-shadow(0 0 30px rgba(0, 128, 0, 0.4));
-                }
-              }
-              .christmas-title {
-                animation: subtleGlow 4s ease-in-out infinite;
-              }
-            `}
-          </style>
-          <Box className="christmas-title">
-            <MainHeading text={"Fireworks Play"} />
-          </Box>
-
-          <Box mb={2}>
-            <SecondaryHeading
-              display="block"
-              fontSize={[25, 35, 55, 60]}
-              opacity={0.5}
-              text={"by"}
-              className="newsreader-bold600_fadeEffect"
-            />
-          </Box>
-          <Box>
-            <TypeWriter
-              color={"#E53E3E"}
-              text={"Sim"}
-              text2={"play"}
-              text3={"Studio"}
-              speed={200}
-              textColor={"black"}
-              textColor2={"black"}
-            />
-          </Box>
-          {/* SUMMARY */}
-          <Box minHeight={["25vh", "30vh", "35vh"]} mt={8}>
-            {showSummary && (
-            <motion.div
-              className="card-container"
-              initial="offscreen"
-              animate="onscreen"
-              viewport={{ once: true, amount: 0.8 }}
-            >
-              <motion.div
-                className="card"
-                variants={cardVariants}
-              >
-                <Text
-                  className="newsreader-bold600"
-                  display={"block"}
-                  cursor={"default"}
-                  fontSize={[18, 24, 30, 36]}
-                  userSelect="none"
-                  style={{
-                    color: "#2f3542",
-                  }}
-                >
-                  Fun and amazing
-                </Text>
-              </motion.div>
-              <motion.div
-                className="card"
-                variants={cardVariants2}
-              >
-                <Text
-                  cursor={"default"}
-                  className="newsreader-bold600"
-                  display={"block"}
-                  userSelect="none"
-                  style={{
-                    color: "#2f3542",
-                  }}
-                  fontSize={[18, 24, 30, 36]}
-                >
-                  fireworks simulator
-                </Text>{" "}
-              </motion.div>
-              <motion.div
-                className="card"
-                variants={cardVariants3}
-              >
-                <Text
-                  className="newsreader-bold600"
-                  cursor={"default"}
-                  userSelect="none"
-                  style={{
-                    color: "#2f3542",
-                  }}
-                  display={"block"}
-                  fontSize={[18, 24, 30, 36]}
-                >
-                  that will blow your mind!
-                </Text>{" "}
-              </motion.div>
-            </motion.div>
-            )}
-          </Box>
-          {/*  END OF SUMMARY */}
-          {/* IMAGE */}
-          {showImages && <Box mt={[9, 4, 2]}><ImageSlider slides={SlideData} /></Box>}
-          {/* IMAGE */}
-          {/* BADGE STORE */}
-          {showStoreBadges && (
-            <>
-              <Box height={["8vh", "10vh", "12vh"]} />
-              <Flex justifyContent={"center"} margin={"auto"} w={"90%"} dir="row">
-                <PlayStoreBadge />
-                <Box width={"10px"} />
-                <AppStoreBadge />
-              </Flex>
-              {/*END OF BADGE STORE */}
-              {/* COPYRIGHT 2024 */}
-              <Box textAlign="center" marginTop="4rem">
-                <Text
-                  display={["inline", "inline", "inline"]}
-                  cursor="default"
-                  fontSize="sm"
-                  color="gray.500"
-                >
-                  © {currentYear} <span style={{ color: "red" }}>Sim</span><span style={{ color: "black" }}>play Studio</span>
-                </Text>
-                <Text
-                  cursor={"pointer"}
-                  onClick={() => {
-                    window.open("https://simplaystudio.com/privacy");
-                  }}
-                  display={["inline", "inline"]}
-                  fontSize={["sm"]}
-                  color="gray.500"
-                >
-                  {" | "}
-                </Text>
-                <Text
-                  style={{ textDecoration: "none" }}
-                  display={["inline"]}
-                  cursor={"pointer"}
-                  fontSize="sm"
-                  color="gray.500"
-                  onClick={() => {
-                    window.location.href = "mailto:contact@simplaystudio.com";
-                  }}
-                >
-                  contact@simplaystudio.com{" "}
-                </Text>
-              </Box>
-              {/* COPYRIGHT */}
-            </>
-          )}
-        </Box>
-      </Box>
-    </>
-  );
+const sectionReveal = {
+  hidden: { opacity: 0.65, y: 48 },
+  visible: { opacity: 1, y: 0 },
 };
 
-export default MainPage;
+// Preserve the hero and scroll invariants in docs/homepage-contract.md.
+export default function MainPage() {
+  const shouldReduceMotion = useReducedMotion();
+  const [loadHeroVideo, setLoadHeroVideo] = useState(false);
+  const [heroVideoReady, setHeroVideoReady] = useState(false);
+
+  const scrollToAnnouncement = () => {
+    const target = document.querySelector(".game-spotlight");
+    if (!target) return;
+
+    target.scrollIntoView({ block: "start" });
+  };
+
+  useEffect(() => {
+    if (!shouldReduceMotion) setLoadHeroVideo(true);
+  }, [shouldReduceMotion]);
+
+  return (
+    <main id="main-content" className="home">
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="hero-video-wrap" aria-hidden="true">
+          {loadHeroVideo && (
+            <iframe
+              className={`hero-video${heroVideoReady ? " is-ready" : ""}`}
+              src="https://www.youtube-nocookie.com/embed/viQ2JorDcSs?autoplay=1&mute=1&controls=0&loop=1&playlist=viQ2JorDcSs&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3"
+              title="Fireworks Play trailer background"
+              tabIndex="-1"
+              allow="autoplay; encrypted-media"
+              loading="eager"
+              onLoad={() => setHeroVideoReady(true)}
+            />
+          )}
+        </div>
+        <div className="hero-edge-shade" aria-hidden="true" />
+        <div className="home-hero-content">
+          <p className="eyebrow studio-word"><span className="studio-sim">Sim</span>play Studio</p>
+          <h1 id="home-title">
+            <img className="hero-logo" src="/GameLabel-clean.webp" alt="Fireworks Play" width="457" height="296" fetchpriority="high" />
+          </h1>
+          <p className="hero-description">Fun and amazing fireworks simulator that will blow your mind!</p>
+          <div className="store-links" aria-label="Download Fireworks Play">
+            <PlayStoreBadge />
+            <AppStoreBadge />
+          </div>
+          <div className="hero-catalog-links">
+            <Link className="text-link" to="/fireworks/">Browse fireworks <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" to="/racks/">Browse racks <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" to="/release-note/">Release notes <span aria-hidden="true">→</span></Link>
+            <a className="text-link" href="/privacy.html">Privacy <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <motion.button
+          type="button"
+          className="hero-scroll-hint"
+          aria-label="Scroll down"
+          onClick={scrollToAnnouncement}
+          whileHover={shouldReduceMotion ? undefined : { y: 2 }}
+          whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+        >
+          <motion.span
+            aria-hidden="true"
+            animate={shouldReduceMotion ? undefined : { y: [0, 5, 0] }}
+            transition={shouldReduceMotion ? undefined : { duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M5 8.5 12 15.5 19 8.5" />
+            </svg>
+          </motion.span>
+        </motion.button>
+      </section>
+      <section className="game-spotlight" aria-labelledby="game-spotlight-title">
+        <motion.div
+          variants={sectionReveal}
+          initial={shouldReduceMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="game-spotlight-heading">
+            <p className="eyebrow">New Game Announcement</p>
+            <p className="game-spotlight-intro">The next fireworks game from Simplay Studio is coming to PC.</p>
+          </div>
+          <div className="new-game-card">
+            <img
+              className="new-game-hero-image"
+              src="/images/fireworks_show_simulator_library_hero-1280.webp"
+              srcSet="/images/fireworks_show_simulator_library_hero-1280.webp 1280w, /images/fireworks_show_simulator_library_hero-2400.webp 2400w"
+              sizes="(max-width: 800px) calc(100vw - 48px), min(1216px, calc(100vw - 64px))"
+              alt=""
+              width="3840"
+              height="1240"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="new-game-content">
+              <p className="new-game-badge">Coming to Steam</p>
+              <h2 id="game-spotlight-title" className="new-game-logo-heading">
+                <img
+                  className="new-game-logo"
+                  src="/fireworks-show-simulator-logo-dirt-500.webp"
+                  srcSet="/fireworks-show-simulator-logo-dirt-500.webp 500w, /fireworks-show-simulator-logo-dirt-860.webp 860w"
+                  sizes="(max-width: 600px) 250px, 430px"
+                  alt="Fireworks Show Simulator"
+                  width="1920"
+                  height="1080"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </h2>
+              <h3>Play. Load. Link. Save. Watch.</h3>
+              <p>Design professional fireworks displays from a top-down view. Watch your show from any viewpoint in a fully 3D world. Place racks, load shells, connect fuses, and control the firing system.</p>
+              <div className="new-game-links">
+                <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer">Wishlist on Steam</a>
+                <a className="text-link" href="https://fireworksshowsimulator.com/" target="_blank" rel="noopener noreferrer">Explore the Game <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+      <section className="gallery-section" aria-labelledby="gallery-title">
+        <motion.div
+          variants={sectionReveal}
+          initial={shouldReduceMotion ? false : "hidden"}
+          whileInView="visible"
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="section-heading">
+            <h2 id="gallery-title">Explore Fireworks Play</h2>
+            <p>Fireworks, maps, and multiplayer.</p>
+          </div>
+          <ImageSlider slides={SlideData} />
+        </motion.div>
+      </section>
+    </main>
+  );
+}

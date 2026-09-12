@@ -1,26 +1,26 @@
 export const SlideData = [
   {
-    image: "/images/1.png",
+    image: "/images/webp/1.webp",
   },
   {
-    image: "/images/2.png",
+    image: "/images/webp/2.webp",
   },
   {
-    image: "/images/3.png",
+    image: "/images/webp/3.webp",
   },
   {
-    image: "/images/4.png",
+    image: "/images/webp/4.webp",
   },
   {
-    image: "/images/5.png",
+    image: "/images/webp/5.webp",
   },
   {
-    image: "/images/6.png",
+    image: "/images/webp/6.webp",
   },
   {
-    image: "/images/7.png",
+    image: "/images/webp/7.webp",
   },
   {
-    image: "/images/8.png",
+    image: "/images/webp/8.webp",
   },
 ];

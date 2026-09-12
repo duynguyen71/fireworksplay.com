@@ -1,0 +1,34 @@
+[
+  {
+    "path": "/",
+    "aliases": ["/fireworksplay/"],
+    "title": "Fireworks Play - Amazing Fireworks Simulator",
+    "description": "Fun and amazing fireworks simulator that will blow your mind. Try it now for free!",
+    "heading": "Fireworks Play",
+    "summary": "Create fireworks shows, explore maps, and play with friends."
+  },
+  {
+    "path": "/release-note/",
+    "aliases": ["/fireworksplay/release-note/"],
+    "title": "Release Notes | Fireworks Play",
+    "description": "Read the latest Fireworks Play updates, features, fixes, and release notes.",
+    "heading": "Fireworks Play Release Notes",
+    "summary": "Latest Fireworks Play updates, features, and fixes."
+  },
+  {
+    "path": "/fireworks/",
+    "aliases": ["/fireworksplay/fireworks/"],
+    "title": "Fireworks Catalog | Fireworks Play",
+    "description": "Browse the fireworks and effects available in Fireworks Play.",
+    "heading": "Fireworks Catalog",
+    "summary": "Browse the fireworks and effects available in Fireworks Play."
+  },
+  {
+    "path": "/racks/",
+    "aliases": ["/fireworksplay/racks/"],
+    "title": "Racks Catalog | Fireworks Play",
+    "description": "Browse reloadable racks, tubes, and firing tools from Fireworks Play.",
+    "heading": "Racks Catalog",
+    "summary": "Reloadable racks, tubes, and firing tools from Fireworks Play."
+  }
+]
