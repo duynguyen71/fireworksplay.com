@@ -16,6 +16,29 @@ function getPageTop(element) {
   return element.getBoundingClientRect().top + window.scrollY;
 }
 
+function getMaxScrollY() {
+  return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+}
+
+function getScrollDestination(element) {
+  return Math.min(getPageTop(element), getMaxScrollY());
+}
+
+function getScrollStops(elements) {
+  const maxScrollY = getMaxScrollY();
+
+  return elements.reduce((stops, element) => {
+    const top = Math.min(getPageTop(element), maxScrollY);
+    const previousStop = stops[stops.length - 1];
+
+    if (!previousStop || top - previousStop.top > scrollEdgeTolerance) {
+      stops.push({ element, top });
+    }
+
+    return stops;
+  }, []);
+}
+
 export default function MainPage() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -23,7 +46,7 @@ export default function MainPage() {
     const target = document.querySelector(".game-spotlight");
     if (!target) return;
 
-    const destination = getPageTop(target);
+    const destination = getScrollDestination(target);
     if (shouldReduceMotion) {
       window.scrollTo(0, destination);
       return;
@@ -67,8 +90,7 @@ export default function MainPage() {
       }, scrollUnlockDelay);
     };
 
-    const scrollToTarget = (target) => {
-      const destination = getPageTop(target);
+    const scrollToTarget = (destination) => {
       isScrollLocked = true;
       root.classList.add("is-section-scrolling");
 
@@ -97,20 +119,22 @@ export default function MainPage() {
       }
 
       const scrollPosition = window.scrollY;
+      const scrollStops = getScrollStops(scrollTargets);
       let currentIndex = 0;
 
-      for (let index = 1; index < scrollTargets.length; index += 1) {
-        if (getPageTop(scrollTargets[index]) > scrollPosition + scrollEdgeTolerance) break;
+      for (let index = 1; index < scrollStops.length; index += 1) {
+        if (scrollStops[index].top > scrollPosition + scrollEdgeTolerance) break;
         currentIndex = index;
       }
 
-      const currentTarget = scrollTargets[currentIndex];
-      const currentTop = getPageTop(currentTarget);
+      const currentStop = scrollStops[currentIndex];
+      const currentTarget = currentStop.element;
+      const currentTop = currentStop.top;
       const currentHeight = currentTarget.getBoundingClientRect().height;
-      const currentBottom = currentTop + currentHeight;
+      const currentBottom = getPageTop(currentTarget) + currentHeight;
       const direction = event.deltaY > 0 ? 1 : -1;
       const canMoveDown = direction === 1
-        && currentIndex < scrollTargets.length - 1
+        && currentIndex < scrollStops.length - 1
         && (currentHeight <= window.innerHeight + scrollEdgeTolerance
           || scrollPosition >= currentBottom - window.innerHeight - scrollEdgeTolerance);
       const canMoveUp = direction === -1
@@ -120,7 +144,7 @@ export default function MainPage() {
       if (!canMoveDown && !canMoveUp) return;
 
       event.preventDefault();
-      scrollToTarget(scrollTargets[currentIndex + direction]);
+      scrollToTarget(scrollStops[currentIndex + direction].top);
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -150,7 +174,7 @@ export default function MainPage() {
         <div className="home-hero-content">
           <p className="eyebrow studio-word"><span className="studio-sim">Sim</span>play Studio</p>
           <h1 id="home-title">
-            <img className="hero-logo" src="/GameLabel.png" alt="Fireworks Play" width="457" height="296" />
+            <img className="hero-logo" src="/GameLabel-clean.png" alt="Fireworks Play" width="457" height="296" />
           </h1>
           <p className="hero-description">Fun and amazing fireworks simulator that will blow your mind!</p>
           <div className="store-links" aria-label="Download Fireworks Play">

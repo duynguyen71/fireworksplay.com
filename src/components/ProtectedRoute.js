@@ -41,14 +41,6 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
 
         if (isValid) {
           const currentUser = authService.getUser();
-
-          // Check admin requirements
-          if (requireAdmin && currentUser?.role !== 'admin') {
-            setError("Admin access required for this page");
-            setIsAuthenticated(false);
-            return;
-          }
-
           setIsAuthenticated(true);
           setUser(currentUser);
         } else {
@@ -156,12 +148,13 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     );
   }
 
-  // No public login form; unauthenticated visitors return to the homepage.
+  // Preserve the requested route so a successful login can return to it.
   if (!isAuthenticated) {
     return (
       <Navigate
-        to="/"
+        to="/login"
         replace
+        state={{ from: location }}
       />
     );
   }

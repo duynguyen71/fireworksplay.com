@@ -44,3 +44,31 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
           enable_jekyll: false
+
+  notify:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Prepare notification
+        id: info
+        shell: bash
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Notify Telegram
+        uses: up9cloud/action-notify@v0.4
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_MESSAGE: |
+            *FIREWORKS PLAY — BUILD*
+
+            *Result:* `${{ needs.build-and-deploy.result == 'success' && 'SUCCESS' || (needs.build-and-deploy.result == 'failure' && 'FAILED' || 'CANCELLED') }}`
+            *Repository:* `${{ github.repository }}`
+            *Branch:* `${{ github.head_ref || github.ref_name }}`
+            *Commit:* [`${{ steps.info.outputs.short_sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            *Workflow:* `${{ github.workflow }}`
+            *Triggered by:* `${{ github.actor }}`
+
+            [Open workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})

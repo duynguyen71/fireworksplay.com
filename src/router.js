@@ -6,6 +6,8 @@ import ReleaseNoteDashboard from "./pages/ReleaseNoteDashboard";
 import NotFoundPage from "./pages/NotFoundPage";
 import RootLayout from "./pages/RootLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LoginPage from "./components/LoginPage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -56,6 +58,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
   {
     path: "/release-note-dashboard",

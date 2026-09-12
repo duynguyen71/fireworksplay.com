@@ -4,6 +4,36 @@ const publicRoutes = require("../src/data/publicRoutes.json");
 
 const siteOrigin = "https://fireworksplay.com";
 const buildDirectory = path.resolve(__dirname, "../build");
+const internalRoutes = [
+  {
+    path: "/login",
+    title: "Admin Sign In | Fireworks Play",
+    description: "Fireworks Play administrator sign in.",
+    heading: "Admin sign in",
+    summary: "Authentication is required to manage release notes.",
+  },
+  {
+    path: "/dashboard",
+    title: "Release Notes Dashboard | Fireworks Play",
+    description: "Fireworks Play release notes administration.",
+    heading: "Release Notes Dashboard",
+    summary: "Authentication is required to access this page.",
+  },
+  {
+    path: "/fireworksplay/dashboard",
+    title: "Release Notes Dashboard | Fireworks Play",
+    description: "Fireworks Play release notes administration.",
+    heading: "Release Notes Dashboard",
+    summary: "Authentication is required to access this page.",
+  },
+  {
+    path: "/release-note-dashboard",
+    title: "Release Notes Dashboard | Fireworks Play",
+    description: "Fireworks Play release notes administration.",
+    heading: "Release Notes Dashboard",
+    summary: "Authentication is required to access this page.",
+  },
+];
 
 function escapeHtml(value) {
   return value
@@ -68,6 +98,20 @@ function renderRoute(template, route) {
   return html;
 }
 
+function renderInternalRoute(template, route) {
+  let html = template.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(route.title) + "</title>");
+  html = replaceMeta(html, "name", "title", route.title);
+  html = replaceMeta(html, "name", "description", route.description);
+  html = replaceMeta(html, "name", "robots", "noindex, nofollow");
+  html = html.replace(/\s*<link[^>]*rel="canonical"[^>]*>/i, "");
+  html = html.replace(/\s*<script[^>]*id="route-structured-data"[^>]*>[\s\S]*?<\/script>/i, "");
+  html = html.replace(
+    /<main[^>]*data-static-route-content[^>]*>[\s\S]*?<\/main>/i,
+    renderStaticContent(route)
+  );
+  return html;
+}
+
 async function writeRoute(routePath, html) {
   if (routePath === "/") {
     await fs.writeFile(path.join(buildDirectory, "index.html"), html);
@@ -88,7 +132,17 @@ async function main() {
     await Promise.all(paths.map((routePath) => writeRoute(routePath, html)));
   }
 
-  console.log("Generated static entry pages for " + publicRoutes.length + " canonical routes.");
+  await Promise.all(
+    internalRoutes.map((route) => writeRoute(route.path, renderInternalRoute(template, route)))
+  );
+
+  console.log(
+    "Generated static entry pages for "
+      + publicRoutes.length
+      + " canonical routes and "
+      + internalRoutes.length
+      + " internal routes."
+  );
 }
 
 main().catch((error) => {
