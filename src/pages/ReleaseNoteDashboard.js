@@ -91,10 +91,11 @@ const clearExistingCache = () => {
   }
 };
 
-// Clear cache immediately when module loads
-clearExistingCache();
-
 const ReleaseNoteDashboard = () => {
+  useEffect(() => {
+    clearExistingCache();
+  }, []);
+
   const [releases, setReleases] = useState([]);
   const [databaseReleases, setDatabaseReleases] = useState([]);
   const [loading, setLoading] = useState(true);

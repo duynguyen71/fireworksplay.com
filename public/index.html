@@ -35,10 +35,22 @@
   </script>
 
   <style>
-    .static-route-content { min-height: 100vh; padding: 72px 24px; background: #161616; color: #f4f4f4; font-family: Arial, sans-serif; text-align: center; }
+    .static-route-content { box-sizing: border-box; min-height: 100vh; padding: 72px 24px; background: #161616; color: #f4f4f4; font-family: Arial, sans-serif; text-align: center; }
     .static-route-content h1 { margin: 0 0 16px; font-size: 42px; }
     .static-route-content p { margin: 0 auto 24px; max-width: 680px; color: #c6c6c6; font-size: 18px; }
     .static-route-content a { margin: 0 12px; color: #33b1ff; }
+    .static-home-route { position: relative; display: grid; place-items: center; padding: 64px 32px; background: #07131a url("/images/webp/2.webp") center / cover no-repeat; font-family: "IBM Plex Sans", sans-serif; }
+    .static-home-route::before { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(2, 9, 14, 0.58) 0%, rgba(2, 9, 14, 0.36) 44%, rgba(2, 9, 14, 0.08) 72%, transparent 86%), linear-gradient(180deg, rgba(2, 9, 14, 0.58) 0%, rgba(2, 9, 14, 0.08) 24%, rgba(2, 9, 14, 0.12) 64%, rgba(2, 9, 14, 0.78) 100%); content: ""; pointer-events: none; }
+    .static-home-content { position: relative; z-index: 1; width: min(760px, 100%); }
+    .static-home-content .static-studio-word { margin-bottom: 8px; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.09em; text-shadow: 0 2px 4px #000, 0 0 18px #000; text-transform: uppercase; }
+    .static-studio-word span { color: #ff3b30; }
+    .static-home-content h1 { margin: 0 0 24px; }
+    .static-hero-logo { display: block; width: 400px; max-width: 100%; height: auto; margin: auto; }
+    .static-home-content .static-hero-description { margin: 0 auto; color: #fff; font-size: clamp(20px, 2vw, 28px); font-weight: 600; line-height: 1.4; text-shadow: 0 2px 4px #000, 0 0 20px #000; }
+    .static-store-space { height: 97px; }
+    .static-home-links { display: flex; justify-content: center; gap: 20px 36px; flex-wrap: wrap; }
+    .static-home-links a { margin: 0; color: #7dd3fc; font-weight: 600; text-shadow: 0 2px 3px #000, 0 0 14px #000; }
+    @media (max-width: 600px) { .static-home-route { padding: 32px 20px 84px; } }
   </style>
 
   <!-- Favicon -->
@@ -70,14 +82,19 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root">
-    <main class="static-route-content" data-static-route-content>
-      <h1>Fireworks Play</h1>
-      <p>Create fireworks shows, explore maps, and play with friends.</p>
-      <nav aria-label="Public pages">
-        <a href="/fireworks/">Fireworks</a>
-        <a href="/racks/">Racks</a>
-        <a href="/release-note/">Release Notes</a>
-      </nav>
+    <main class="static-route-content static-home-route" data-static-route-content>
+      <div class="static-home-content">
+        <p class="static-studio-word"><span>Sim</span>play Studio</p>
+        <h1><img class="static-hero-logo" src="/GameLabel-clean.webp" alt="Fireworks Play" width="457" height="296" fetchpriority="high" /></h1>
+        <p class="static-hero-description">Fun and amazing fireworks simulator that will blow your mind!</p>
+        <div class="static-store-space" aria-hidden="true"></div>
+        <nav class="static-home-links hero-catalog-links" aria-label="Public pages">
+          <a class="text-link" href="/fireworks/">Browse fireworks <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="/racks/">Browse racks <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="/release-note/">Release notes <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="/privacy.html">Privacy <span aria-hidden="true">→</span></a>
+        </nav>
+      </div>
     </main>
   </div>
 </body>

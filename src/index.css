@@ -1,9 +1,7 @@
 body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webkit-font-smoothing: antialiased; }
 * { box-sizing: border-box; }
 .site-shell { min-height: 100vh; }
-html.home-scroll-snap { scroll-behavior: auto; scroll-snap-type: y mandatory; }
-html.home-scroll-snap.is-section-scrolling { scroll-snap-type: none; }
-html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scroll-snap-align: start; scroll-snap-stop: always; }
+.route-loading { min-height: 70vh; display: grid; place-items: center; color: var(--site-secondary); }
 .subpage-nav { width: 100%; max-width: 1280px; margin: 0 auto; padding: 48px 32px 0; }
 .back-home-link { display: inline-block; color: #33b1ff; text-decoration: none; }
 .back-home-link:hover { text-decoration: underline; }
@@ -21,16 +19,17 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
   background: #07131a url("../public/images/webp/2.webp") center / cover no-repeat;
 }
 .hero-video-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.hero-video { position: absolute; top: 50%; left: 50%; width: 112vw; height: 63vw; min-width: 199vh; min-height: 112vh; border: 0; transform: translate(-50%, -50%); }
-.hero-edge-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2, 9, 14, 0.52) 0%, transparent 22%, transparent 72%, rgba(2, 9, 14, 0.64) 100%); pointer-events: none; }
+.hero-video { position: absolute; top: 50%; left: 50%; width: 112vw; height: 63vw; min-width: 199vh; min-height: 112vh; border: 0; opacity: 0; transform: translate(-50%, -50%); transition: opacity 400ms ease; }
+.hero-video.is-ready { opacity: 1; }
+.hero-edge-shade { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(2, 9, 14, 0.58) 0%, rgba(2, 9, 14, 0.36) 44%, rgba(2, 9, 14, 0.08) 72%, transparent 86%), linear-gradient(180deg, rgba(2, 9, 14, 0.58) 0%, rgba(2, 9, 14, 0.08) 24%, rgba(2, 9, 14, 0.12) 64%, rgba(2, 9, 14, 0.78) 100%); pointer-events: none; }
 .home-hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: min(760px, 100%); }
 .eyebrow { margin-bottom: 24px; color: var(--site-secondary); font-size: 14px; }
-.home-hero .studio-word { margin-bottom: 8px; color: #f4f4f4; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
+.home-hero .studio-word { margin-bottom: 8px; color: #fff; font-weight: 600; letter-spacing: 0.09em; text-shadow: 0 2px 4px #000, 0 0 18px #000; text-transform: uppercase; }
 .studio-sim { color: #ff3b30; }
-.home-hero .text-link { color: #33b1ff; }
+.home-hero .text-link { color: #7dd3fc; font-weight: 600; text-shadow: 0 2px 3px #000, 0 0 14px #000; }
 .home h1 { font-size: clamp(44px, 6vw, 76px); font-weight: 300; line-height: 1.08; letter-spacing: -1.5px; margin: 0 0 24px; }
 .hero-logo { display: block; width: 400px; max-width: 100%; height: auto; }
-.hero-description { margin: 0; color: #f4f4f4; font-size: clamp(20px, 2vw, 28px); line-height: 1.4; max-width: 650px; text-shadow: 0 2px 18px #000; text-wrap: balance; }
+.hero-description { margin: 0; color: #fff; font-size: clamp(20px, 2vw, 28px); font-weight: 600; line-height: 1.4; max-width: 650px; text-shadow: 0 2px 4px #000, 0 0 20px #000; text-wrap: balance; }
 .store-links { display: flex; gap: 16px; margin: 28px 0 24px; align-items: center; justify-content: center; flex-wrap: wrap; }
 .store-links a { display: flex; }
 .hero-scroll-hint { position: absolute; z-index: 2; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; padding: 0; border: 2px solid #fff; border-radius: 50%; background: transparent; color: #fff; transform: translateX(-50%); cursor: pointer; }
@@ -72,7 +71,6 @@ html.home-scroll-snap .home > section, html.home-scroll-snap .site-footer { scro
   .footer-copy::after { content: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html.home-scroll-snap { scroll-snap-type: none; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .hero-video-wrap { display: none; }
 }

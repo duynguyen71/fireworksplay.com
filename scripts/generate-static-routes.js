@@ -53,16 +53,22 @@ function replaceMeta(html, attribute, key, content) {
 }
 
 function renderStaticContent(route) {
-  const navigation = route.path === "/"
-    ? '<nav aria-label="Public pages"><a href="/fireworks/">Fireworks</a> <a href="/racks/">Racks</a> <a href="/release-note/">Release Notes</a></nav>'
-    : '<p><a href="/">Back to Fireworks Play</a></p>';
+  if (route.path === "/") {
+    return '<main class="static-route-content static-home-route" data-static-route-content><div class="static-home-content">'
+      + '<p class="static-studio-word"><span>Sim</span>play Studio</p>'
+      + '<h1><img class="static-hero-logo" src="/GameLabel-clean.webp" alt="Fireworks Play" width="457" height="296" fetchpriority="high" /></h1>'
+      + '<p class="static-hero-description">Fun and amazing fireworks simulator that will blow your mind!</p>'
+      + '<div class="static-store-space" aria-hidden="true"></div>'
+      + '<nav class="static-home-links hero-catalog-links" aria-label="Public pages"><a class="text-link" href="/fireworks/">Browse fireworks <span aria-hidden="true">→</span></a> <a class="text-link" href="/racks/">Browse racks <span aria-hidden="true">→</span></a> <a class="text-link" href="/release-note/">Release notes <span aria-hidden="true">→</span></a> <a class="text-link" href="/privacy.html">Privacy <span aria-hidden="true">→</span></a></nav>'
+      + "</div></main>";
+  }
 
   return '<main class="static-route-content" data-static-route-content><h1>'
     + escapeHtml(route.heading)
     + "</h1><p>"
     + escapeHtml(route.summary)
     + "</p>"
-    + navigation
+    + '<p><a href="/">Back to Fireworks Play</a></p>'
     + "</main>";
 }
 

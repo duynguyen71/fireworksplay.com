@@ -32,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test:ci
+
       - name: Build the project (no ESLint)
         run: npm run build
         env:
@@ -49,26 +55,54 @@ jobs:
     needs: build-and-deploy
     runs-on: ubuntu-latest
     if: always()
+    permissions:
+      contents: read
+    timeout-minutes: 5
 
     steps:
       - name: Prepare notification
-        id: info
-        shell: bash
-        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+        shell: python
+        env:
+          DEPLOY_RESULT: ${{ needs.build-and-deploy.result }}
+        run: |
+          import html
+          import json
+          import os
+          from pathlib import Path
+
+          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+          message = (event.get("head_commit") or {}).get("message", "")
+          lines = [line.strip() for line in message.splitlines() if line.strip()]
+          title = lines[0] if lines else "Manual deployment"
+          if title.startswith("Merge pull request #") and len(lines) > 1:
+              title = lines[1]
+
+          escape = html.escape
+          sha = os.environ["GITHUB_SHA"]
+          repository = os.environ["GITHUB_REPOSITORY"]
+          base = f"https://github.com/{repository}"
+          result = {
+              "success": "SUCCESS", "failure": "FAILED",
+              "cancelled": "CANCELLED", "skipped": "SKIPPED",
+          }.get(os.environ["DEPLOY_RESULT"], "UNKNOWN")
+          text = (
+              "<b>FIREWORKS PLAY</b>\n"
+              f"Website Deployment | <b>{result}</b>\n\n"
+              "<b>Website:</b> fireworksplay.com\n"
+              f"<b>Branch:</b> <code>{escape(os.environ['GITHUB_REF_NAME'])}</code>\n"
+              f"<b>Commit:</b> <code>{escape(sha[:8])}</code>\n"
+              f"<b>Change:</b> {escape(title[:200])}\n"
+              f"<b>Run:</b> #{escape(os.environ['GITHUB_RUN_NUMBER'])}\n\n"
+              '<a href="https://fireworksplay.com">Open Website</a> | '
+              f'<a href="{escape(base)}/actions/runs/{escape(os.environ["GITHUB_RUN_ID"])}">View Deployment</a>'
+          )
+          # The action runs envsubst; preserve literal dollar signs in commit titles.
+          Path("telegram-notification.html").write_text(text.replace("$", "&#36;"))
 
       - name: Notify Telegram
         uses: up9cloud/action-notify@v0.4
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_MESSAGE: |
-            *FIREWORKS PLAY — BUILD*
-
-            *Result:* `${{ needs.build-and-deploy.result == 'success' && 'SUCCESS' || (needs.build-and-deploy.result == 'failure' && 'FAILED' || 'CANCELLED') }}`
-            *Repository:* `${{ github.repository }}`
-            *Branch:* `${{ github.head_ref || github.ref_name }}`
-            *Commit:* [`${{ steps.info.outputs.short_sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-            *Workflow:* `${{ github.workflow }}`
-            *Triggered by:* `${{ github.actor }}`
-
-            [Open workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          TELEGRAM_TEMPLATE_PATH: /github/workspace/telegram-notification.html
+          TELEGRAM_PARSE_MODE: HTML

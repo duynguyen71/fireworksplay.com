@@ -9,10 +9,7 @@ export default function ImageSlider({ slides }) {
       <div className="screenshot-grid">
         {slides.map((slide, index) => (
           <button key={slide.image} className="screenshot-button" onClick={() => setSelectedImage(index)} aria-label={`Open Fireworks Play screenshot ${index + 1}`}>
-            <picture>
-              <source srcSet={`/images/webp/${index + 1}.webp`} type="image/webp" />
-              <img src={slide.image} alt={`Fireworks Play gameplay screenshot ${index + 1}`} loading="lazy" width="2048" height="946" />
-            </picture>
+            <img src={slide.image} alt={`Fireworks Play gameplay screenshot ${index + 1}`} loading="lazy" width="1200" height="554" />
           </button>
         ))}
       </div>

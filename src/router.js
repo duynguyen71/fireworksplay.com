@@ -1,12 +1,26 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import MainPage from "./pages/MainPage";
-import CatalogPage from "./pages/CatalogPage";
-import ReleaseNote from "./pages/ReleaseNote";
-import ReleaseNoteDashboard from "./pages/ReleaseNoteDashboard";
 import NotFoundPage from "./pages/NotFoundPage";
 import RootLayout from "./pages/RootLayout";
-import ProtectedRoute from "./components/ProtectedRoute";
-import LoginPage from "./components/LoginPage";
+
+const CatalogPage = lazy(() => import("./pages/CatalogPage"));
+const ReleaseNote = lazy(() => import("./pages/ReleaseNote"));
+const ReleaseNoteDashboard = lazy(() => import("./pages/ReleaseNoteDashboard"));
+const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"));
+const LoginPage = lazy(() => import("./components/LoginPage"));
+
+const RouteFallback = () => (
+  <main className="route-loading" aria-live="polite">
+    Loading...
+  </main>
+);
+
+const suspended = (element) => (
+  <Suspense fallback={<RouteFallback />}>
+    {element}
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
@@ -18,15 +32,15 @@ const router = createBrowserRouter([
         index: true,
         element: <MainPage />,
       },
-      { path: "fireworks", element: <CatalogPage /> },
-      { path: "racks", element: <CatalogPage racks /> },
+      { path: "fireworks", element: suspended(<CatalogPage />) },
+      { path: "racks", element: suspended(<CatalogPage racks />) },
       {
         path: "release-note",
-        element: <ReleaseNote />,
+        element: suspended(<ReleaseNote />),
       },
       {
         path: "dashboard",
-        element: (
+        element: suspended(
           <ProtectedRoute requireAdmin>
             <ReleaseNoteDashboard />
           </ProtectedRoute>
@@ -43,15 +57,15 @@ const router = createBrowserRouter([
         index: true,
         element: <MainPage />,
       },
-      { path: "fireworks", element: <CatalogPage /> },
-      { path: "racks", element: <CatalogPage racks /> },
+      { path: "fireworks", element: suspended(<CatalogPage />) },
+      { path: "racks", element: suspended(<CatalogPage racks />) },
       {
         path: "release-note",
-        element: <ReleaseNote />,
+        element: suspended(<ReleaseNote />),
       },
       {
         path: "dashboard",
-        element: (
+        element: suspended(
           <ProtectedRoute requireAdmin>
             <ReleaseNoteDashboard />
           </ProtectedRoute>
@@ -61,11 +75,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: suspended(<LoginPage />),
   },
   {
     path: "/release-note-dashboard",
-    element: (
+    element: suspended(
       <ProtectedRoute requireAdmin>
         <ReleaseNoteDashboard />
       </ProtectedRoute>
