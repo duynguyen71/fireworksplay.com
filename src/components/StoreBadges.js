@@ -1,12 +1,8 @@
 export function PlayStoreBadge() {
   return (
-    <svg
+    <a href="https://play.google.com/store/apps/dev?id=8281496798126662852&hl=en-VN" target="_blank" rel="noopener noreferrer" aria-label="Get Fireworks Play on Google Play">
+    <svg aria-hidden="true"
       cursor={"pointer"}
-      onClick={() =>
-        window.open(
-          "https://play.google.com/store/apps/dev?id=8281496798126662852&hl=en-VN"
-        )
-      }
       width={150}
       height={45}
       viewBox="0 0 150 45"
@@ -117,18 +113,15 @@ export function PlayStoreBadge() {
         </clipPath>
       </defs>
     </svg>
+    </a>
   );
 }
 
 export function AppStoreBadge() {
   return (
-    <svg
+    <a href="https://apps.apple.com/vn/developer/duy-nguyen/id1459262315?l=vi" target="_blank" rel="noopener noreferrer" aria-label="Download Fireworks Play on the App Store">
+    <svg aria-hidden="true"
       cursor={"pointer"}
-      onClick={() =>
-        window.open(
-          "https://apps.apple.com/vn/developer/duy-nguyen/id1459262315?l=vi"
-        )
-      }
       width={150}
       height={45}
       viewBox="0 0 150 45"
@@ -155,5 +148,6 @@ export function AppStoreBadge() {
         </clipPath>
       </defs>
     </svg>
+    </a>
   );
 }

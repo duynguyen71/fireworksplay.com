@@ -2,7 +2,6 @@ import { Box, Heading, Text, Stack, HStack, VStack, Icon, Link, Button, Spinner,
 import { Link as RouterLink } from "react-router-dom";
 import { CheckCircleIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { fetchReleases } from "../utils/databaseService";
 import authService from "../utils/authService";
 
@@ -33,22 +32,22 @@ const formatText = (text) => {
 
 const ReleaseVersionContainer = ({ title, listItem = [] }) => (
   <Box
-    boxShadow="lg"
+    boxShadow="none"
     border="1px solid"
-    borderColor="gray.200"
+    borderColor="line"
     borderRadius="lg"
     p={6}
     my={6}
     transition="all 0.3s"
-    _hover={{ boxShadow: "xl", transform: "translateY(-2px)" }}
-    bg="white"
+    _hover={{ borderColor: "gray.300" }}
+    bg="surface"
   >
     <Heading
       letterSpacing="wide"
-      color="red.500"
+      color="foreground"
       fontSize="xl"
-      borderBottom="2px solid"
-      borderColor="red.300"
+      borderBottom="1px solid"
+      borderColor="line"
       pb={2}
       mb={4}
     >
@@ -75,7 +74,7 @@ const ReleaseVersionContainer = ({ title, listItem = [] }) => (
                 Watch Video
               </Button>
             ) : (
-              <Text color="gray.700" fontSize="md">
+              <Text color="muted" fontSize="md">
                 {formatText(item)}
               </Text>
             )}
@@ -88,7 +87,6 @@ const ReleaseVersionContainer = ({ title, listItem = [] }) => (
 
 const ReleaseNote = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [direction, setDirection] = useState(null);
   const [releases, setReleases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -153,18 +151,23 @@ const ReleaseNote = () => {
     loadReleases();
   }, []);
 
-  const handlePageChange = (newPage, newDirection = null) => {
+  const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      setDirection(newDirection);
       setCurrentPage(newPage);
+      requestAnimationFrame(() => {
+        document.getElementById("main-content")?.scrollIntoView({ block: "start" });
+      });
     }
   };
 
   if (loading) {
     return (
-      <Box maxW="900px" mx="auto" px={4} py={8} display="flex" justifyContent="center" alignItems="center" minH="400px">
+      <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8} display="flex" justifyContent="center" alignItems="center" minH="400px">
         <VStack spacing={4}>
-          <Spinner size="xl" color="red.500" />
+          <Heading as="h1" size="xl" color="foreground">
+            Release Notes
+          </Heading>
+          <Spinner size="xl" color="foreground" />
           <Text>Loading release notes...</Text>
         </VStack>
       </Box>
@@ -173,12 +176,15 @@ const ReleaseNote = () => {
 
   if (error) {
     return (
-      <Box maxW="900px" mx="auto" px={4} py={8}>
+      <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8}>
+        <Heading as="h1" size="xl" color="foreground" mb={4}>
+          Release Notes
+        </Heading>
         <Alert status="error" borderRadius="lg" mb={4}>
           <AlertIcon />
           <VStack align="start" spacing={2}>
             <Text>{error}</Text>
-            <Text fontSize="sm" color="gray.600">
+            <Text fontSize="sm" color="muted">
               You can try refreshing the data or reloading the page.
             </Text>
           </VStack>
@@ -197,7 +203,10 @@ const ReleaseNote = () => {
 
   if (releases.length === 0) {
     return (
-      <Box maxW="900px" mx="auto" px={4} py={8}>
+      <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8}>
+        <Heading as="h1" size="xl" color="foreground" mb={4}>
+          Release Notes
+        </Heading>
         <Alert status="info" borderRadius="lg">
           <AlertIcon />
           <VStack align="start" spacing={2}>
@@ -219,28 +228,11 @@ const ReleaseNote = () => {
   }
 
   return (
-    <Box maxW="900px" mx="auto" px={4} py={8}>
+    <Box as="main" id="main-content" maxW="1056px" mx="auto" px={4} py={8}>
       <HStack justify="space-between" mb={4}>
-        <Box>
-          <RouterLink to="/">
-            <HStack spacing={3} alignItems="center" cursor="pointer" _hover={{ opacity: 0.8 }}>
-              <img
-                src="/GameLabel_bk.png"
-                alt="Game Logo"
-                style={{ height: '50px', width: 'auto', borderRadius: '50%' }}
-              />
-              <Heading
-                as="h1"
-                size="xl"
-                bgGradient="linear(to-r, orange.400, yellow.400)"
-                bgClip="text"
-                textShadow="2px 2px 4px rgba(0,0,0,0.1)"
-              >
-                Fireworks Play
-              </Heading>
-            </HStack>
-          </RouterLink>
-        </Box>
+        <Heading as="h1" size="xl" color="foreground">
+          Release Notes
+        </Heading>
         {user && (
           <Button
             as={RouterLink}
@@ -253,14 +245,8 @@ const ReleaseNote = () => {
         )}
       </HStack>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentPage}
-          initial={direction ? { opacity: 0, y: direction === "next" ? 30 : -30 } : false}
-          animate={direction ? { opacity: 1, y: 0 } : false}
-          exit={direction ? { opacity: 0, y: direction === "next" ? -30 : 30 } : false}
-          transition={direction ? { duration: 0.3 } : {}}
-        >
+      <div>
+        <div key={currentPage}>
           {currentItems.map((update, index) => (
             <ReleaseVersionContainer
               key={update.id || index}
@@ -268,8 +254,8 @@ const ReleaseNote = () => {
               listItem={update.changes}
             />
           ))}
-        </motion.div>
-      </AnimatePresence>
+        </div>
+      </div>
 
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
         <Button

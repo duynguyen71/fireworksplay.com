@@ -91,10 +91,11 @@ const clearExistingCache = () => {
   }
 };
 
-// Clear cache immediately when module loads
-clearExistingCache();
-
 const ReleaseNoteDashboard = () => {
+  useEffect(() => {
+    clearExistingCache();
+  }, []);
+
   const [releases, setReleases] = useState([]);
   const [databaseReleases, setDatabaseReleases] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -147,8 +148,7 @@ const ReleaseNoteDashboard = () => {
         status: "info",
       });
 
-      // Redirect to login page
-      window.location.href = '/login';
+      window.location.href = '/';
     } catch (error) {
       console.error('Logout error:', error);
       toast({
@@ -763,12 +763,12 @@ const ReleaseNoteDashboard = () => {
         transition="all 0.2s"
         _hover={{
           shadow: "md",
-          transform: 'translateY(-2px)'
+          transform: "none"
         }}
       >
         <CardBody p={4}>
           <VStack spacing={4} align="stretch">
-            <Flex justify="space-between" align="center">
+            <Flex justify="space-between" align="center" gap={6} flexWrap="wrap">
               <VStack align="start" spacing={1}>
                 <Heading
                   size="md"
@@ -792,7 +792,7 @@ const ReleaseNoteDashboard = () => {
                     icon={<ChevronDownIcon />}
                     variant="ghost"
                     size="md"
-                    borderRadius="full"
+                    borderRadius="none"
                   />
                   <MenuList bg={bgModal} borderColor={border}>
                     <MenuItem
@@ -823,14 +823,14 @@ const ReleaseNoteDashboard = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   size="xs"
-                  bgGradient="linear(135deg, #9f7aea 0%, #805ad5 100%)"
-                  color={textPrimary}
+                  bg="blue.600"
+                  color="white"
                   leftIcon={<ExternalLinkIcon boxSize={3} />}
-                  borderRadius="full"
+                  borderRadius="none"
                   fontWeight="medium"
                   _hover={{
-                    bgGradient: "linear(135deg, #805ad5 0%, #6b46c1 100%)",
-                    transform: 'scale(1.05)'
+                    bg: "blue.700",
+                    transform: "none"
                   }}
                   transition="all 0.2s"
                 >
@@ -838,11 +838,11 @@ const ReleaseNoteDashboard = () => {
                 </Button>
               ))}
               <Badge
-                bgGradient="linear(135deg, #4299e1 0%, #3182ce 100%)"
-                color={textPrimary}
+                bg="blue.600"
+                color="white"
                 px={3}
                 py={1}
-                borderRadius="full"
+                borderRadius="none"
                 fontSize="xs"
                 fontWeight="medium"
               >
@@ -872,7 +872,7 @@ const ReleaseNoteDashboard = () => {
   // Modern Mobile Header Component with Glass Effects
   const MobileHeader = () => (
     <Box
-      bg={useColorModeValue("green.500", "green.600")}
+      bg="gray.900"
       color="white"
       py={6}
       px={headerPadding}
@@ -890,34 +890,20 @@ const ReleaseNoteDashboard = () => {
       <Container maxW={containerMaxWidth} position="relative">
         <VStack spacing={4} align="stretch">
           <SlideFade in>
-            <Flex justify="space-between" align="center">
+            <Flex justify="space-between" align="center" gap={6} flexWrap="wrap">
               <VStack align="start" spacing={2}>
                 <Heading
                   size="lg"
-                  fontWeight="extrabold"
+                  fontWeight="semibold"
                   letterSpacing="tight"
                   color="white"
-                  bgGradient="linear(135deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%)"
-                  bgClip="text"
-                  textShadow="0 2px 10px rgba(255, 255, 255, 0.5)"
                   position="relative"
                   display="inline-block"
-                  _after={{
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-2px',
-                    left: 0,
-                    right: 0,
-                    height: '3px',
-                    bgGradient: 'linear(90deg, transparent, #ffffff, transparent)',
-                    borderRadius: 'full',
-                    animation: 'shimmer 2s ease-in-out infinite alternate'
-                  }}
                 >
-                  ✨ Dashboard
+                  Dashboard
                 </Heading>
-                <Text fontSize="sm" opacity={0.9} fontWeight="medium" color="white">
-                  Manage your releases with style
+                <Text fontSize="sm" opacity={1} fontWeight="medium" color="white">
+                  Manage release notes
                 </Text>
               </VStack>
 
@@ -926,15 +912,15 @@ const ReleaseNoteDashboard = () => {
                   <IconButton
                     onClick={handleManualRefresh}
                     isLoading={fetchingFromNotion}
-                    bg="rgba(255, 255, 255, 0.2)"
+                    bg="surface"
                                         border="1px solid rgba(255, 255, 255, 0.3)"
                     icon={<TimeIcon />}
                     size="md"
                     aria-label="Refresh"
-                    borderRadius="full"
+                    borderRadius="none"
                     _hover={{
-                      bg: 'rgba(255, 255, 255, 0.3)',
-                      transform: 'scale(1.05)'
+                      bg: "surfaceRaised",
+                      transform: "none"
                     }}
                     transition="all 0.2s"
                   />
@@ -947,18 +933,18 @@ const ReleaseNoteDashboard = () => {
                       <Avatar
                         size="sm"
                         name={user?.name || 'User'}
-                        bg="white"
-                        color="purple.600"
+                        bg="surface"
+                        color="purple.200"
                         border="2px solid rgba(255, 255, 255, 0.5)"
                       />
                     }
-                    bg="rgba(255, 255, 255, 0.2)"
+                    bg="surface"
                                         border="1px solid rgba(255, 255, 255, 0.3)"
                     size="md"
-                    borderRadius="full"
+                    borderRadius="none"
                     _hover={{
-                      bg: 'rgba(255, 255, 255, 0.3)',
-                      transform: 'scale(1.05)'
+                      bg: "surfaceRaised",
+                      transform: "none"
                     }}
                     transition="all 0.2s"
                   />
@@ -971,17 +957,13 @@ const ReleaseNoteDashboard = () => {
                       <VStack align="start" spacing={2} w="full">
                         <Text fontWeight="bold" fontSize="sm" color={textPrimary}>{user?.name}</Text>
                         <Badge
-                          bgGradient={
-                            user?.role === 'admin'
-                              ? 'linear(135deg, #f56565 0%, #e53e3e 100%)'
-                              : 'linear(135deg, #4299e1 0%, #3182ce 100%)'
-                          }
+                          bg="surfaceRaised"
                           color={textPrimary}
                           variant="solid"
                           fontSize="xs"
                           px={3}
                           py={1}
-                          borderRadius="full"
+                          borderRadius="none"
                         >
                           {user?.role?.toUpperCase() || 'USER'}
                         </Badge>
@@ -990,7 +972,7 @@ const ReleaseNoteDashboard = () => {
                     <MenuItem
                       icon={<ViewIcon />}
                       as={RouterLink}
-                      to="/release-note"
+                      to="/release-note/"
                       fontSize="sm"
                       bg="transparent"
                       color={textPrimary}
@@ -1032,7 +1014,7 @@ const ReleaseNoteDashboard = () => {
                 position="relative"
                 transition="all 0.3s"
                 _hover={{
-                  transform: 'translateY(-2px)',
+                  transform: "none",
                   bg: 'rgba(255, 255, 255, 0.25)'
                 }}
               >
@@ -1048,7 +1030,7 @@ const ReleaseNoteDashboard = () => {
                         </StatNumber>
                       </VStack>
                     </Stat>
-                    <Circle size="40px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                    <Circle size="40px" bg="surface">
                       <Icon as={CheckCircleIcon} boxSize={6} color="green.300" />
                     </Circle>
                   </HStack>
@@ -1066,7 +1048,7 @@ const ReleaseNoteDashboard = () => {
                 position="relative"
                 transition="all 0.3s"
                 _hover={{
-                  transform: 'translateY(-2px)',
+                  transform: "none",
                   bg: 'rgba(255, 255, 255, 0.25)'
                 }}
               >
@@ -1082,8 +1064,8 @@ const ReleaseNoteDashboard = () => {
                         </StatNumber>
                       </VStack>
                     </Stat>
-                    <Circle size="40px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
-                      <Icon as={TimeIcon} boxSize={6} color="blue.300" />
+                    <Circle size="40px" bg="surface">
+                      <Icon as={TimeIcon} boxSize={6} color="accent" />
                     </Circle>
                   </HStack>
                 </CardBody>
@@ -1100,7 +1082,7 @@ const ReleaseNoteDashboard = () => {
                 position="relative"
                 transition="all 0.3s"
                 _hover={{
-                  transform: 'translateY(-2px)',
+                  transform: "none",
                   bg: 'rgba(255, 255, 255, 0.25)'
                 }}
               >
@@ -1116,8 +1098,8 @@ const ReleaseNoteDashboard = () => {
                         </StatNumber>
                       </VStack>
                     </Stat>
-                    <Circle size="40px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
-                      <Icon as={ExternalLinkIcon} boxSize={6} color="purple.300" />
+                    <Circle size="40px" bg="surface">
+                      <Icon as={ExternalLinkIcon} boxSize={6} color="muted" />
                     </Circle>
                   </HStack>
                 </CardBody>
@@ -1130,18 +1112,18 @@ const ReleaseNoteDashboard = () => {
             <Button
               leftIcon={<AddIcon />}
               onClick={handleNew}
-              bgGradient="linear(135deg, #38a169 0%, #2f855a 100%)"
+              bg="blue.600"
               color="white"
               variant="solid"
               size="lg"
               w="full"
-              borderRadius="full"
-              fontWeight="extrabold"
-              letterSpacing="wider"
-              textTransform="uppercase"
+              borderRadius="none"
+              fontWeight="semibold"
+              letterSpacing="normal"
+              textTransform="none"
               fontSize="md"
               py={6}
-              boxShadow="0 10px 40px rgba(56, 161, 105, 0.6), 0 0 0 3px rgba(72, 187, 120, 0.2)"
+              boxShadow="none"
               border="2px solid rgba(255, 255, 255, 0.3)"
               position="relative"
               overflow="hidden"
@@ -1152,27 +1134,27 @@ const ReleaseNoteDashboard = () => {
                 left: '-100%',
                 width: '100%',
                 height: '100%',
-                bg: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+                bg: "blue.600",
                 transition: 'left 0.5s',
               }}
               _hover={{
-                bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
-                transform: 'translateY(-3px) scale(1.02)',
-                boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
+                bg: "blue.700",
+                transform: "none",
+                boxShadow: "none",
                 border: "2px solid rgba(255, 255, 255, 0.5)",
                 _before: {
                   left: '100%'
                 }
               }}
               _active={{
-                transform: 'translateY(-1px) scale(1.01)',
-                boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
+                transform: "none",
+                boxShadow: "none"
               }}
               transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
             >
               <VStack spacing={1}>
-                <Text fontSize="lg" fontWeight="extrabold">✨ Add New Release</Text>
-                <Text fontSize="xs" opacity={0.9} fontWeight="medium">Create New Version</Text>
+                <Text fontSize="lg" fontWeight="semibold">Add release</Text>
+                <Text fontSize="xs" opacity={1} fontWeight="medium">Create New Version</Text>
               </VStack>
             </Button>
           </ScaleFade>
@@ -1184,7 +1166,7 @@ const ReleaseNoteDashboard = () => {
   // Modern Desktop Header Component with Glass Effects
   const DesktopHeader = () => (
     <Box
-      bg={useColorModeValue("green.500", "green.600")}
+      bg="gray.900"
       color="white"
       py={10}
       px={headerPadding}
@@ -1202,31 +1184,17 @@ const ReleaseNoteDashboard = () => {
       <Container maxW={containerMaxWidth} position="relative">
         <VStack spacing={8} align="stretch">
           <SlideFade in>
-            <Flex justify="space-between" align="center">
+            <Flex justify="space-between" align="center" gap={6} flexWrap="wrap">
               <VStack align="start" spacing={3}>
                 <Heading
-                  size="3xl"
-                  fontWeight="extrabold"
+                  size="xl"
+                  fontWeight="semibold"
                   letterSpacing="tight"
                   color="white"
-                  bgGradient="linear(135deg, #ffffff 0%, #e0f2fe 50%, #ffffff 100%)"
-                  bgClip="text"
-                  textShadow="0 2px 10px rgba(255, 255, 255, 0.5)"
                   position="relative"
                   display="inline-block"
-                  _after={{
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-2px',
-                    left: 0,
-                    right: 0,
-                    height: '3px',
-                    bgGradient: 'linear(90deg, transparent, #ffffff, transparent)',
-                    borderRadius: 'full',
-                    animation: 'shimmer 2s ease-in-out infinite alternate'
-                  }}
                 >
-                  ✨ FireworksPlay Dashboard
+                  Fireworks Play dashboard
                 </Heading>
                 </VStack>
 
@@ -1235,17 +1203,17 @@ const ReleaseNoteDashboard = () => {
                   <Button
                     onClick={handleManualRefresh}
                     isLoading={fetchingFromNotion}
-                    bg="rgba(255, 255, 255, 0.2)"
+                    bg="surface"
                                         border="1px solid rgba(255, 255, 255, 0.3)"
                     color={textPrimary}
                     leftIcon={<TimeIcon />}
                     size="md"
-                    borderRadius="full"
+                    borderRadius="none"
                     fontWeight="medium"
                     _hover={{
-                      bg: 'rgba(255, 255, 255, 0.3)',
-                      transform: 'translateY(-2px)',
-                      boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)'
+                      bg: "surfaceRaised",
+                      transform: "none",
+                      boxShadow: "none"
                     }}
                     transition="all 0.3s"
                   >
@@ -1256,18 +1224,18 @@ const ReleaseNoteDashboard = () => {
                 <Button
                   leftIcon={<AddIcon />}
                   onClick={handleNew}
-                  bgGradient="linear(135deg, #38a169 0%, #2f855a 100%)"
+                  bg="blue.600"
                   color="white"
                   variant="solid"
                   size="lg"
-                  borderRadius="full"
-                  fontWeight="extrabold"
-                  letterSpacing="wider"
-                  textTransform="uppercase"
+                  borderRadius="none"
+                  fontWeight="semibold"
+                  letterSpacing="normal"
+                  textTransform="none"
                   fontSize="md"
                   px={8}
                   py={6}
-                  boxShadow="0 10px 40px rgba(56, 161, 105, 0.6), 0 0 0 3px rgba(72, 187, 120, 0.2)"
+                  boxShadow="none"
                   border="2px solid rgba(255, 255, 255, 0.3)"
                   position="relative"
                   overflow="hidden"
@@ -1278,44 +1246,44 @@ const ReleaseNoteDashboard = () => {
                     left: '-100%',
                     width: '100%',
                     height: '100%',
-                    bg: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+                    bg: "blue.600",
                     transition: 'left 0.5s',
                   }}
                   _hover={{
-                    bgGradient: "linear(135deg, #2f855a 0%, #276749 100%)",
-                    transform: 'translateY(-3px) scale(1.02)',
-                    boxShadow: '0 15px 50px rgba(56, 161, 105, 0.8), 0 0 0 4px rgba(72, 187, 120, 0.3)',
+                    bg: "blue.700",
+                    transform: "none",
+                    boxShadow: "none",
                     border: "2px solid rgba(255, 255, 255, 0.5)",
                     _before: {
                       left: '100%'
                     }
                   }}
                   _active={{
-                    transform: 'translateY(-1px) scale(1.01)',
-                    boxShadow: '0 8px 30px rgba(56, 161, 105, 0.7), 0 0 0 2px rgba(72, 187, 120, 0.4)'
+                    transform: "none",
+                    boxShadow: "none"
                   }}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                 >
                   <VStack spacing={1}>
-                    <Text fontSize="lg" fontWeight="extrabold">✨ Add Release</Text>
-                    <Text fontSize="xs" opacity={0.9} fontWeight="medium">Create New Version</Text>
+                    <Text fontSize="lg" fontWeight="semibold">Add release</Text>
+                    <Text fontSize="xs" opacity={1} fontWeight="medium">Create New Version</Text>
                   </VStack>
                 </Button>
 
                 <Menu>
                   <MenuButton
                     as={Button}
-                    bg="rgba(255, 255, 255, 0.2)"
+                    bg="surface"
                                         border="1px solid rgba(255, 255, 255, 0.3)"
                     color={textPrimary}
                     rightIcon={<ChevronDownIcon />}
-                    borderRadius="full"
+                    borderRadius="none"
                     size="md"
                     fontWeight="medium"
                     _hover={{
-                      bg: 'rgba(255, 255, 255, 0.3)',
-                      transform: 'translateY(-2px)',
-                      boxShadow: '0 8px 24px rgba(255, 255, 255, 0.2)'
+                      bg: "surfaceRaised",
+                      transform: "none",
+                      boxShadow: "none"
                     }}
                     transition="all 0.3s"
                   >
@@ -1323,13 +1291,13 @@ const ReleaseNoteDashboard = () => {
                       <Avatar
                         size="sm"
                         name={user?.name || 'User'}
-                        bg="white"
-                        color="purple.600"
+                        bg="surface"
+                        color="purple.200"
                         border="2px solid rgba(255, 255, 255, 0.8)"
                       />
                       <VStack spacing={0} align="start" display={{ base: 'none', md: 'flex' }}>
                         <Text fontSize="sm" fontWeight="bold">{user?.name || 'User'}</Text>
-                        <Text fontSize="xs" opacity={0.9}>{user?.role || 'user'}</Text>
+                        <Text fontSize="xs" opacity={1}>{user?.role || 'user'}</Text>
                       </VStack>
                     </HStack>
                   </MenuButton>
@@ -1345,16 +1313,12 @@ const ReleaseNoteDashboard = () => {
                         <HStack w="full" justify="space-between">
                           <Text fontWeight="bold" color={textPrimary}>{user?.name}</Text>
                           <Badge
-                            bgGradient={
-                              user?.role === 'admin'
-                                ? 'linear(135deg, #f56565 0%, #e53e3e 100%)'
-                                : 'linear(135deg, #4299e1 0%, #3182ce 100%)'
-                            }
+                            bg="surfaceRaised"
                             color={textPrimary}
                             variant="solid"
                             px={3}
                             py={1}
-                            borderRadius="full"
+                            borderRadius="none"
                             fontSize="xs"
                           >
                             {user?.role?.toUpperCase() || 'USER'}
@@ -1366,7 +1330,7 @@ const ReleaseNoteDashboard = () => {
                     <MenuItem
                       icon={<ViewIcon />}
                       as={RouterLink}
-                      to="/release-note"
+                      to="/release-note/"
                       bg="transparent"
                       color={textPrimary}
                       _hover={{
@@ -1406,7 +1370,7 @@ const ReleaseNoteDashboard = () => {
                 position="relative"
                 transition="all 0.3s"
                 _hover={{
-                  transform: 'translateY(-4px)',
+                  transform: "none",
                   bg: 'rgba(255, 255, 255, 0.25)'
                 }}
               >
@@ -1423,7 +1387,7 @@ const ReleaseNoteDashboard = () => {
                         Active versions in database
                       </Text>
                     </VStack>
-                    <Circle size="60px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
+                    <Circle size="60px" bg="surface">
                       <Icon as={CheckCircleIcon} boxSize={8} color="green.300" />
                     </Circle>
                   </HStack>
@@ -1441,7 +1405,7 @@ const ReleaseNoteDashboard = () => {
                 position="relative"
                 transition="all 0.3s"
                 _hover={{
-                  transform: 'translateY(-4px)',
+                  transform: "none",
                   bg: 'rgba(255, 255, 255, 0.25)'
                 }}
               >
@@ -1458,8 +1422,8 @@ const ReleaseNoteDashboard = () => {
                         Total updates across all releases
                       </Text>
                     </VStack>
-                    <Circle size="60px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
-                      <Icon as={TimeIcon} boxSize={8} color="blue.300" />
+                    <Circle size="60px" bg="surface">
+                      <Icon as={TimeIcon} boxSize={8} color="accent" />
                     </Circle>
                   </HStack>
                 </CardBody>
@@ -1476,7 +1440,7 @@ const ReleaseNoteDashboard = () => {
                 position="relative"
                 transition="all 0.3s"
                 _hover={{
-                  transform: 'translateY(-4px)',
+                  transform: "none",
                   bg: 'rgba(255, 255, 255, 0.25)'
                 }}
               >
@@ -1493,8 +1457,8 @@ const ReleaseNoteDashboard = () => {
                         Video links and tutorials
                       </Text>
                     </VStack>
-                    <Circle size="60px" bg="rgba(255, 255, 255, 0.2)" backdropFilter="blur(8px)">
-                      <Icon as={ExternalLinkIcon} boxSize={8} color="purple.300" />
+                    <Circle size="60px" bg="surface">
+                      <Icon as={ExternalLinkIcon} boxSize={8} color="muted" />
                     </Circle>
                   </HStack>
                 </CardBody>
@@ -1543,14 +1507,14 @@ const ReleaseNoteDashboard = () => {
                 <Heading size="lg" fontWeight="bold" letterSpacing="tight">
                   Loading Dashboard
                 </Heading>
-                <Text fontSize="md" opacity={0.9} fontWeight="medium">
+                <Text fontSize="md" opacity={1} fontWeight="medium">
                   Preparing your modern release management experience
                 </Text>
                 <Progress
                   size="xs"
                   w="200px"
                   isIndeterminate
-                  bg="rgba(255, 255, 255, 0.2)"
+                  bg="surface"
                   colorScheme="whiteAlpha"
                 />
               </VStack>
@@ -1602,10 +1566,10 @@ const ReleaseNoteDashboard = () => {
                 <AlertIcon boxSize="24px" color="green.500" />
                 <Box>
                   <AlertTitle fontSize="lg" fontWeight="bold" color="green.300">
-                    Welcome back, {user?.name}! 👋
+                    Welcome back, {user?.name}.
                   </AlertTitle>
-                  <Text fontSize="sm" color="green.200" mt={1}>
-                    You are logged in as an {user?.role}. Manage your releases with our modern dashboard experience.
+                  <Text fontSize="sm" color="muted" mt={1}>
+                    You are logged in as an {user?.role}. Manage your release notes.
                   </Text>
                 </Box>
               </Alert>
@@ -1628,7 +1592,7 @@ const ReleaseNoteDashboard = () => {
                   left={0}
                   right={0}
                   h="3px"
-                  bgGradient="linear(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%)"
+                  bg="blue.600"
                 />
                 <CardHeader
                   bg={bgSecondary}
@@ -1639,11 +1603,9 @@ const ReleaseNoteDashboard = () => {
                   <HStack justify="space-between" align="center">
                     <VStack align="start" spacing={2}>
                       <HStack spacing={2}>
-                        <Text fontSize={isMobile ? "2xl" : "3xl"}>📝</Text>
+
                         <Heading
                           size={isMobile ? "lg" : "xl"}
-                          bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
-                          bgClip="text"
                           fontWeight="bold"
                         >
                           Release Notes ({filteredReleases.length})
@@ -1651,16 +1613,16 @@ const ReleaseNoteDashboard = () => {
                       </HStack>
                       </VStack>
                     <HStack spacing={2}>
-                      <Circle size="40px" bg="rgba(66, 153, 225, 0.2)" backdropFilter="blur(8px)">
+                      <Circle size="40px" bg="rgba(66, 153, 225, 0.2)">
                         <CheckCircleIcon color="blue.500" boxSize={6} />
                       </Circle>
                       <Tag
-                        bgGradient="linear(135deg, #4299e1 0%, #3182ce 100%)"
-                        color={textPrimary}
+                        bg="blue.600"
+                        color="white"
                         variant="solid"
                         px={3}
                         py={1}
-                        borderRadius="full"
+                        borderRadius="none"
                         fontWeight="medium"
                       >
                         Database
@@ -1692,7 +1654,7 @@ const ReleaseNoteDashboard = () => {
                               >
                                 Previous
                               </Button>
-                              <Text color="gray.300" fontSize="sm">
+                              <Text color="muted" fontSize="sm">
                                 Page {currentPage} of {totalPages}
                               </Text>
                               <Button
@@ -1724,9 +1686,9 @@ const ReleaseNoteDashboard = () => {
                                   <Th
                                     fontWeight="bold"
                                     color={textPrimary}
-                                    textTransform="uppercase"
+                                    textTransform="none"
                                     fontSize="xs"
-                                    letterSpacing="wider"
+                                    letterSpacing="normal"
                                     py={4}
                                     borderRight="1px solid"
                                     borderRightColor={border}
@@ -1736,9 +1698,9 @@ const ReleaseNoteDashboard = () => {
                                   <Th
                                     fontWeight="bold"
                                     color={textPrimary}
-                                    textTransform="uppercase"
+                                    textTransform="none"
                                     fontSize="xs"
-                                    letterSpacing="wider"
+                                    letterSpacing="normal"
                                     py={4}
                                     borderRight="1px solid"
                                     borderRightColor={border}
@@ -1748,9 +1710,9 @@ const ReleaseNoteDashboard = () => {
                                   <Th
                                     fontWeight="bold"
                                     color={textPrimary}
-                                    textTransform="uppercase"
+                                    textTransform="none"
                                     fontSize="xs"
-                                    letterSpacing="wider"
+                                    letterSpacing="normal"
                                     py={4}
                                     borderRight="1px solid"
                                     borderRightColor={border}
@@ -1760,9 +1722,9 @@ const ReleaseNoteDashboard = () => {
                                   <Th
                                     fontWeight="bold"
                                     color={textPrimary}
-                                    textTransform="uppercase"
+                                    textTransform="none"
                                     fontSize="xs"
-                                    letterSpacing="wider"
+                                    letterSpacing="normal"
                                     py={4}
                                     textAlign="center"
                                   >
@@ -1776,8 +1738,8 @@ const ReleaseNoteDashboard = () => {
                                     key={release.id}
                                     _hover={{
                                       bg: bgSecondary,
-                                      transform: 'scale(1.01)',
-                                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                                      transform: "none",
+                                      boxShadow: "none"
                                     }}
                                     transition="all 0.2s"
                                     borderBottom="1px solid"
@@ -1785,8 +1747,6 @@ const ReleaseNoteDashboard = () => {
                                   >
                                     <Td
                                       fontWeight="bold"
-                                      bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
-                                      bgClip="text"
                                       borderRight="1px solid"
                                       borderRightColor={border}
                                     >
@@ -1799,11 +1759,11 @@ const ReleaseNoteDashboard = () => {
                                     </Td>
                                     <Td borderRight="1px solid" borderRightColor={border}>
                                       <Badge
-                                        bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
-                                        color={textPrimary}
+                                        bg="blue.600"
+                                        color="white"
                                         px={3}
                                         py={1}
-                                        borderRadius="full"
+                                        borderRadius="none"
                                         fontWeight="medium"
                                         fontSize="xs"
                                       >
@@ -1820,14 +1780,14 @@ const ReleaseNoteDashboard = () => {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             size="xs"
-                                            bgGradient="linear(135deg, #9f7aea 0%, #805ad5 100%)"
-                                            color={textPrimary}
+                                            bg="blue.600"
+                                            color="white"
                                             leftIcon={<ExternalLinkIcon boxSize={3} />}
-                                            borderRadius="full"
+                                            borderRadius="none"
                                             fontWeight="medium"
                                             _hover={{
-                                              bgGradient: "linear(135deg, #805ad5 0%, #6b46c1 100%)",
-                                              transform: 'scale(1.05)'
+                                              bg: "blue.700",
+                                              transform: "none"
                                             }}
                                             transition="all 0.2s"
                                           >
@@ -1835,11 +1795,11 @@ const ReleaseNoteDashboard = () => {
                                           </Button>
                                         ))}
                                         <Badge
-                                          bgGradient="linear(135deg, #4299e1 0%, #3182ce 100%)"
-                                          color={textPrimary}
+                                          bg="blue.600"
+                                          color="white"
                                           px={2}
                                           py={1}
-                                          borderRadius="full"
+                                          borderRadius="none"
                                           fontSize="xs"
                                           fontWeight="medium"
                                         >
@@ -1855,13 +1815,13 @@ const ReleaseNoteDashboard = () => {
                                             size="md"
                                             bg="rgba(66, 153, 225, 0.2)"
                                                                                         border="1px solid rgba(66, 153, 225, 0.3)"
-                                            color="blue.600"
+                                            color="accent"
                                             onClick={() => handleEdit(release)}
                                             aria-label="Edit release"
-                                            borderRadius="full"
+                                            borderRadius="none"
                                             _hover={{
                                               bg: 'rgba(66, 153, 225, 0.3)',
-                                              transform: 'scale(1.1)'
+                                              transform: "none"
                                             }}
                                             transition="all 0.2s"
                                           />
@@ -1875,10 +1835,10 @@ const ReleaseNoteDashboard = () => {
                                             color="red.600"
                                             onClick={() => handleDelete(release)}
                                             aria-label="Delete release"
-                                            borderRadius="full"
+                                            borderRadius="none"
                                             _hover={{
                                               bg: 'rgba(245, 101, 101, 0.3)',
-                                              transform: 'scale(1.1)'
+                                              transform: "none"
                                             }}
                                             transition="all 0.2s"
                                           />
@@ -1903,7 +1863,7 @@ const ReleaseNoteDashboard = () => {
                               >
                                 Previous
                               </Button>
-                              <Text color="gray.300" fontSize="sm">
+                              <Text color="muted" fontSize="sm">
                                 Page {currentPage} of {totalPages}
                               </Text>
                               <Button
@@ -1932,7 +1892,7 @@ const ReleaseNoteDashboard = () => {
                       >
                         <AlertIcon boxSize="20px" color="blue.500" />
                         <Box>
-                          <AlertTitle fontSize={isMobile ? "md" : "lg"} fontWeight="bold" color="blue.300">
+                          <AlertTitle fontSize={isMobile ? "md" : "lg"} fontWeight="bold" color="accent">
                             No releases found
                           </AlertTitle>
                           <Text fontSize="sm" color="blue.200" mt={1}>
@@ -1958,14 +1918,14 @@ const ReleaseNoteDashboard = () => {
               >
                 <AlertIcon boxSize="24px" color="blue.500" />
                 <Box>
-                  <AlertTitle fontSize="lg" fontWeight="bold" color="blue.300" mb={2}>
+                  <AlertTitle fontSize="lg" fontWeight="bold" color="accent" mb={2}>
                     💾 Database Information
                   </AlertTitle>
                   <Text fontSize="sm" color="blue.200">
                     All release notes are managed in the Cloudflare Database. View them on the
                     <Button
                       as={RouterLink}
-                      to="/release-note"
+                      to="/release-note/"
                       variant="link"
                       color="red.500"
                       fontWeight="bold"
@@ -2026,7 +1986,7 @@ const ReleaseNoteDashboard = () => {
                     _placeholder={{ color: textMuted }}
                     _focus={{
                       borderColor: '#667eea',
-                      boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                      boxShadow: "none"
                     }}
                   />
                 </FormControl>
@@ -2049,7 +2009,7 @@ const ReleaseNoteDashboard = () => {
                           _placeholder={{ color: textMuted }}
                           _focus={{
                             borderColor: '#667eea',
-                            boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)'
+                            boxShadow: "none"
                           }}
                         />
                         {formData.changes.length > 1 && (
@@ -2060,10 +2020,10 @@ const ReleaseNoteDashboard = () => {
                             border="1px solid rgba(245, 101, 101, 0.3)"
                             color="red.600"
                             size="md"
-                            borderRadius="full"
+                            borderRadius="none"
                             _hover={{
                               bg: 'rgba(245, 101, 101, 0.3)',
-                              transform: 'scale(1.1)'
+                              transform: "none"
                             }}
                             transition="all 0.2s"
                           />
@@ -2073,16 +2033,16 @@ const ReleaseNoteDashboard = () => {
                     <Button
                       leftIcon={<AddIcon />}
                       onClick={handleAddChange}
-                      bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
-                      color={textPrimary}
+                      bg="blue.600"
+                      color="white"
                       variant="solid"
                       alignSelf="flex-start"
                       size="sm"
-                      borderRadius="full"
+                      borderRadius="none"
                       fontWeight="medium"
                       _hover={{
-                        bgGradient: "linear(135deg, #5a67d8 0%, #6b46c1 100%)",
-                        transform: 'translateY(-1px)'
+                        bg: "blue.700",
+                        transform: "none"
                       }}
                       transition="all 0.2s"
                     >
@@ -2098,7 +2058,7 @@ const ReleaseNoteDashboard = () => {
                 mr={3}
                 onClick={() => setIsEditModalOpen(false)}
                 size="md"
-                borderRadius="full"
+                borderRadius="none"
                 fontWeight="medium"
                 borderColor={border}
                 _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
@@ -2106,15 +2066,15 @@ const ReleaseNoteDashboard = () => {
                 Cancel
               </Button>
               <Button
-                bgGradient="linear(135deg, #667eea 0%, #764ba2 100%)"
-                color={textPrimary}
+                bg="blue.600"
+                color="white"
                 onClick={handleSave}
                 size="md"
-                borderRadius="full"
+                borderRadius="none"
                 fontWeight="bold"
                 _hover={{
-                  bgGradient: "linear(135deg, #5a67d8 0%, #6b46c1 100%)",
-                  transform: 'translateY(-1px)'
+                  bg: "blue.700",
+                  transform: "none"
                 }}
                 transition="all 0.2s"
               >
@@ -2126,30 +2086,30 @@ const ReleaseNoteDashboard = () => {
 
         {/* New Modal with Glass Design */}
         <Modal isOpen={isNewModalOpen} onClose={() => setIsNewModalOpen(false)} size={modalSize} isCentered>
-          <ModalOverlay bg="rgba(0, 0, 0, 0.6)" backdropFilter="blur(8px)" />
+          <ModalOverlay bg="rgba(0, 0, 0, 0.6)" />
           <ModalContent
             bg={bgModal}
                         border="1px solid"
             borderColor="rgba(148, 163, 184, 0.2)"
             borderRadius="2xl"
-            boxShadow="0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+            boxShadow="none"
             maxH="90vh"
             overflowY="auto"
           >
             <ModalHeader
-              bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
-              color={textPrimary}
+              bg="blue.600"
+              color="white"
               borderTopRadius="2xl"
               py={6}
             >
               <VStack align="start" spacing={1}>
                 <Heading size="lg" fontWeight="bold">Add New Release</Heading>
-                <Text fontSize="sm" opacity={0.9}>
+                <Text fontSize="sm" opacity={1}>
                   Create a new release version
                 </Text>
               </VStack>
             </ModalHeader>
-            <ModalCloseButton />
+            <ModalCloseButton color="white" />
             <ModalBody p={6}>
               <VStack spacing={6}>
                 <FormControl>
@@ -2166,7 +2126,7 @@ const ReleaseNoteDashboard = () => {
                     _placeholder={{ color: textMuted }}
                     _focus={{
                       borderColor: '#48bb78',
-                      boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)'
+                      boxShadow: "none"
                     }}
                   />
                 </FormControl>
@@ -2194,21 +2154,21 @@ https://youtu.be/f0wHacQFoZ4"
                       borderRadius="lg"
                       _focus={{
                         borderColor: '#9f7aea',
-                        boxShadow: '0 0 0 3px rgba(159, 122, 234, 0.1)'
+                        boxShadow: "none"
                       }}
                     />
                     <Button
                       onClick={handleQuickParse}
-                      bgGradient="linear(135deg, #9f7aea 0%, #805ad5 100%)"
-                      color={textPrimary}
+                      bg="blue.600"
+                      color="white"
                       variant="solid"
                       alignSelf="flex-start"
                       size="sm"
-                      borderRadius="full"
+                      borderRadius="none"
                       fontWeight="medium"
                       _hover={{
-                        bgGradient: "linear(135deg, #805ad5 0%, #6b46c1 100%)",
-                        transform: 'translateY(-1px)'
+                        bg: "blue.700",
+                        transform: "none"
                       }}
                       transition="all 0.2s"
                     >
@@ -2237,7 +2197,7 @@ https://youtu.be/f0wHacQFoZ4"
                           _placeholder={{ color: textMuted }}
                           _focus={{
                             borderColor: '#48bb78',
-                            boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)'
+                            boxShadow: "none"
                           }}
                         />
                         {formData.changes.length > 1 && (
@@ -2248,10 +2208,10 @@ https://youtu.be/f0wHacQFoZ4"
                             border="1px solid rgba(245, 101, 101, 0.3)"
                             color="red.600"
                             size="md"
-                            borderRadius="full"
+                            borderRadius="none"
                             _hover={{
                               bg: 'rgba(245, 101, 101, 0.3)',
-                              transform: 'scale(1.1)'
+                              transform: "none"
                             }}
                             transition="all 0.2s"
                           />
@@ -2261,16 +2221,16 @@ https://youtu.be/f0wHacQFoZ4"
                     <Button
                       leftIcon={<AddIcon />}
                       onClick={handleAddChange}
-                      bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
-                      color={textPrimary}
+                      bg="blue.600"
+                      color="white"
                       variant="solid"
                       alignSelf="flex-start"
                       size="sm"
-                      borderRadius="full"
+                      borderRadius="none"
                       fontWeight="medium"
                       _hover={{
-                        bgGradient: "linear(135deg, #38a169 0%, #2f855a 100%)",
-                        transform: 'translateY(-1px)'
+                        bg: "blue.700",
+                        transform: "none"
                       }}
                       transition="all 0.2s"
                     >
@@ -2286,7 +2246,7 @@ https://youtu.be/f0wHacQFoZ4"
                 mr={3}
                 onClick={() => setIsNewModalOpen(false)}
                 size="md"
-                borderRadius="full"
+                borderRadius="none"
                 fontWeight="medium"
                 borderColor={border}
                 _hover={{ bg: 'rgba(255, 255, 255, 0.1)' }}
@@ -2294,15 +2254,15 @@ https://youtu.be/f0wHacQFoZ4"
                 Cancel
               </Button>
               <Button
-                bgGradient="linear(135deg, #48bb78 0%, #38a169 100%)"
-                color={textPrimary}
+                bg="blue.600"
+                color="white"
                 onClick={handleSave}
                 size="md"
-                borderRadius="full"
+                borderRadius="none"
                 fontWeight="bold"
                 _hover={{
-                  bgGradient: "linear(135deg, #38a169 0%, #2f855a 100%)",
-                  transform: 'translateY(-1px)'
+                  bg: "blue.700",
+                  transform: "none"
                 }}
                 transition="all 0.2s"
               >
@@ -2323,18 +2283,17 @@ https://youtu.be/f0wHacQFoZ4"
           bottom={8}
           right={8}
           size="lg"
-          borderRadius="full"
+          borderRadius="none"
           bg="rgba(239, 68, 68, 0.8)"
           color="white"
-          boxShadow="0 4px 12px rgba(0, 0, 0, 0.15)"
-          backdropFilter="blur(8px)"
+          boxShadow="none"
           zIndex={1000}
           _hover={{
             bg: "rgba(220, 38, 38, 0.9)",
             transform: "scale(1.1)",
           }}
           transition="all 0.3s ease"
-          opacity={0.9}
+          opacity={1}
         />
       )}
     </Box>
