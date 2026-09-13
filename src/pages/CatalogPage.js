@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import catalog from "../data/gameCatalog.json";
 
-const pageSize = 24;
+const pageSize = 25;
 const fireworkCategories = [...new Set(catalog.filter((item) => item.category !== "Racks").map((item) => item.category))];
 
 function CategoryFilter({ value, onChange }) {
@@ -103,7 +103,7 @@ export default function CatalogPage({ racks = false }) {
       {items.length ? <div className="catalog-grid">
         {visible.map((item) => <article className="catalog-card" key={`${item.category}-${item.id}`}>
           <div className="catalog-image"><img src={item.image} alt={item.name} loading="lazy" width="256" height="256" /></div>
-          <div className="catalog-card-label"><p>{item.category}</p><h2>{item.name}</h2></div>
+          <div className="catalog-card-label"><h2>{item.name}</h2></div>
         </article>)}
       </div> : <p className="catalog-empty">No items available.</p>}
       {pages > 1 && <nav className="catalog-pagination" aria-label="Catalog pages">
