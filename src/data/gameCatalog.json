@@ -1992,310 +1992,436 @@
     "image": "/images/catalog/item-188.webp"
   },
   {
-    "id": "363",
-    "name": "25sh, 25m, Classic Trail",
+    "id": "422",
+    "name": "Gold Titanium",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-374.webp"
   },
   {
-    "id": "364",
-    "name": "25sh, 25m, Colorful Head",
+    "id": "427",
+    "name": "Rebel Waves",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-390.webp"
   },
   {
-    "id": "365",
-    "name": "25sh, 25m, Crackle Head",
+    "id": "439",
+    "name": "Saturn Missile",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-395.webp"
   },
   {
-    "id": "366",
-    "name": "25sh, 25m, Fish",
+    "id": "450",
+    "name": "Artistic Pyro",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-359.webp"
   },
   {
-    "id": "367",
-    "name": "25sh, 25m, Frenzy",
+    "id": "698",
+    "name": "Phoenix Spread",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-389.webp"
   },
   {
-    "id": "368",
-    "name": "25sh, 25m, No Trail",
+    "id": "699",
+    "name": "Starlight Thunder",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-398.webp"
   },
   {
-    "id": "369",
-    "name": "25sh, 25m, Steady",
+    "id": "700",
+    "name": "Phantom Bouquet",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-387.webp"
   },
   {
-    "id": "370",
-    "name": "25sh, 25m, Steady 5s",
+    "id": "705",
+    "name": "Sapphire Fan",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-394.webp"
   },
   {
-    "id": "371",
-    "name": "25sh, 25m, Whistle",
+    "id": "706",
+    "name": "Storm Serpent",
     "category": "Cakes",
-    "image": "/images/catalog/item-320.webp"
+    "image": "/images/catalog/item-399.webp"
   },
   {
-    "id": "372",
-    "name": "40sh, 30m, Classic Trail",
+    "id": "708",
+    "name": "Crown Of Embers",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-366.webp"
   },
   {
-    "id": "373",
-    "name": "40sh, 30m, Colorful Head",
+    "id": "709",
+    "name": "Emerald Phoenix",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-370.webp"
   },
   {
-    "id": "374",
-    "name": "40sh, 30m, Crackle Head",
+    "id": "727",
+    "name": "Infinity Sweep",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-380.webp"
   },
   {
-    "id": "375",
-    "name": "40sh, 30m, Fish",
+    "id": "729",
+    "name": "Crackling Fan",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-365.webp"
   },
   {
-    "id": "376",
-    "name": "40sh, 30m, Frenzy",
+    "id": "733",
+    "name": "HBD",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-375.webp"
   },
   {
-    "id": "377",
-    "name": "40sh, 30m, No Trail",
+    "id": "731",
+    "name": "Multi Crossettes",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-386.webp"
   },
   {
-    "id": "378",
-    "name": "40sh, 30m, Steady",
+    "id": "735",
+    "name": "Blue Crown Cataclysm",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-453.webp"
   },
   {
-    "id": "379",
-    "name": "40sh, 30m, Steady 5s",
+    "id": "432",
+    "name": "Strobing Missiles",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-401.webp"
   },
   {
-    "id": "380",
-    "name": "40sh, 30m, Whistle",
+    "id": "431",
+    "name": "Straight Shootout",
     "category": "Cakes",
-    "image": "/images/catalog/item-321.webp"
+    "image": "/images/catalog/item-400.webp"
   },
   {
-    "id": "398",
-    "name": "25sh, 45m, Classic Trail",
+    "id": "428",
+    "name": "Red Alert",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-391.webp"
   },
   {
-    "id": "399",
-    "name": "25sh, 45m, Colorful Head",
+    "id": "414",
+    "name": "600 Shots Salute",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-356.webp"
   },
   {
-    "id": "400",
-    "name": "25sh, 45m, Crackle Head",
+    "id": "425",
+    "name": "July",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-378.webp"
   },
   {
-    "id": "401",
-    "name": "25sh, 45m, Fish",
+    "id": "417",
+    "name": "Devils Raise",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-368.webp"
   },
   {
-    "id": "402",
-    "name": "25sh, 45m, Frenzy",
+    "id": "424",
+    "name": "July Rainy",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-377.webp"
   },
   {
-    "id": "403",
-    "name": "25sh, 45m, No Trail",
+    "id": "423",
+    "name": "Independence Day",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-376.webp"
   },
   {
-    "id": "404",
-    "name": "25sh, 45m, Steady",
+    "id": "415",
+    "name": "Azure Skies",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-361.webp"
   },
   {
-    "id": "405",
-    "name": "25sh, 45m, Steady 5s",
+    "id": "550",
+    "name": "Cracke Combination",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-364.webp"
   },
   {
-    "id": "406",
-    "name": "25sh, 45m, Whistle",
+    "id": "713",
+    "name": "My Mia",
     "category": "Cakes",
-    "image": "/images/catalog/item-322.webp"
+    "image": "/images/catalog/item-381.webp"
   },
   {
-    "id": "390",
-    "name": "100sh, 25m, Missile",
+    "id": "736",
+    "name": "Cashout Chaos",
     "category": "Cakes",
-    "image": "/images/catalog/item-323.webp"
+    "image": "/images/catalog/item-454.webp"
   },
   {
-    "id": "391",
-    "name": "100sh, 30m, Colorful Head",
+    "id": "429",
+    "name": "Red Glittering",
     "category": "Cakes",
-    "image": "/images/catalog/item-323.webp"
+    "image": "/images/catalog/item-392.webp"
   },
   {
-    "id": "392",
-    "name": "100sh, 30m, Fish",
+    "id": "715",
+    "name": "Sreaming Serpent",
     "category": "Cakes",
-    "image": "/images/catalog/item-323.webp"
+    "image": "/images/catalog/item-382.webp"
   },
   {
-    "id": "393",
-    "name": "100sh, 30m, Fury",
+    "id": "430",
+    "name": "Salute",
     "category": "Cakes",
-    "image": "/images/catalog/item-323.webp"
+    "image": "/images/catalog/item-393.webp"
   },
   {
-    "id": "394",
-    "name": "100sh, 30m, Steady",
+    "id": "418",
+    "name": "Dragon Crossette",
     "category": "Cakes",
-    "image": "/images/catalog/item-323.webp"
+    "image": "/images/catalog/item-369.webp"
   },
   {
-    "id": "395",
-    "name": "100sh, 30m, Steady 5s",
+    "id": "426",
+    "name": "Liberty",
     "category": "Cakes",
-    "image": "/images/catalog/item-323.webp"
+    "image": "/images/catalog/item-383.webp"
   },
   {
-    "id": "407",
-    "name": "40sh, 35m, Classic Trail",
+    "id": "416",
+    "name": "Celebration",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-363.webp"
   },
   {
-    "id": "408",
-    "name": "40sh, 35m, Colorful Head",
+    "id": "419",
+    "name": "Eye Of Osiris",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-371.webp"
   },
   {
-    "id": "409",
-    "name": "40sh, 35m, Crackle Head",
+    "id": "420",
+    "name": "Garden Of Eden",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-373.webp"
   },
   {
-    "id": "410",
-    "name": "40sh, 35m, Frenzy",
+    "id": "421",
+    "name": "Glitering Waterfalls",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-439.webp"
   },
   {
-    "id": "411",
-    "name": "40sh, 35m, No Trail",
+    "id": "442",
+    "name": "Airstrike Salute",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-358.webp"
   },
   {
-    "id": "412",
-    "name": "40sh, 35m, Steady",
+    "id": "443",
+    "name": "Airstrike Rocket",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-357.webp"
   },
   {
-    "id": "413",
-    "name": "40sh, 35m, Steady 5s",
+    "id": "452",
+    "name": "Moonlit Radiance",
     "category": "Cakes",
-    "image": "/images/catalog/item-325.webp"
+    "image": "/images/catalog/item-385.webp"
   },
   {
-    "id": "396",
-    "name": "15sh, 30m, Classic 5s",
+    "id": "453",
+    "name": "Lantern Skyfall",
     "category": "Cakes",
-    "image": "/images/catalog/item-326.webp"
+    "image": "/images/catalog/item-379.webp"
   },
   {
-    "id": "397",
-    "name": "15sh, 30m, Crackle 5s",
+    "id": "454",
+    "name": "Starlight Symphony",
     "category": "Cakes",
-    "image": "/images/catalog/item-326.webp"
+    "image": "/images/catalog/item-397.webp"
   },
   {
-    "id": "381",
-    "name": "40sh, 30m, Classic Trail",
+    "id": "458",
+    "name": "Phantom Flames",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-388.webp"
   },
   {
-    "id": "382",
-    "name": "40sh, 30m, Classic Trail Reverse",
+    "id": "459",
+    "name": "Azure Skyburst",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-362.webp"
   },
   {
-    "id": "383",
-    "name": "40sh, 30m, Fan",
+    "id": "511",
+    "name": "Midnight Party",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-384.webp"
   },
   {
-    "id": "384",
-    "name": "40sh, 30m, Fury",
+    "id": "495",
+    "name": "Sky High",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-396.webp"
   },
   {
-    "id": "385",
-    "name": "40sh, 30m, No Trail",
+    "id": "504",
+    "name": "2025",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-347.webp"
   },
   {
-    "id": "386",
-    "name": "40sh, 30m, Rhythm",
+    "id": "726",
+    "name": "2026",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-452.webp"
   },
   {
-    "id": "387",
-    "name": "40sh, 30m, Rhythm 2",
+    "id": "496",
+    "name": "Firefly",
     "category": "Cakes",
-    "image": "/images/catalog/item-324.webp"
+    "image": "/images/catalog/item-434.webp"
   },
   {
-    "id": "388",
-    "name": "8sh, 30m, Classic Trail",
+    "id": "508",
+    "name": "Inferno Pair",
     "category": "Cakes",
-    "image": "/images/catalog/item-327.webp"
+    "image": "/images/catalog/item-443.webp"
   },
   {
-    "id": "389",
-    "name": "40sh, 30m, Fury",
+    "id": "629",
+    "name": "Emerald Skyburst",
     "category": "Cakes",
-    "image": "/images/catalog/item-327.webp"
+    "image": "/images/catalog/item-411.webp"
+  },
+  {
+    "id": "633",
+    "name": "Wind Fire Wheel",
+    "category": "Cakes",
+    "image": "/images/catalog/item-402.webp"
+  },
+  {
+    "id": "634",
+    "name": "Red Thunder Salute",
+    "category": "Cakes",
+    "image": "/images/catalog/item-455.webp"
+  },
+  {
+    "id": "637",
+    "name": "The Thunder King",
+    "category": "Cakes",
+    "image": "/images/catalog/item-472.webp"
+  },
+  {
+    "id": "644",
+    "name": "Flame of Leira",
+    "category": "Cakes",
+    "image": "/images/catalog/item-437.webp"
+  },
+  {
+    "id": "646",
+    "name": "Daisy 16 Shots",
+    "category": "Cakes",
+    "image": "/images/catalog/item-408.webp"
+  },
+  {
+    "id": "642",
+    "name": "Head Bang",
+    "category": "Cakes",
+    "image": "/images/catalog/item-441.webp"
+  },
+  {
+    "id": "660",
+    "name": "City Wake",
+    "category": "Cakes",
+    "image": "/images/catalog/item-404.webp"
+  },
+  {
+    "id": "734",
+    "name": "Defense Pearl Fountain",
+    "category": "Cakes",
+    "image": "/images/catalog/item-367.webp"
+  },
+  {
+    "id": "738",
+    "name": "Defense Flower Fountain",
+    "category": "Cakes",
+    "image": "/images/catalog/item-372.webp"
+  },
+  {
+    "id": "749",
+    "name": "Aurora Bloom",
+    "category": "Cakes",
+    "image": "/images/catalog/item-360.webp"
+  },
+  {
+    "id": "666",
+    "name": "Nuclear War",
+    "category": "Cakes",
+    "image": "/images/catalog/item-448.webp"
+  },
+  {
+    "id": "669",
+    "name": "Countdown 5s",
+    "category": "Cakes",
+    "image": "/images/catalog/item-405.webp"
+  },
+  {
+    "id": "671",
+    "name": "Blaze Kickoff",
+    "category": "Cakes",
+    "image": "/images/catalog/item-353.webp"
+  },
+  {
+    "id": "718",
+    "name": "Neon Drift",
+    "category": "Cakes",
+    "image": "/images/catalog/item-353.webp"
+  },
+  {
+    "id": "719",
+    "name": "Stardust",
+    "category": "Cakes",
+    "image": "/images/catalog/item-353.webp"
+  },
+  {
+    "id": "674",
+    "name": "Rainbow Starter",
+    "category": "Cakes",
+    "image": "/images/catalog/item-451.webp"
+  },
+  {
+    "id": "676",
+    "name": "Kick Flare",
+    "category": "Cakes",
+    "image": "/images/catalog/item-444.webp"
+  },
+  {
+    "id": "678",
+    "name": "Arch Strike",
+    "category": "Cakes",
+    "image": "/images/catalog/item-350.webp"
+  },
+  {
+    "id": "722",
+    "name": "Forest Spark",
+    "category": "Cakes",
+    "image": "/images/catalog/item-350.webp"
+  },
+  {
+    "id": "679",
+    "name": "Arch Blaze",
+    "category": "Cakes",
+    "image": "/images/catalog/item-349.webp"
+  },
+  {
+    "id": "725",
+    "name": "Golden Fan",
+    "category": "Cakes",
+    "image": "/images/catalog/item-349.webp"
   },
   {
     "id": "2",
@@ -2650,438 +2776,6 @@
     "name": "Bingo 2",
     "category": "Fireworks",
     "image": "/images/catalog/item-352.webp"
-  },
-  {
-    "id": "422",
-    "name": "Gold Titanium",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-374.webp"
-  },
-  {
-    "id": "427",
-    "name": "Rebel Waves",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-390.webp"
-  },
-  {
-    "id": "439",
-    "name": "Saturn Missile",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-395.webp"
-  },
-  {
-    "id": "450",
-    "name": "Artistic Pyro",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-359.webp"
-  },
-  {
-    "id": "698",
-    "name": "Phoenix Spread",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-389.webp"
-  },
-  {
-    "id": "699",
-    "name": "Starlight Thunder",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-398.webp"
-  },
-  {
-    "id": "700",
-    "name": "Phantom Bouquet",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-387.webp"
-  },
-  {
-    "id": "705",
-    "name": "Sapphire Fan",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-394.webp"
-  },
-  {
-    "id": "706",
-    "name": "Storm Serpent",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-399.webp"
-  },
-  {
-    "id": "708",
-    "name": "Crown Of Embers",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-366.webp"
-  },
-  {
-    "id": "709",
-    "name": "Emerald Phoenix",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-370.webp"
-  },
-  {
-    "id": "727",
-    "name": "Infinity Sweep",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-380.webp"
-  },
-  {
-    "id": "729",
-    "name": "Crackling Fan",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-365.webp"
-  },
-  {
-    "id": "733",
-    "name": "HBD",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-375.webp"
-  },
-  {
-    "id": "731",
-    "name": "Multi Crossettes",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-386.webp"
-  },
-  {
-    "id": "735",
-    "name": "Blue Crown Cataclysm",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-453.webp"
-  },
-  {
-    "id": "432",
-    "name": "Strobing Missiles",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-401.webp"
-  },
-  {
-    "id": "431",
-    "name": "Straight Shootout",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-400.webp"
-  },
-  {
-    "id": "428",
-    "name": "Red Alert",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-391.webp"
-  },
-  {
-    "id": "414",
-    "name": "600 Shots Salute",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-356.webp"
-  },
-  {
-    "id": "425",
-    "name": "July",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-378.webp"
-  },
-  {
-    "id": "417",
-    "name": "Devils Raise",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-368.webp"
-  },
-  {
-    "id": "424",
-    "name": "July Rainy",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-377.webp"
-  },
-  {
-    "id": "423",
-    "name": "Independence Day",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-376.webp"
-  },
-  {
-    "id": "415",
-    "name": "Azure Skies",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-361.webp"
-  },
-  {
-    "id": "550",
-    "name": "Cracke Combination",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-364.webp"
-  },
-  {
-    "id": "713",
-    "name": "My Mia",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-381.webp"
-  },
-  {
-    "id": "736",
-    "name": "Cashout Chaos",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-454.webp"
-  },
-  {
-    "id": "429",
-    "name": "Red Glittering",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-392.webp"
-  },
-  {
-    "id": "715",
-    "name": "Sreaming Serpent",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-382.webp"
-  },
-  {
-    "id": "430",
-    "name": "Salute",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-393.webp"
-  },
-  {
-    "id": "418",
-    "name": "Dragon Crossette",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-369.webp"
-  },
-  {
-    "id": "426",
-    "name": "Liberty",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-383.webp"
-  },
-  {
-    "id": "416",
-    "name": "Celebration",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-363.webp"
-  },
-  {
-    "id": "419",
-    "name": "Eye Of Osiris",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-371.webp"
-  },
-  {
-    "id": "420",
-    "name": "Garden Of Eden",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-373.webp"
-  },
-  {
-    "id": "421",
-    "name": "Glitering Waterfalls",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-439.webp"
-  },
-  {
-    "id": "442",
-    "name": "Airstrike Salute",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-358.webp"
-  },
-  {
-    "id": "443",
-    "name": "Airstrike Rocket",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-357.webp"
-  },
-  {
-    "id": "452",
-    "name": "Moonlit Radiance",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-385.webp"
-  },
-  {
-    "id": "453",
-    "name": "Lantern Skyfall",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-379.webp"
-  },
-  {
-    "id": "454",
-    "name": "Starlight Symphony",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-397.webp"
-  },
-  {
-    "id": "458",
-    "name": "Phantom Flames",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-388.webp"
-  },
-  {
-    "id": "459",
-    "name": "Azure Skyburst",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-362.webp"
-  },
-  {
-    "id": "511",
-    "name": "Midnight Party",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-384.webp"
-  },
-  {
-    "id": "495",
-    "name": "Sky High",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-396.webp"
-  },
-  {
-    "id": "504",
-    "name": "2025",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-347.webp"
-  },
-  {
-    "id": "726",
-    "name": "2026",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-452.webp"
-  },
-  {
-    "id": "496",
-    "name": "Firefly",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-434.webp"
-  },
-  {
-    "id": "508",
-    "name": "Inferno Pair",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-443.webp"
-  },
-  {
-    "id": "629",
-    "name": "Emerald Skyburst",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-411.webp"
-  },
-  {
-    "id": "633",
-    "name": "Wind Fire Wheel",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-402.webp"
-  },
-  {
-    "id": "634",
-    "name": "Red Thunder Salute",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-455.webp"
-  },
-  {
-    "id": "637",
-    "name": "The Thunder King",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-472.webp"
-  },
-  {
-    "id": "644",
-    "name": "Flame of Leira",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-437.webp"
-  },
-  {
-    "id": "646",
-    "name": "Daisy 16 Shots",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-408.webp"
-  },
-  {
-    "id": "642",
-    "name": "Head Bang",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-441.webp"
-  },
-  {
-    "id": "660",
-    "name": "City Wake",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-404.webp"
-  },
-  {
-    "id": "734",
-    "name": "Defense Pearl Fountain",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-367.webp"
-  },
-  {
-    "id": "738",
-    "name": "Defense Flower Fountain",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-372.webp"
-  },
-  {
-    "id": "749",
-    "name": "Aurora Bloom",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-360.webp"
-  },
-  {
-    "id": "666",
-    "name": "Nuclear War",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-448.webp"
-  },
-  {
-    "id": "669",
-    "name": "Countdown 5s",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-405.webp"
-  },
-  {
-    "id": "671",
-    "name": "Blaze Kickoff",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-353.webp"
-  },
-  {
-    "id": "718",
-    "name": "Neon Drift",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-353.webp"
-  },
-  {
-    "id": "719",
-    "name": "Stardust",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-353.webp"
-  },
-  {
-    "id": "674",
-    "name": "Rainbow Starter",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-451.webp"
-  },
-  {
-    "id": "676",
-    "name": "Kick Flare",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-444.webp"
-  },
-  {
-    "id": "678",
-    "name": "Arch Strike",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-350.webp"
-  },
-  {
-    "id": "722",
-    "name": "Forest Spark",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-350.webp"
-  },
-  {
-    "id": "679",
-    "name": "Arch Blaze",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-349.webp"
-  },
-  {
-    "id": "725",
-    "name": "Golden Fan",
-    "category": "Fireworks",
-    "image": "/images/catalog/item-349.webp"
   },
   {
     "id": "242",

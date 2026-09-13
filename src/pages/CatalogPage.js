@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import catalog from "../data/gameCatalog.json";
 
-const pageSize = 25;
+const pageSize = 50;
 const fireworkCategories = [...new Set(catalog.filter((item) => item.category !== "Racks").map((item) => item.category))];
 
 function CategoryFilter({ value, onChange }) {
