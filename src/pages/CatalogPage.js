@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import catalog from "../data/gameCatalog.json";
 
 const pageSize = 50;
-const fireworkCategories = [...new Set(catalog.filter((item) => item.category !== "Racks").map((item) => item.category))];
+const catalogCategories = [...new Set(catalog.map((item) => item.category))];
 
 function CategoryFilter({ value, onChange }) {
   const detailsRef = useRef(null);
@@ -43,7 +43,7 @@ function CategoryFilter({ value, onChange }) {
           <span id="catalog-category-value">{label}</span>
         </summary>
         <div className="catalog-category-options" role="group" aria-labelledby="catalog-category-label">
-          {["All", ...fireworkCategories].map((name) => (
+          {["All", ...catalogCategories].map((name) => (
             <button
               key={name}
               type="button"
@@ -62,10 +62,9 @@ function CategoryFilter({ value, onChange }) {
 export default function CatalogPage({ racks = false }) {
   const [params, setParams] = useSearchParams();
   const selected = params.get("category") || "All";
-  const category = fireworkCategories.includes(selected) ? selected : "All";
+  const category = catalogCategories.includes(selected) ? selected : "All";
   const matches = catalog.filter((item) =>
-    (racks ? item.category === "Racks" : item.category !== "Racks") &&
-    (racks || category === "All" || item.category === category)
+    racks ? item.category === "Racks" : category === "All" || item.category === category
   );
   // Shells in the game includes effects also listed in specialized categories.
   const items = [...new Map(matches.map((item) => [item.id, item])).values()];
@@ -90,8 +89,8 @@ export default function CatalogPage({ racks = false }) {
   return (
     <main id="main-content" className="catalog-page">
       <div className="section-heading">
-        <h1>{racks ? "Racks" : "Fireworks"}</h1>
-        <p>{racks ? "Reloadable racks, tubes, and firing tools from Fireworks Play." : "Browse the fireworks and effects available in Fireworks Play."}</p>
+        <h1>{racks ? "Racks" : "Game Items"}</h1>
+        <p>{racks ? "Reloadable racks, tubes, and firing tools from Fireworks Play." : "Browse fireworks, effects, racks, and firing tools available in Fireworks Play."}</p>
       </div>
       {!racks && <div className="catalog-filters">
         <CategoryFilter

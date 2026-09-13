@@ -18,10 +18,10 @@
   {
     "path": "/fireworks/",
     "aliases": ["/fireworksplay/fireworks/"],
-    "title": "Fireworks Catalog | Fireworks Play",
-    "description": "Browse the fireworks and effects available in Fireworks Play.",
-    "heading": "Fireworks Catalog",
-    "summary": "Browse the fireworks and effects available in Fireworks Play."
+    "title": "Game Items | Fireworks Play",
+    "description": "Browse fireworks, effects, racks, and firing tools available in Fireworks Play.",
+    "heading": "Game Items",
+    "summary": "Browse fireworks, effects, racks, and firing tools available in Fireworks Play."
   },
   {
     "path": "/racks/",

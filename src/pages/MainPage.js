@@ -60,8 +60,7 @@ export default function MainPage() {
             <AppStoreBadge />
           </div>
           <div className="hero-catalog-links">
-            <Link className="text-link" to="/fireworks/">Browse fireworks <span aria-hidden="true">→</span></Link>
-            <Link className="text-link" to="/racks/">Browse racks <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" to="/fireworks/">Explore game items <span aria-hidden="true">→</span></Link>
             <Link className="text-link" to="/release-note/">Release notes <span aria-hidden="true">→</span></Link>
             <a className="text-link" href="/privacy.html">Privacy <span aria-hidden="true">→</span></a>
           </div>
