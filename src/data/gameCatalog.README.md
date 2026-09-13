@@ -8,6 +8,6 @@ Snapshot from `/Users/duynguyen/RiderProjects/fireworkbuilder/Firework/Assets`, 
 - Names use `Firework.fullName`; Fireworks and Firecrackers use `friendlyName` when provided, matching `GetDisplayName()`.
 - Thumbnail references resolve through `spriteThumb` GUIDs and Unity `.meta` files. All imported sprites use single-sprite mode. Web thumbnails are resized to 256px wide and encoded as WebP in `public/images/catalog/`.
 - Racks includes the game's firing tools and tubes, as listed in the same store tab. Props, explosives, rewards, and seasonal lists are outside these two website categories.
-- The website `Cakes` category excludes the legacy customizable orange-box variants and uses the packaged `Fireworks` entries from `Gold Titanium` onward.
+- The website omits the standalone `Fireworks` category. `Cakes` excludes the legacy customizable orange-box variants and uses the packaged entries from `Gold Titanium` onward.
 - `gameCatalog.json` is static website data. Update it and the copied thumbnails when the game catalog changes. Website builds do not require Unity or access to the game checkout.
 - The All view deduplicates IDs because effects can appear in several in-game categories.
