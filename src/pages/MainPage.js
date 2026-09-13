@@ -45,11 +45,16 @@ export default function MainPage() {
         </div>
         <div className="hero-edge-shade" aria-hidden="true" />
         <div className="home-hero-content">
-          <p className="eyebrow studio-word"><span className="studio-sim">Sim</span>play Studio</p>
+          <p className="eyebrow studio-word">
+            <a className="studio-link" href="https://simplaystudio.com/"><span className="studio-sim">Sim</span>play Studio</a>
+          </p>
           <h1 id="home-title">
             <img className="hero-logo" src="/GameLabel-clean.webp" alt="Fireworks Play" width="457" height="296" fetchpriority="high" />
           </h1>
-          <p className="hero-description">Fun and amazing fireworks simulator that will blow your mind!</p>
+          <p className="hero-description">
+            <span className="hero-description-line">Fun and amazing fireworks simulator</span>
+            <span className="hero-description-line">that will blow your mind!</span>
+          </p>
           <div className="store-links" aria-label="Download Fireworks Play">
             <PlayStoreBadge />
             <AppStoreBadge />
@@ -90,7 +95,7 @@ export default function MainPage() {
         >
           <div className="game-spotlight-heading">
             <p className="eyebrow">New Game Announcement</p>
-            <p className="game-spotlight-intro">The next fireworks game from Simplay Studio is coming to PC.</p>
+            <p className="game-spotlight-intro">The next fireworks game from <a className="studio-link" href="https://simplaystudio.com/">Simplay Studio</a> is coming to PC.</p>
           </div>
           <div className="new-game-card">
             <img
@@ -119,7 +124,6 @@ export default function MainPage() {
                   decoding="async"
                 />
               </h2>
-              <h3>Play. Load. Link. Save. Watch.</h3>
               <p>Design professional fireworks displays from a top-down view. Watch your show from any viewpoint in a fully 3D world. Place racks, load shells, connect fuses, and control the firing system.</p>
               <div className="new-game-links">
                 <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer">Wishlist on Steam</a>
@@ -139,7 +143,6 @@ export default function MainPage() {
         >
           <div className="section-heading">
             <h2 id="gallery-title">Explore Fireworks Play</h2>
-            <p>Fireworks, maps, and multiplayer.</p>
           </div>
           <ImageSlider slides={SlideData} />
         </motion.div>

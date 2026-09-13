@@ -91,7 +91,7 @@ export default function RootLayout() {
           <a href={socialMediaLinks.discord} aria-label="Discord" target="_blank" rel="noopener noreferrer"><FaDiscord aria-hidden="true" /></a>
         </nav>
         <p>
-          <span className="footer-copy">© {new Date().getFullYear()} <span className="studio-word"><span className="studio-sim">Sim</span>play Studio</span></span>
+          <span className="footer-copy">© {new Date().getFullYear()} <a className="studio-word studio-link" href="https://simplaystudio.com/"><span className="studio-sim">Sim</span>play Studio</a></span>
           <span className="footer-meta">
             <a href="/privacy.html">Privacy</a>
             <span aria-hidden="true">|</span>
