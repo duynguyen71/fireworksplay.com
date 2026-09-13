@@ -109,6 +109,7 @@ function renderInternalRoute(template, route) {
   html = replaceMeta(html, "name", "title", route.title);
   html = replaceMeta(html, "name", "description", route.description);
   html = replaceMeta(html, "name", "robots", "noindex, nofollow");
+  html = html.replace(/\s*<meta[^>]*(?:property|name)="(?:og:[^"]+|twitter:[^"]+)"[^>]*>/gi, "");
   html = html.replace(/\s*<link[^>]*rel="canonical"[^>]*>/i, "");
   html = html.replace(/\s*<script[^>]*id="route-structured-data"[^>]*>[\s\S]*?<\/script>/i, "");
   html = html.replace(

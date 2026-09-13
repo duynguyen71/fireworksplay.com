@@ -1,8 +1,63 @@
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import catalog from "../data/gameCatalog.json";
 
 const pageSize = 24;
 const fireworkCategories = [...new Set(catalog.filter((item) => item.category !== "Racks").map((item) => item.category))];
+
+function CategoryFilter({ value, onChange }) {
+  const detailsRef = useRef(null);
+  const label = value === "All" ? "All categories" : value;
+
+  useEffect(() => {
+    const closeOnPointerDown = (event) => {
+      const details = detailsRef.current;
+      if (details?.open && !details.contains(event.target)) details.open = false;
+    };
+    const closeOnEscape = (event) => {
+      const details = detailsRef.current;
+      if (event.key !== "Escape" || !details?.open) return;
+      details.open = false;
+      details.querySelector("summary")?.focus();
+    };
+
+    document.addEventListener("pointerdown", closeOnPointerDown);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnPointerDown);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
+
+  const selectCategory = (nextValue) => {
+    onChange(nextValue);
+    detailsRef.current.open = false;
+    detailsRef.current.querySelector("summary")?.focus();
+  };
+
+  return (
+    <div className="catalog-category-field">
+      <span id="catalog-category-label" className="catalog-category-label">Category</span>
+      <details ref={detailsRef} className="catalog-category-picker">
+        <summary aria-labelledby="catalog-category-label catalog-category-value">
+          <span id="catalog-category-value">{label}</span>
+        </summary>
+        <div className="catalog-category-options" role="group" aria-labelledby="catalog-category-label">
+          {["All", ...fireworkCategories].map((name) => (
+            <button
+              key={name}
+              type="button"
+              aria-pressed={value === name}
+              onClick={() => selectCategory(name)}
+            >
+              {name === "All" ? "All categories" : name}
+            </button>
+          ))}
+        </div>
+      </details>
+    </div>
+  );
+}
 
 export default function CatalogPage({ racks = false }) {
   const [params, setParams] = useSearchParams();
@@ -39,12 +94,10 @@ export default function CatalogPage({ racks = false }) {
         <p>{racks ? "Reloadable racks, tubes, and firing tools from Fireworks Play." : "Browse the fireworks and effects available in Fireworks Play."}</p>
       </div>
       {!racks && <div className="catalog-filters">
-        <label>Category
-          <select value={category} onChange={(event) => updateFilter("category", event.target.value)}>
-            <option value="All">All categories</option>
-            {fireworkCategories.map((name) => <option key={name}>{name}</option>)}
-          </select>
-        </label>
+        <CategoryFilter
+          value={category}
+          onChange={(value) => updateFilter("category", value === "All" ? "" : value)}
+        />
       </div>}
       <p id="catalog-results" className="catalog-count" aria-live="polite">{items.length} items</p>
       {items.length ? <div className="catalog-grid">
