@@ -80,7 +80,7 @@ export default function RootLayout() {
       <a className="skip-link" href="#main-content">Skip to content</a>
       {!isHomePage && (
         <nav className="subpage-nav" aria-label="Page navigation">
-          <Link className="back-home-link" to="/">← Back to Fireworks Play</Link>
+          <Link className="back-home-link" to="/">Back to Fireworks Play</Link>
         </nav>
       )}
       <Outlet />
