@@ -60,9 +60,9 @@ export default function MainPage() {
             <AppStoreBadge />
           </div>
           <div className="hero-catalog-links">
-            <Link className="text-link" to="/fireworks/">Explore game items <span aria-hidden="true">→</span></Link>
-            <Link className="text-link" to="/release-note/">Release notes <span aria-hidden="true">→</span></Link>
-            <a className="text-link" href="/privacy.html">Privacy <span aria-hidden="true">→</span></a>
+            <Link className="text-link" to="/fireworks/">Explore game items</Link>
+            <Link className="text-link" to="/release-note/">Release notes</Link>
+            <a className="text-link" href="/privacy.html">Privacy</a>
           </div>
         </div>
         <motion.button
@@ -126,7 +126,7 @@ export default function MainPage() {
               <p>Design professional fireworks displays from a top-down view. Watch your show from any viewpoint in a fully 3D world. Place racks, load shells, connect fuses, and control the firing system.</p>
               <div className="new-game-links">
                 <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer">Wishlist on Steam</a>
-                <a className="text-link" href="https://fireworksshowsimulator.com/" target="_blank" rel="noopener noreferrer">Explore the Game <span aria-hidden="true">→</span></a>
+                <a className="text-link" href="https://fireworksshowsimulator.com/" target="_blank" rel="noopener noreferrer">Explore the Game</a>
               </div>
             </div>
           </div>
