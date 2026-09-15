@@ -4,6 +4,15 @@ import catalog from "../data/gameCatalog.json";
 
 const pageSize = 50;
 const catalogCategories = [...new Set(catalog.map((item) => item.category))];
+const categoryOptions = catalogCategories.includes("Cakes")
+  ? ["Cakes", ...catalogCategories.filter((category) => category !== "Cakes")]
+  : catalogCategories;
+const categoryRank = new Map(categoryOptions.map((category, index) => [category, index]));
+const orderedCatalog = [...catalog].sort((first, second) => {
+  const imagePriority = Number(Boolean(second.image)) - Number(Boolean(first.image));
+  if (imagePriority) return imagePriority;
+  return categoryRank.get(first.category) - categoryRank.get(second.category);
+});
 
 function CategoryFilter({ value, onChange }) {
   const detailsRef = useRef(null);
@@ -43,7 +52,7 @@ function CategoryFilter({ value, onChange }) {
           <span id="catalog-category-value">{label}</span>
         </summary>
         <div className="catalog-category-options" role="group" aria-labelledby="catalog-category-label">
-          {["All", ...catalogCategories].map((name) => (
+          {["All", ...categoryOptions].map((name) => (
             <button
               key={name}
               type="button"
@@ -63,7 +72,7 @@ export default function CatalogPage({ racks = false }) {
   const [params, setParams] = useSearchParams();
   const selected = params.get("category") || "All";
   const category = catalogCategories.includes(selected) ? selected : "All";
-  const matches = catalog.filter((item) =>
+  const matches = orderedCatalog.filter((item) =>
     racks ? item.category === "Racks" : category === "All" || item.category === category
   );
   // Shells in the game includes effects also listed in specialized categories.
