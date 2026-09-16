@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
+import { FaSteam, FaBullhorn } from "react-icons/fa";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
-import ImageSlider from "../components/ImageSlider";
-import { SlideData } from "../data/SlideData";
-
-const sectionReveal = {
-  hidden: { opacity: 0.65, y: 48 },
-  visible: { opacity: 1, y: 0 },
-};
+import FeatureCard from "../components/FeatureCard";
+import { FeatureSections } from "../data/FeatureSections";
 
 // Preserve the hero and scroll invariants in docs/homepage-contract.md.
 export default function MainPage() {
@@ -65,35 +61,23 @@ export default function MainPage() {
             <a className="text-link" href="/privacy.html">Privacy</a>
           </div>
         </div>
-        <motion.button
+        <button
           type="button"
           className="hero-scroll-hint"
           aria-label="Scroll down"
           onClick={scrollToAnnouncement}
-          whileHover={shouldReduceMotion ? undefined : { y: 2 }}
-          whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
         >
-          <motion.span
-            aria-hidden="true"
-            animate={shouldReduceMotion ? undefined : { y: [0, 5, 0] }}
-            transition={shouldReduceMotion ? undefined : { duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <span aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M5 8.5 12 15.5 19 8.5" />
             </svg>
-          </motion.span>
-        </motion.button>
+          </span>
+        </button>
       </section>
       <section className="game-spotlight" aria-labelledby="game-spotlight-title">
-        <motion.div
-          variants={sectionReveal}
-          initial={shouldReduceMotion ? false : "hidden"}
-          whileInView="visible"
-          viewport={{ amount: 0.2 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <div>
           <div className="game-spotlight-heading">
-            <p className="eyebrow">New Game Announcement</p>
+            <p className="eyebrow eyebrow--announce"><FaBullhorn aria-hidden="true" />New Game Announcement</p>
             <p className="game-spotlight-intro">The next fireworks game from <a className="studio-link" href="https://simplaystudio.com/">Simplay Studio</a> is coming to PC.</p>
           </div>
           <div className="new-game-card">
@@ -125,26 +109,21 @@ export default function MainPage() {
               </h2>
               <p>Design professional fireworks displays from a top-down view. Watch your show from any viewpoint in a fully 3D world. Place racks, load shells, connect fuses, and control the firing system.</p>
               <div className="new-game-links">
-                <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer">Wishlist on Steam</a>
+                <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer"><FaSteam aria-hidden="true" />Wishlist on Steam</a>
                 <a className="text-link" href="https://fireworksshowsimulator.com/" target="_blank" rel="noopener noreferrer">Explore the Game</a>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
-      <section className="gallery-section" aria-labelledby="gallery-title">
-        <motion.div
-          variants={sectionReveal}
-          initial={shouldReduceMotion ? false : "hidden"}
-          whileInView="visible"
-          viewport={{ amount: 0.2 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="section-heading">
-            <h2 id="gallery-title">Explore Fireworks Play</h2>
+      <section className="features-section" aria-label="Explore Fireworks Play">
+        <div>
+          <div className="feature-list">
+            {FeatureSections.map((feature, index) => (
+              <FeatureCard key={feature.title} feature={feature} reverse={index % 2 === 1} />
+            ))}
           </div>
-          <ImageSlider slides={SlideData} />
-        </motion.div>
+        </div>
       </section>
     </main>
   );
