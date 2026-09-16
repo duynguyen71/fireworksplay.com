@@ -6,7 +6,6 @@ export const FeatureSections = [
     image: "/images/webp/1.webp",
     alt: "Top-down view of the Fireworks Play item arsenal",
     objectPosition: "50% 100%",
-    links: [{ label: "Explore game items", to: "/fireworks/" }],
   },
   {
     title: "Every type of firework is available here!",
@@ -14,7 +13,6 @@ export const FeatureSections = [
       "Shells, cakes, fountains, mines, comets, firecrackers and racks — the whole catalog is unlocked from the start. Light a whole street at once and paint the night sky.",
     image: "/images/webp/2.webp",
     alt: "Massive fireworks show lighting up the night sky over town",
-    links: [{ label: "Browse fireworks", to: "/fireworks/" }],
   },
   {
     title: "Plenty of maps to choose",

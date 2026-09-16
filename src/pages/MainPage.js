@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FaSteam, FaBullhorn } from "react-icons/fa";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
 import FeatureCard from "../components/FeatureCard";
@@ -61,20 +61,29 @@ export default function MainPage() {
             <a className="text-link" href="/privacy.html">Privacy</a>
           </div>
         </div>
-        <button
+        <motion.button
           type="button"
           className="hero-scroll-hint"
           aria-label="Scroll down"
           onClick={scrollToAnnouncement}
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <span aria-hidden="true">
             <svg viewBox="0 0 24 24" focusable="false">
               <path d="M5 8.5 12 15.5 19 8.5" />
             </svg>
           </span>
-        </button>
+        </motion.button>
       </section>
-      <section className="game-spotlight" aria-labelledby="game-spotlight-title">
+      <motion.section
+        className="game-spotlight"
+        aria-labelledby="game-spotlight-title"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div>
           <div className="game-spotlight-heading">
             <p className="eyebrow eyebrow--announce"><FaBullhorn aria-hidden="true" />New Game Announcement</p>
@@ -115,7 +124,7 @@ export default function MainPage() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
       <section className="features-section" aria-label="Explore Fireworks Play">
         <div>
           <div className="feature-list">
