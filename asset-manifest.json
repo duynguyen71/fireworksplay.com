@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.684da9df.css",
-    "main.js": "/static/js/main.d86a4b00.js",
+    "main.css": "/static/css/main.11451300.css",
+    "main.js": "/static/js/main.2ace660a.js",
     "static/js/453.13e4b64c.chunk.js": "/static/js/453.13e4b64c.chunk.js",
     "static/js/165.773908b4.chunk.js": "/static/js/165.773908b4.chunk.js",
     "static/js/503.e2395232.chunk.js": "/static/js/503.e2395232.chunk.js",
@@ -17,8 +17,8 @@
     "static/media/ibm-plex-sans-latin-400-normal.woff2": "/static/media/ibm-plex-sans-latin-400-normal.3160b5c6767eb4c69c78.woff2",
     "static/media/ibm-plex-sans-latin-400-normal.woff": "/static/media/ibm-plex-sans-latin-400-normal.65b2eda743bf11103476.woff",
     "index.html": "/index.html",
-    "main.684da9df.css.map": "/static/css/main.684da9df.css.map",
-    "main.d86a4b00.js.map": "/static/js/main.d86a4b00.js.map",
+    "main.11451300.css.map": "/static/css/main.11451300.css.map",
+    "main.2ace660a.js.map": "/static/js/main.2ace660a.js.map",
     "453.13e4b64c.chunk.js.map": "/static/js/453.13e4b64c.chunk.js.map",
     "165.773908b4.chunk.js.map": "/static/js/165.773908b4.chunk.js.map",
     "503.e2395232.chunk.js.map": "/static/js/503.e2395232.chunk.js.map",
@@ -28,7 +28,7 @@
     "806.6b63de0d.chunk.js.map": "/static/js/806.6b63de0d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.684da9df.css",
-    "static/js/main.d86a4b00.js"
+    "static/css/main.11451300.css",
+    "static/js/main.2ace660a.js"
   ]
 }
