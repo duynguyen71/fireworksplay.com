@@ -44,7 +44,53 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
 .gallery-section, .features-section { max-width: 1216px; width: calc(100% - 64px); margin: auto; padding: 40px 0 64px; border-top: 1px solid var(--site-border); }
 .features-section .eyebrow { display: inline-block; margin: 0 0 14px; padding: 7px 10px; background: #111; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
 .feature-list { display: flex; flex-direction: column; gap: 32px; }
-.feature-card { min-height: 380px; }
+.feature-card { transition: box-shadow 0.35s ease, border-color 0.35s ease; }
+.new-game-card.feature-card { min-height: 0; aspect-ratio: 2 / 1; }
+.feature-card:hover { box-shadow: 16px 16px 0 rgba(20, 20, 20, 0.35), 0 0 40px rgba(255, 140, 0, 0.06); border-color: #1a1a1a; }
+.feature-card .new-game-hero-image { object-fit: contain; }
+.feature-card--fade-2 .new-game-hero-image--fade { animation: feature-fade-2 12s ease-in-out infinite; }
+.feature-card--fade-2 .new-game-hero-image--fade:nth-of-type(2) { animation-delay: -6s; }
+@keyframes feature-fade-2 {
+  0% { opacity: 0; }
+  6% { opacity: 1; }
+  44% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.feature-card--fade-3 .new-game-hero-image--fade { animation: feature-fade-3 18s ease-in-out infinite; }
+.feature-card--fade-3 .new-game-hero-image--fade:nth-of-type(2) { animation-delay: -12s; }
+.feature-card--fade-3 .new-game-hero-image--fade:nth-of-type(3) { animation-delay: -6s; }
+@keyframes feature-fade-3 {
+  0% { opacity: 0; }
+  4% { opacity: 1; }
+  29.3% { opacity: 1; }
+  33.3% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.feature-card--fade-4 .new-game-hero-image--fade { animation: feature-fade-4 24s ease-in-out infinite; }
+.feature-card--fade-4 .new-game-hero-image--fade:nth-of-type(2) { animation-delay: -18s; }
+.feature-card--fade-4 .new-game-hero-image--fade:nth-of-type(3) { animation-delay: -12s; }
+.feature-card--fade-4 .new-game-hero-image--fade:nth-of-type(4) { animation-delay: -6s; }
+@keyframes feature-fade-4 {
+  0% { opacity: 0; }
+  3% { opacity: 1; }
+  22% { opacity: 1; }
+  25% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.feature-card--fade-5 .new-game-hero-image--fade { animation: feature-fade-5 30s ease-in-out infinite; }
+.feature-card--fade-5 .new-game-hero-image--fade:nth-of-type(2) { animation-delay: -24s; }
+.feature-card--fade-5 .new-game-hero-image--fade:nth-of-type(3) { animation-delay: -18s; }
+.feature-card--fade-5 .new-game-hero-image--fade:nth-of-type(4) { animation-delay: -12s; }
+.feature-card--fade-5 .new-game-hero-image--fade:nth-of-type(5) { animation-delay: -6s; }
+@keyframes feature-fade-5 {
+  0% { opacity: 0; }
+  2.4% { opacity: 1; }
+  17.6% { opacity: 1; }
+  20% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 .new-game-card.feature-card::after { background: linear-gradient(90deg, rgba(11, 11, 11, 0.55) 0%, rgba(11, 11, 11, 0.2) 15%, rgba(11, 11, 11, 0) 30%); }
 .feature-card .new-game-content { width: 46%; }
 .feature-card .new-game-content > p:not(.new-game-badge) { color: #fff; font-weight: 500; text-shadow: 0 1px 3px #000, 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 28px rgba(0, 0, 0, 0.85); }
@@ -90,6 +136,8 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .hero-video-wrap { display: none; }
+  .feature-card .new-game-hero-image--fade { animation: none !important; }
+  .feature-card .new-game-hero-image--fade:not(:first-of-type) { display: none; }
 }
 
 .hero-catalog-links { display: flex; justify-content: center; gap: 20px 36px; flex-wrap: wrap; }
@@ -125,9 +173,13 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
   .feature-card--reverse { flex-direction: column; }
   .feature-card .new-game-content { width: 100%; }
   .feature-list { gap: 24px; }
+  .new-game-card.feature-card { aspect-ratio: auto; }
   .new-game-card::after { display: none; }
   .feature-card--dim .new-game-hero-image { filter: none; }
-  .new-game-hero-image { position: static; aspect-ratio: 16 / 7; height: auto; object-fit: cover; }
+  .new-game-hero-image { position: static; aspect-ratio: 16 / 9; height: auto; object-fit: cover; }
+  .feature-card .new-game-hero-image { aspect-ratio: auto; object-fit: contain; }
+  .feature-card .new-game-hero-image--fade { animation: none; }
+  .feature-card .new-game-hero-image--fade:not(:first-of-type) { display: none; }
   .new-game-content { width: 100%; padding: 24px 28px 28px; }
 }
 @media (max-width: 600px) {

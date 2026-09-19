@@ -31,7 +31,7 @@ export default function RootLayout() {
   const publicPage = Boolean(routeMetadata);
   const isHomePage = routeMetadata?.path === "/";
 
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  useEffect(() => { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }, [pathname]);
 
   useEffect(() => {
     const canonical = document.head.querySelector('link[rel="canonical"]');
