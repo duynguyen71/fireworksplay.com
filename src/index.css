@@ -178,8 +178,7 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
   .feature-card--dim .new-game-hero-image { filter: none; }
   .new-game-hero-image { position: static; aspect-ratio: 16 / 9; height: auto; object-fit: cover; }
   .feature-card .new-game-hero-image { aspect-ratio: auto; object-fit: contain; }
-  .feature-card .new-game-hero-image--fade { animation: none; }
-  .feature-card .new-game-hero-image--fade:not(:first-of-type) { display: none; }
+  .feature-card .new-game-hero-image--fade:not(:first-of-type) { position: absolute; top: 0; right: 0; bottom: auto; left: 0; }
   .new-game-content { width: 100%; padding: 24px 28px 28px; }
 }
 @media (max-width: 600px) {
