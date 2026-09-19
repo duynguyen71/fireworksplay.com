@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function FeatureCard({ feature, reverse = false }) {
   const images = feature.images?.length ? feature.images : [feature.image];
-  const fadeCount = [2, 3, 4, 5].includes(images.length) ? images.length : 0;
+  const fadeCount = [2, 3, 4, 5, 6].includes(images.length) ? images.length : 0;
   const visibleImages = fadeCount ? images : images.slice(0, 1);
 
   return (

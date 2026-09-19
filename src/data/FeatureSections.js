@@ -51,11 +51,11 @@ export const FeatureSections = [
     description:
       "Gas tanks, grenades, TNT, powder and nukes. Blow things up, demolish buildings and turn any map into your personal demolition range.",
     images: [
+      "/images/webp/ammunition-desert-blast.webp",
       "/images/webp/ammunition-arsenal.webp",
       "/images/webp/ammunition-burning-town.webp",
-      "/images/webp/ammunition-desert-blast.webp",
     ],
-    alt: "Gas tanks, TNT crates and grenades in a wild-west town",
+    alt: "Explosion blasting through a desert canyon beside the train tracks",
   },
   {
     title: "Multiplayer",
@@ -64,6 +64,7 @@ export const FeatureSections = [
     images: [
       "/images/webp/multiplayer-city.webp",
       "/images/webp/multiplayer-firefight.webp",
+      "/images/webp/multiplayer-fireworks.webp",
     ],
     alt: "First-person view of a multiplayer session on a city street at night",
   },
@@ -101,6 +102,10 @@ export const FeatureSections = [
     images: [
       "/images/webp/community-shows-red-canyon.webp",
       "/images/webp/community-shows-green-valley.webp",
+      "/images/webp/community-shows-stadium-red.webp",
+      "/images/webp/community-shows-tower-green.webp",
+      "/images/webp/community-shows-stadium-burst.webp",
+      "/images/webp/community-shows-stadium-gold.webp",
     ],
     alt: "Community firework shows lighting up a red canyon and a green valley",
   },

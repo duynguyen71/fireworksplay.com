@@ -90,6 +90,19 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
   20% { opacity: 0; }
   100% { opacity: 0; }
 }
+.feature-card--fade-6 .new-game-hero-image--fade { animation: feature-fade-6 36s ease-in-out infinite; }
+.feature-card--fade-6 .new-game-hero-image--fade:nth-of-type(2) { animation-delay: -30s; }
+.feature-card--fade-6 .new-game-hero-image--fade:nth-of-type(3) { animation-delay: -24s; }
+.feature-card--fade-6 .new-game-hero-image--fade:nth-of-type(4) { animation-delay: -18s; }
+.feature-card--fade-6 .new-game-hero-image--fade:nth-of-type(5) { animation-delay: -12s; }
+.feature-card--fade-6 .new-game-hero-image--fade:nth-of-type(6) { animation-delay: -6s; }
+@keyframes feature-fade-6 {
+  0% { opacity: 0; }
+  2% { opacity: 1; }
+  14.7% { opacity: 1; }
+  16.7% { opacity: 0; }
+  100% { opacity: 0; }
+}
 
 .new-game-card.feature-card::after { background: linear-gradient(90deg, rgba(11, 11, 11, 0.55) 0%, rgba(11, 11, 11, 0.2) 15%, rgba(11, 11, 11, 0) 30%); }
 .feature-card .new-game-content { width: 46%; }
