@@ -61,7 +61,10 @@ export const FeatureSections = [
     title: "Multiplayer",
     description:
       "Team up with friends in real time to choreograph epic shows — or compete and cause explosive chaos. Watch out: lighting TNT or gas tanks might blast your pals.",
-    image: "/images/webp/multiplayer.webp",
+    images: [
+      "/images/webp/multiplayer-city.webp",
+      "/images/webp/multiplayer-firefight.webp",
+    ],
     alt: "First-person view of a multiplayer session on a city street at night",
   },
   {
@@ -75,7 +78,6 @@ export const FeatureSections = [
     title: "Custom maps",
     description:
       "Set up your own playgrounds the way you like — arrange gear, save your setups and load them back anytime for the perfect show.",
-    dim: true,
     images: [
       "/images/webp/custom-maps-mega-mall.webp",
       "/images/webp/custom-maps-concert-stage.webp",
@@ -96,7 +98,6 @@ export const FeatureSections = [
     title: "Community shows",
     description:
       "Save, load and publish your creations to the community. Play someone else's masterpiece on your map and join events on Discord.",
-    dim: true,
     images: [
       "/images/webp/community-shows-red-canyon.webp",
       "/images/webp/community-shows-green-valley.webp",
