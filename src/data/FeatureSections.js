@@ -3,7 +3,13 @@ export const FeatureSections = [
     title: "What you see is what you play",
     description:
       "Hundreds of shells, cakes, racks, firecrackers, guns, planes, helicopters, torches and props — laid out right in front of you. Pick anything up and light it. No coins, no tickets, no loot boxes.",
-    image: "/images/webp/what-you-see.webp",
+    images: [
+      "/images/webp/what-you-see.webp",
+      "/images/webp/what-you-see-fireworks.webp",
+      "/images/webp/what-you-see-beach.webp",
+      "/images/webp/what-you-see-street.webp",
+      "/images/webp/what-you-see-street-burst.webp",
+    ],
     alt: "3D scene showing the full Fireworks Play item arsenal on a city street",
 
   },
