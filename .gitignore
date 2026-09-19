@@ -28,6 +28,9 @@ yarn-error.log*
 agent/
 skills/
 
+# opencode AI files
+.opencode/
+
 # Cloudflare Worker files (separate deployment)
 cloudflare-worker/
 
