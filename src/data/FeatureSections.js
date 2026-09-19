@@ -17,7 +17,13 @@ export const FeatureSections = [
     title: "Every type of firework is available here!",
     description:
       "Shells, cakes, fountains, mines, comets, firecrackers and racks — the whole catalog is unlocked from the start. Light a whole street at once and paint the night sky.",
-    image: "/images/webp/every-firework.webp",
+    images: [
+      "/images/webp/every-firework.webp",
+      "/images/webp/every-firework-city.webp",
+      "/images/webp/every-firework-stadium-purple.webp",
+      "/images/webp/every-firework-stadium-gold.webp",
+      "/images/webp/every-firework-stadium-green.webp",
+    ],
     alt: "Stadium fireworks show with colorful smoke, laser beams and giant shell bursts",
   },
   {
@@ -57,11 +63,11 @@ export const FeatureSections = [
     description:
       "Gas tanks, grenades, TNT, powder and nukes. Blow things up, demolish buildings and turn any map into your personal demolition range.",
     images: [
-      "/images/webp/ammunition-desert-blast.webp",
       "/images/webp/ammunition-arsenal.webp",
+      "/images/webp/ammunition-desert-blast.webp",
       "/images/webp/ammunition-burning-town.webp",
     ],
-    alt: "Explosion blasting through a desert canyon beside the train tracks",
+    alt: "Gas tanks, TNT crates and grenades in a wild-west town",
   },
   {
     title: "Multiplayer",
@@ -78,7 +84,11 @@ export const FeatureSections = [
     title: "Mini-games, maximum entertainment",
     description:
       "Football face-offs, quick-draw duels, nuke-crafting puzzles, horror-mansion break-ins, hot-air-balloon flights, helicopter missions and clay hunts.",
-    image: "/images/webp/mini-games.webp",
+    images: [
+      "/images/webp/mini-games.webp",
+      "/images/webp/mini-games-hammer.webp",
+      "/images/webp/mini-games-key.webp",
+    ],
     alt: "Nuke-crafting puzzle mini-game on a farm",
   },
   {
