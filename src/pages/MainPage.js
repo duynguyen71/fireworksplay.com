@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { FaSteam, FaBullhorn } from "react-icons/fa";
 import { AppStoreBadge, PlayStoreBadge } from "../components/StoreBadges";
 import FeatureCard from "../components/FeatureCard";
+import LazyImage from "../components/LazyImage";
 import { FeatureSections } from "../data/FeatureSections";
 
 // Preserve the hero and scroll invariants in docs/homepage-contract.md.
@@ -90,7 +91,7 @@ export default function MainPage() {
             <p className="game-spotlight-intro">The next fireworks game from <a className="studio-link" href="https://simplaystudio.com/">Simplay Studio</a> is coming to PC.</p>
           </div>
           <div className="new-game-card">
-            <img
+            <LazyImage
               className="new-game-hero-image"
               src="/images/fireworks_show_simulator_library_hero-1280.webp"
               srcSet="/images/fireworks_show_simulator_library_hero-1280.webp 1280w, /images/fireworks_show_simulator_library_hero-2400.webp 2400w"
@@ -98,13 +99,11 @@ export default function MainPage() {
               alt=""
               width="3840"
               height="1240"
-              loading="lazy"
-              decoding="async"
             />
             <div className="new-game-content">
               <p className="new-game-badge">Coming to Steam</p>
               <h2 id="game-spotlight-title" className="new-game-logo-heading">
-                <img
+                <LazyImage
                   className="new-game-logo"
                   src="/fireworks-show-simulator-logo-dirt-500.webp"
                   srcSet="/fireworks-show-simulator-logo-dirt-500.webp 500w, /fireworks-show-simulator-logo-dirt-860.webp 860w"
@@ -112,8 +111,6 @@ export default function MainPage() {
                   alt="Fireworks Show Simulator"
                   width="1920"
                   height="1080"
-                  loading="lazy"
-                  decoding="async"
                 />
               </h2>
               <p>Design professional fireworks displays from a top-down view. Watch your show from any viewpoint in a fully 3D world. Place racks, load shells, connect fuses, and control the firing system.</p>
