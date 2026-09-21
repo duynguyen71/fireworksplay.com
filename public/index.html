@@ -22,8 +22,8 @@
   <meta property="og:title" content="Fireworks Play" />
   <meta property="og:description"
     content="Create fireworks shows, explore maps, and play with friends in Fireworks Play, a free fireworks simulator." />
-  <meta property="og:image" content="https://fireworksplay.com/og-image-v2.png" />
-  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image" content="https://fireworksplay.com/og-image-v2.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Fireworks Play logo over an in-game fireworks display" />
@@ -34,7 +34,7 @@
   <meta name="twitter:title" content="Fireworks Play" />
   <meta name="twitter:description"
     content="Create fireworks shows, explore maps, and play with friends in Fireworks Play, a free fireworks simulator." />
-  <meta name="twitter:image" content="https://fireworksplay.com/og-image-v2.png" />
+  <meta name="twitter:image" content="https://fireworksplay.com/og-image-v2.jpg" />
   <meta name="twitter:image:alt" content="Fireworks Play logo over an in-game fireworks display" />
 
   <script type="application/ld+json" id="route-structured-data">
@@ -63,9 +63,10 @@
     @media (max-width: 600px) { .static-home-route { padding: 32px 20px 84px; } }
   </style>
 
-  <!-- Favicon -->
-  <link rel="icon" href="%PUBLIC_URL%/app-icon512-spring.png" sizes="512x512" />
-  <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/app-icon512-spring.png" />
+  <!-- Favicon: PNG first as fallback, WebP last (Chromium/Firefox prefer the last matching icon, Safari keeps the PNG fallback) -->
+  <link rel="icon" type="image/png" href="%PUBLIC_URL%/app-icon512-spring.png" sizes="512x512" />
+  <link rel="icon" type="image/webp" href="%PUBLIC_URL%/app-icon512-spring.webp" sizes="512x512" />
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
 
   <!-- Manifest -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
