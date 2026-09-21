@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import LazyImage from "./LazyImage";
 
 export default function FeatureCard({ feature, reverse = false }) {
   const images = feature.images?.length ? feature.images : [feature.image];
@@ -10,7 +11,7 @@ export default function FeatureCard({ feature, reverse = false }) {
       className={`new-game-card feature-card${reverse ? " feature-card--reverse" : ""}${feature.dim ? " feature-card--dim" : ""}${fadeCount ? ` feature-card--fade-${fadeCount}` : ""}`}
     >
       {visibleImages.map((src, index) => (
-        <img
+        <LazyImage
           key={src}
           className={`new-game-hero-image${fadeCount ? " new-game-hero-image--fade" : ""}`}
           src={src}
@@ -18,8 +19,6 @@ export default function FeatureCard({ feature, reverse = false }) {
           aria-hidden={index > 0 ? "true" : undefined}
           width="1200"
           height="600"
-          loading="lazy"
-          decoding="async"
           style={feature.objectPosition ? { objectPosition: feature.objectPosition } : undefined}
         />
       ))}

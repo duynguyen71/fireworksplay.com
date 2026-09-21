@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
+import LazyImage from "../components/LazyImage";
 import catalog from "../data/gameCatalog.json";
 
 const pageSize = 50;
@@ -110,7 +111,7 @@ export default function CatalogPage({ racks = false }) {
       <p id="catalog-results" className="catalog-count" aria-live="polite">{items.length} items</p>
       {items.length ? <div className="catalog-grid">
         {visible.map((item) => <article className="catalog-card" key={`${item.category}-${item.id}`}>
-          <div className="catalog-image"><img src={item.image} alt={item.name} loading="lazy" width="256" height="256" /></div>
+          <div className="catalog-image"><LazyImage src={item.image} alt={item.name} width="256" height="256" /></div>
           <div className="catalog-card-label"><h2>{item.name}</h2></div>
         </article>)}
       </div> : <p className="catalog-empty">No items available.</p>}
