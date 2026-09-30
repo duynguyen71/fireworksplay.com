@@ -115,7 +115,7 @@ export default function MainPage() {
               </h2>
               <p>Design professional fireworks displays from a top-down view. Watch your show from any viewpoint in a fully 3D world. Place racks, load shells, connect fuses, and control the firing system.</p>
               <div className="new-game-links">
-                <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer"><FaSteam aria-hidden="true" />Wishlist on Steam</a>
+                <a className="steam-link" href="https://store.steampowered.com/app/4668450/Fireworks_Show_Simulator" target="_blank" rel="noopener noreferrer"><FaSteam aria-hidden="true" />Available on Steam!</a>
                 <a className="text-link" href="https://fireworksshowsimulator.com/" target="_blank" rel="noopener noreferrer">Explore the Game</a>
               </div>
             </div>
