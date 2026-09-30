@@ -106,7 +106,7 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
 
 .new-game-card.feature-card::after { background: linear-gradient(90deg, rgba(11, 11, 11, 0.55) 0%, rgba(11, 11, 11, 0.2) 15%, rgba(11, 11, 11, 0) 30%); }
 .feature-card .new-game-content { width: 46%; }
-.feature-card .new-game-content > p:not(.new-game-badge) { color: #fff; font-weight: 500; text-shadow: 0 1px 3px #000, 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 28px rgba(0, 0, 0, 0.85); }
+.feature-card .new-game-content > p { color: #fff; font-weight: 500; text-shadow: 0 1px 3px #000, 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 28px rgba(0, 0, 0, 0.85); }
 .feature-card--reverse { flex-direction: row-reverse; }
 .new-game-card.feature-card--reverse::after { background: linear-gradient(-90deg, rgba(11, 11, 11, 0.55) 0%, rgba(11, 11, 11, 0.2) 15%, rgba(11, 11, 11, 0) 30%); }
 .new-game-card.feature-card--dim::after { background: linear-gradient(90deg, rgba(8, 8, 8, 0.88) 0%, rgba(8, 8, 8, 0.72) 22%, rgba(8, 8, 8, 0.38) 42%, rgba(8, 8, 8, 0.12) 60%, rgba(8, 8, 8, 0) 75%); }
@@ -171,10 +171,9 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
 .new-game-card::after { position: absolute; inset: 0; background: linear-gradient(90deg, #0b0b0b 0%, rgba(11, 11, 11, 0.98) 42%, rgba(11, 11, 11, 0.82) 57%, rgba(11, 11, 11, 0.04) 84%); content: ""; pointer-events: none; }
 .new-game-hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .new-game-content { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; width: 54%; padding: 44px 48px; }
-.new-game-badge { display: inline-flex; align-self: flex-start; margin: 0 0 18px; padding: 7px 10px; background: #ffb000; color: #111; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .new-game-logo-heading { margin: -20px 0 8px; }
 .new-game-logo { display: block; width: min(100%, 430px); height: auto; }
-.new-game-content > p:not(.new-game-badge) { color: var(--site-secondary); line-height: 1.6; }
+.new-game-content > p { color: var(--site-secondary); line-height: 1.6; }
 .new-game-links { display: flex; align-items: center; flex-wrap: wrap; gap: 20px 24px; margin-top: 24px; }
 .steam-link { display: inline-flex; align-items: center; gap: 10px; background: #a4d007; color: #161616; padding: 12px 20px; font-weight: 600; }
 .steam-link svg { width: 20px; height: 20px; flex: 0 0 auto; }
@@ -200,10 +199,9 @@ body { margin: 0; background: #161616; color: #f4f4f4; color-scheme: dark; -webk
   .game-spotlight-intro { font-size: clamp(22px, 7vw, 28px); }
   .new-game-card { border-width: 2px; box-shadow: 4px 4px 0 rgba(20, 20, 20, 0.28); }
   .new-game-content { padding: 18px 16px 20px; }
-  .new-game-badge { margin-bottom: 10px; padding: 6px 8px; font-size: 11px; }
   .new-game-logo-heading { margin: -8px 0 4px; }
   .new-game-logo { width: min(78%, 250px); }
-  .new-game-content > p:not(.new-game-badge) { font-size: 14px; line-height: 1.45; }
+  .new-game-content > p { font-size: 14px; line-height: 1.45; }
   .new-game-links { gap: 12px 16px; margin-top: 14px; }
   .new-game-links .text-link { gap: 16px; font-size: 14px; }
   .steam-link { padding: 10px 14px; font-size: 14px; }
