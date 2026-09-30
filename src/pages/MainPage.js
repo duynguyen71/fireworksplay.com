@@ -101,7 +101,6 @@ export default function MainPage() {
               height="1240"
             />
             <div className="new-game-content">
-              <p className="new-game-badge">Coming to Steam</p>
               <h2 id="game-spotlight-title" className="new-game-logo-heading">
                 <LazyImage
                   className="new-game-logo"
