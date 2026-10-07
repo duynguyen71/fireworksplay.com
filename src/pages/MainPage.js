@@ -45,7 +45,7 @@ export default function MainPage() {
           <p className="eyebrow studio-word">
             <a className="studio-link" href="https://simplaystudio.com/"><span className="studio-sim">Sim</span>play Studio</a>
           </p>
-          <h1 id="home-title">
+          <h1 id="home-title" aria-label="Fireworks Play – Free Fireworks Simulator Game">
             <img className="hero-logo" src="/GameLabel-clean.webp" alt="Fireworks Play" width="457" height="296" fetchpriority="high" />
           </h1>
           <p className="hero-description">
@@ -58,6 +58,7 @@ export default function MainPage() {
           </div>
           <div className="hero-catalog-links">
             <Link className="text-link" to="/fireworks/">Explore game items</Link>
+            <Link className="text-link" to="/racks/">Racks catalog</Link>
             <Link className="text-link" to="/release-note/">Release notes</Link>
             <a className="text-link" href="/privacy.html">Privacy</a>
           </div>

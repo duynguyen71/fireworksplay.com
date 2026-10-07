@@ -34,6 +34,8 @@ const router = createBrowserRouter([
       },
       { path: "fireworks", element: suspended(<CatalogPage />) },
       { path: "racks", element: suspended(<CatalogPage racks />) },
+      { path: "fireworks/page/:pageNumber", element: suspended(<CatalogPage />) },
+      { path: "racks/page/:pageNumber", element: suspended(<CatalogPage racks />) },
       {
         path: "release-note",
         element: suspended(<ReleaseNote />),

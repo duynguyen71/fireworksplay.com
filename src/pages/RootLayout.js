@@ -3,12 +3,13 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaYoutube, FaTiktok, FaDiscord } from "react-icons/fa";
 import socialMediaLinks from "../data/SocialMediaLinks";
 import publicRoutes from "../data/publicRoutes.json";
+import { getCatalogRoutes, pageCounts, catalogPagePath } from "../utils/catalogMetadata";
 
 const siteOrigin = "https://fireworksplay.com";
 const normalizePath = (path) => path.replace(/\/+$/, "") || "/";
 const publicRouteByPath = new Map();
 
-publicRoutes.forEach((route) => {
+[...publicRoutes, ...getCatalogRoutes(publicRoutes)].forEach((route) => {
   [route.path, ...(route.aliases || [])].forEach((path) => {
     publicRouteByPath.set(normalizePath(path), route);
   });
@@ -25,9 +26,18 @@ function setMetaContent(attribute, key, content) {
 }
 
 export default function RootLayout() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const normalizedPath = normalizePath(pathname);
-  const routeMetadata = publicRouteByPath.get(normalizedPath);
+  const params = new URLSearchParams(search);
+  const catalogBase = normalizedPath.startsWith("/racks") ? "/racks" : "/fireworks";
+  const isCatalog = /^\/(fireworks|racks)(\/page\/\d+)?$/.test(normalizedPath);
+  const filtered = isCatalog && params.has("category");
+  const legacyPage = normalizedPath === catalogBase && !filtered && params.has("page")
+    ? Math.min(pageCounts[catalogBase === "/racks" ? "racks" : "fireworks"], Math.max(1, Math.floor(Number(params.get("page")) || 1)))
+    : null;
+  const metadataPath = filtered ? catalogBase : legacyPage
+    ? normalizePath(catalogPagePath(catalogBase === "/racks", legacyPage)) : normalizedPath;
+  const routeMetadata = publicRouteByPath.get(metadataPath);
   const publicPage = Boolean(routeMetadata);
   const isHomePage = routeMetadata?.path === "/";
 
