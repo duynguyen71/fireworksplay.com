@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       { path: "fireworks", element: suspended(<CatalogPage />) },
-      { path: "racks", element: suspended(<CatalogPage racks />) },
+      { path: "fireworks/page/:pageNumber", element: suspended(<CatalogPage />) },
       {
         path: "release-note",
         element: suspended(<ReleaseNote />),
@@ -58,7 +58,6 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       { path: "fireworks", element: suspended(<CatalogPage />) },
-      { path: "racks", element: suspended(<CatalogPage racks />) },
       {
         path: "release-note",
         element: suspended(<ReleaseNote />),

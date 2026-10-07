@@ -1,19 +1,7 @@
 import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import LazyImage from "../components/LazyImage";
-import catalog from "../data/gameCatalog.json";
-
-const pageSize = 50;
-const catalogCategories = [...new Set(catalog.map((item) => item.category))];
-const categoryOptions = catalogCategories.includes("Cakes")
-  ? ["Cakes", ...catalogCategories.filter((category) => category !== "Cakes")]
-  : catalogCategories;
-const categoryRank = new Map(categoryOptions.map((category, index) => [category, index]));
-const orderedCatalog = [...catalog].sort((first, second) => {
-  const imagePriority = Number(Boolean(second.image)) - Number(Boolean(first.image));
-  if (imagePriority) return imagePriority;
-  return categoryRank.get(first.category) - categoryRank.get(second.category);
-});
+import { pageSize, categoryOptions, getCatalogItems, catalogPagePath } from "../utils/catalogRoutes";
 
 function CategoryFilter({ value, onChange }) {
   const detailsRef = useRef(null);
@@ -69,28 +57,34 @@ function CategoryFilter({ value, onChange }) {
   );
 }
 
-export default function CatalogPage({ racks = false }) {
-  const [params, setParams] = useSearchParams();
+export default function CatalogPage() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const { pageNumber } = useParams();
   const selected = params.get("category") || "All";
-  const category = catalogCategories.includes(selected) ? selected : "All";
-  const matches = orderedCatalog.filter((item) =>
-    racks ? item.category === "Racks" : category === "All" || item.category === category
-  );
-  // Shells in the game includes effects also listed in specialized categories.
-  const items = [...new Map(matches.map((item) => [item.id, item])).values()];
+  const category = categoryOptions.includes(selected) ? selected : "All";
+  const items = getCatalogItems(category);
   const pages = Math.max(1, Math.ceil(items.length / pageSize));
-  const page = Math.min(pages, Math.max(1, Math.floor(Number(params.get("page")) || 1)));
+  const page = Math.min(pages, Math.max(1, Math.floor(Number(pageNumber || params.get("page")) || 1)));
   const visible = items.slice((page - 1) * pageSize, page * pageSize);
   const updateFilter = (key, value) => {
     const next = new URLSearchParams(params);
     value ? next.set(key, value) : next.delete(key);
     next.delete("page");
-    setParams(next, { replace: true });
+    const query = next.toString();
+    navigate(catalogPagePath(1) + (query ? `?${query}` : ""), { replace: true });
   };
-  const changePage = (value) => {
+  const pageLink = (value) => {
     const next = new URLSearchParams(params);
-    next.set("page", value);
-    setParams(next);
+    if (category !== "All") {
+      next.set("page", value);
+      return `${catalogPagePath(1)}?${next}`;
+    }
+    next.delete("page");
+    const query = next.toString();
+    return catalogPagePath(value) + (query ? `?${query}` : "");
+  };
+  const scrollToResults = () => {
     requestAnimationFrame(() => {
       document.getElementById("catalog-results")?.scrollIntoView({ block: "start" });
     });
@@ -99,15 +93,15 @@ export default function CatalogPage({ racks = false }) {
   return (
     <main id="main-content" className="catalog-page">
       <div className="section-heading">
-        <h1>{racks ? "Racks" : "Game Items"}</h1>
-        <p>{racks ? "Reloadable racks, tubes, and firing tools from Fireworks Play." : "Browse fireworks, effects, racks, and firing tools available in Fireworks Play."}</p>
+        <h1>Game Items</h1>
+        <p>Browse fireworks, effects, racks, and firing tools available in Fireworks Play.</p>
       </div>
-      {!racks && <div className="catalog-filters">
+      <div className="catalog-filters">
         <CategoryFilter
           value={category}
           onChange={(value) => updateFilter("category", value === "All" ? "" : value)}
         />
-      </div>}
+      </div>
       <p id="catalog-results" className="catalog-count" aria-live="polite">{items.length} items</p>
       {items.length ? <div className="catalog-grid">
         {visible.map((item) => <article className="catalog-card" key={`${item.category}-${item.id}`}>
@@ -116,9 +110,9 @@ export default function CatalogPage({ racks = false }) {
         </article>)}
       </div> : <p className="catalog-empty">No items available.</p>}
       {pages > 1 && <nav className="catalog-pagination" aria-label="Catalog pages">
-        <button disabled={page === 1} onClick={() => changePage(page - 1)}>Previous</button>
+        {page > 1 ? <Link to={pageLink(page - 1)} onClick={scrollToResults}>Previous</Link> : <span aria-disabled="true">Previous</span>}
         <span>Page {page} of {pages}</span>
-        <button disabled={page === pages} onClick={() => changePage(page + 1)}>Next</button>
+        {page < pages ? <Link to={pageLink(page + 1)} onClick={scrollToResults}>Next</Link> : <span aria-disabled="true">Next</span>}
       </nav>}
     </main>
   );

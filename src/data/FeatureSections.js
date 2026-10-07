@@ -1,4 +1,4 @@
-export const FeatureSections = [
+const FeatureSections = [
   {
     title: "What you see is what you play",
     description:
@@ -126,3 +126,5 @@ export const FeatureSections = [
     alt: "Community firework shows lighting up a red canyon and a green valley",
   },
 ];
+
+module.exports = { FeatureSections };

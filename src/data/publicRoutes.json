@@ -2,7 +2,7 @@
   {
     "path": "/",
     "aliases": ["/fireworksplay/"],
-    "title": "Fireworks Play",
+    "title": "Fireworks Play – Free Fireworks Simulator Game",
     "description": "Create fireworks shows, explore maps, and play with friends in Fireworks Play, a free fireworks simulator.",
     "heading": "Fireworks Play",
     "summary": "Create fireworks shows, explore maps, and play with friends."
@@ -22,13 +22,5 @@
     "description": "Browse fireworks, effects, racks, and firing tools available in Fireworks Play.",
     "heading": "Game Items",
     "summary": "Browse fireworks, effects, racks, and firing tools available in Fireworks Play."
-  },
-  {
-    "path": "/racks/",
-    "aliases": ["/fireworksplay/racks/"],
-    "title": "Racks Catalog | Fireworks Play",
-    "description": "Browse reloadable racks, tubes, and firing tools from Fireworks Play.",
-    "heading": "Racks Catalog",
-    "summary": "Reloadable racks, tubes, and firing tools from Fireworks Play."
   }
 ]
