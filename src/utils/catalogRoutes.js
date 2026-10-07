@@ -11,9 +11,9 @@ const orderedCatalog = [...catalog].sort((first, second) => {
   return imagePriority || categoryRank.get(first.category) - categoryRank.get(second.category);
 });
 
-function getCatalogItems(racks = false, category = "All") {
+function getCatalogItems(category = "All") {
   const matches = orderedCatalog.filter((item) =>
-    racks ? item.category === "Racks" : category === "All" || item.category === category
+    category === "All" || item.category === category
   );
   // Shells also contains effects listed in specialized categories.
   return [...new Map(matches.map((item) => [item.id, item])).values()];

@@ -57,13 +57,13 @@ function CategoryFilter({ value, onChange }) {
   );
 }
 
-export default function CatalogPage({ racks = false }) {
+export default function CatalogPage() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const { pageNumber } = useParams();
   const selected = params.get("category") || "All";
   const category = categoryOptions.includes(selected) ? selected : "All";
-  const items = getCatalogItems(racks, category);
+  const items = getCatalogItems(category);
   const pages = Math.max(1, Math.ceil(items.length / pageSize));
   const page = Math.min(pages, Math.max(1, Math.floor(Number(pageNumber || params.get("page")) || 1)));
   const visible = items.slice((page - 1) * pageSize, page * pageSize);
@@ -71,16 +71,18 @@ export default function CatalogPage({ racks = false }) {
     const next = new URLSearchParams(params);
     value ? next.set(key, value) : next.delete(key);
     next.delete("page");
-    navigate(catalogPagePath(racks, 1) + (next.size ? `?${next}` : ""), { replace: true });
+    const query = next.toString();
+    navigate(catalogPagePath(1) + (query ? `?${query}` : ""), { replace: true });
   };
   const pageLink = (value) => {
     const next = new URLSearchParams(params);
-    if (!racks && category !== "All") {
+    if (category !== "All") {
       next.set("page", value);
-      return `${catalogPagePath(false, 1)}?${next}`;
+      return `${catalogPagePath(1)}?${next}`;
     }
     next.delete("page");
-    return catalogPagePath(racks, value) + (next.size ? `?${next}` : "");
+    const query = next.toString();
+    return catalogPagePath(value) + (query ? `?${query}` : "");
   };
   const scrollToResults = () => {
     requestAnimationFrame(() => {
@@ -91,19 +93,15 @@ export default function CatalogPage({ racks = false }) {
   return (
     <main id="main-content" className="catalog-page">
       <div className="section-heading">
-        <h1>{racks ? "Racks" : "Game Items"}</h1>
-        <p>{racks ? "Reloadable racks, tubes, and firing tools from Fireworks Play." : "Browse fireworks, effects, racks, and firing tools available in Fireworks Play."}</p>
+        <h1>Game Items</h1>
+        <p>Browse fireworks, effects, racks, and firing tools available in Fireworks Play.</p>
       </div>
-      <nav className="hero-catalog-links" aria-label="Catalog navigation">
-        <Link className="text-link" to="/fireworks/">All game items</Link>
-        <Link className="text-link" to="/racks/">Racks catalog</Link>
-      </nav>
-      {!racks && <div className="catalog-filters">
+      <div className="catalog-filters">
         <CategoryFilter
           value={category}
           onChange={(value) => updateFilter("category", value === "All" ? "" : value)}
         />
-      </div>}
+      </div>
       <p id="catalog-results" className="catalog-count" aria-live="polite">{items.length} items</p>
       {items.length ? <div className="catalog-grid">
         {visible.map((item) => <article className="catalog-card" key={`${item.category}-${item.id}`}>

@@ -58,7 +58,6 @@ export default function MainPage() {
           </div>
           <div className="hero-catalog-links">
             <Link className="text-link" to="/fireworks/">Explore game items</Link>
-            <Link className="text-link" to="/racks/">Racks catalog</Link>
             <Link className="text-link" to="/release-note/">Release notes</Link>
             <a className="text-link" href="/privacy.html">Privacy</a>
           </div>

@@ -29,14 +29,14 @@ export default function RootLayout() {
   const { pathname, search } = useLocation();
   const normalizedPath = normalizePath(pathname);
   const params = new URLSearchParams(search);
-  const catalogBase = normalizedPath.startsWith("/racks") ? "/racks" : "/fireworks";
-  const isCatalog = /^\/(fireworks|racks)(\/page\/\d+)?$/.test(normalizedPath);
+  const catalogBase = "/fireworks";
+  const isCatalog = /^\/fireworks(\/page\/\d+)?$/.test(normalizedPath);
   const filtered = isCatalog && params.has("category");
   const legacyPage = normalizedPath === catalogBase && !filtered && params.has("page")
-    ? Math.min(pageCounts[catalogBase === "/racks" ? "racks" : "fireworks"], Math.max(1, Math.floor(Number(params.get("page")) || 1)))
+    ? Math.min(pageCounts.fireworks, Math.max(1, Math.floor(Number(params.get("page")) || 1)))
     : null;
   const metadataPath = filtered ? catalogBase : legacyPage
-    ? normalizePath(catalogPagePath(catalogBase === "/racks", legacyPage)) : normalizedPath;
+    ? normalizePath(catalogPagePath(legacyPage)) : normalizedPath;
   const routeMetadata = publicRouteByPath.get(metadataPath);
   const publicPage = Boolean(routeMetadata);
   const isHomePage = routeMetadata?.path === "/";
